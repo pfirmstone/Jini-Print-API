@@ -1,0 +1,1302 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service API -- Revision History</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<H2><A NAME="top">Jini Print Service API Revision History</A></H2>
+<FONT SIZE=2>
+<A HREF="#20000523">Draft Standard Version 1.0 (23-May-2000)</A><BR>
+<A HREF="#20000324">Draft Version 24-Mar-2000</A><BR>
+<A HREF="#20000207">Draft Version 07-Feb-2000</A><BR>
+<A HREF="#20000117">Draft Version 17-Jan-2000</A><BR>
+<A HREF="#19991223">Draft Version 23-Dec-1999</A><BR>
+<A HREF="#19991115">Draft Version 15-Nov-1999</A><BR>
+<A HREF="#19991110">Draft Version 10-Nov-1999</A><BR>
+<A HREF="#19991104">Draft Version 04-Nov-1999</A><BR>
+<A HREF="#19991028">Draft Version 28-Oct-1999</A>
+</FONT>
+
+<P>
+<HR>
+<A NAME="20000523"><H2>Draft Standard Version 1.0 (23-May-2000)</H2></A>
+<H3>Description</H3>
+Draft Standard Version 1.0
+of the Jini Print Service API
+represents the first version
+released from the Jini Printing Working Group
+to the entire Jini Community.
+It is denoted a "draft <I>standard</I>"
+so developers can create Jini Print Service implementations and clients
+based on a common standard.
+It is denoted a "<I>draft</I> standard"
+to recognize that implementation experience
+may necessitate changing the API
+before finalizing it as a full standard.
+<P>
+This draft incorporates revisions
+to resolve issues raised with the draft version of 24-Mar-2000
+as agreed at the Jini Printing Working Group Meeting
+of 11-Apr-2000 and subsequently.
+See the <A HREF="http://developer.jini.org/exchange/users/jpgwg/JiniPrintService/issues/index.html">Jini Print Service API Issues List</A>
+for minutes of the meeting.
+This draft includes
+all the capabilities of the first product release subset
+identified at the Jini Printing Working Group meeting
+in September 1999.
+See the
+<A HREF="http://developer.jini.org/exchange/users/jpgwg/roadmap/roadmap-19990928/firstsubset.htm">Jini Print Service Roadmap Prototyping Subset</A>
+for a list of these capabilities.
+<H3>Changes Since Previous Version</H3>
+<H4>Attributes</H4>
+<UL>
+<LI>
+Package net.jini.print.util,
+containing interface CategoricalSet
+and implementations thereof,
+was eliminated.
+<P>
+<LI>
+Interface <A HREF="../../../../javax/print/attribute/Attribute.html">Attribute</A>
+was changed to a standalone interface
+rather than extending CategoricalSet.Value.
+Its <A HREF="../../../../javax/print/attribute/Attribute.html#getCategory()"><CODE>getCategory()</CODE></A> method
+was changed to return type Class (the type for an attribute category)
+instead of type Object.
+<P>
+<LI>
+Tagging subinterfaces of interface
+<A HREF="../../../../javax/print/attribute/Attribute.html">Attribute</A>
+were defined to denote how various printing attributes are used --
+interfaces <A HREF="../../../../javax/print/attribute/DocAttribute.html">DocAttribute</A>,
+<A HREF="../../../../javax/print/attribute/PrintRequestAttribute.html">PrintRequestAttribute</A>,
+<A HREF="../../../../javax/print/attribute/PrintJobAttribute.html">PrintJobAttribute</A>,
+<A HREF="../../../../javax/print/attribute/PrintServiceAttribute.html">PrintServiceAttribute</A>, and
+<A HREF="../../../../javax/print/attribute/SupportedValuesAttribute.html">SupportedValuesAttribute</A>.
+Each attribute class was tagged with one or more
+of the above tagging subinterfaces
+instead of interface <A HREF="../../../../javax/print/attribute/Attribute.html">Attribute</A>.
+<P>
+<LI>
+Interface <A HREF="../../../../javax/print/attribute/AttributeSet.html">AttributeSet</A>
+was changed to extend interface java.util.Map rather than CategoricalSet.
+<P>
+<LI>
+Subinterfaces of interface <A HREF="../../../../javax/print/attribute/AttributeSet.html">AttributeSet</A>
+were defined that are restricted to contain
+just one kind of attribute --
+classes <A HREF="../../../../javax/print/attribute/DocAttributeSet.html">DocAttributeSet</A>,
+<A HREF="../../../../javax/print/attribute/PrintRequestAttributeSet.html">PrintRequestAttributeSet</A>,
+<A HREF="../../../../javax/print/attribute/PrintJobAttributeSet.html">PrintJobAttributeSet</A>, and
+<A HREF="../../../../javax/print/attribute/PrintServiceAttributeSet.html">PrintServiceAttributeSet</A>.
+Throughout the API,
+methods that had taken generic
+<A HREF="../../../../javax/print/attribute/AttributeSet.html">AttributeSet</A> arguments
+or returned generic
+<A HREF="../../../../javax/print/attribute/AttributeSet.html">AttributeSet</A> objects
+were changed to take or return the proper kind of restricted attribute set.
+<P>
+<LI>
+Implementations of interface
+<A HREF="../../../../javax/print/attribute/AttributeSet.html">AttributeSet</A>
+and its subinterfaces were changed to use class java.util.HashMap
+rather than CategoricalSet implementations.
+<P>
+<LI>
+Unmodifiable and synchronized views of an attribute set
+are now provided in class
+<A HREF="../../../../javax/print/attribute/AttributeSetViews.html">AttributeSetViews</A>
+rather than class Collections,
+the new class name being more descriptive.
+<P>
+<LI>
+The <A HREF="../../../../javax/print/attribute/standard/Media.html">Media</A> attribute
+and <A HREF="../lookup/MediaEntry.html">MediaEntry</A> service registration entry
+were changed to conform to recent changes
+in the IPP Production Printing Extensions proposal.
+The following abstract syntax classes were eliminated:
+WeightSyntax.
+The following media characteristics were eliminated:
+MediaWeight.
+The following media characteristics were added:
+<A HREF="../../../../javax/print/attribute/standard/MediaRecycled.html">MediaRecycled</A>,
+<A HREF="../../../../javax/print/attribute/standard/MediaStock.html">MediaStock</A>,
+<A HREF="../../../../javax/print/attribute/standard/MediaWeightEnglish.html">MediaWeightEnglish</A>, and
+<A HREF="../../../../javax/print/attribute/standard/MediaWeightMetric.html">MediaWeightMetric</A>.
+Class MediaName was renamed
+<A HREF="../../../../javax/print/attribute/standard/MediaDescription.html">MediaDescription</A>.
+Some additional enumeration values were added to classes
+<A HREF="../../../../javax/print/attribute/standard/MediaColor.html">MediaColor</A>,
+<A HREF="../../../../javax/print/attribute/standard/MediaKind.html">MediaKind</A>, and
+<A HREF="../../../../javax/print/attribute/standard/MediaPrePrinted.html">MediaPrePrinted</A>.
+<P>
+<LI>
+The following abstract syntax classes were added:
+<A HREF="../../../../javax/print/attribute/URLSyntax.html">URLSyntax</A>.
+The following attributes were added:
+<A HREF="../../../../javax/print/attribute/standard/ColorSupported.html">ColorSupported</A>,
+<A HREF="../../../../javax/print/attribute/standard/PagesPerMinute.html">PagesPerMinute</A>,
+<A HREF="../../../../javax/print/attribute/standard/PagesPerMinuteColor.html">PagesPerMinuteColor</A>,
+<A HREF="../../../../javax/print/attribute/standard/PDLOverrideSupported.html">PDLOverrideSupported</A>,
+<A HREF="../../../../javax/print/attribute/standard/PrinterInfo.html">PrinterInfo</A>,
+<A HREF="../../../../javax/print/attribute/standard/PrinterLocation.html">PrinterLocation</A>,
+<A HREF="../../../../javax/print/attribute/standard/PrinterMakeAndModel.html">PrinterMakeAndModel</A>,
+<A HREF="../../../../javax/print/attribute/standard/PrinterMoreInfo.html">PrinterMoreInfo</A>,
+<A HREF="../../../../javax/print/attribute/standard/PrinterMoreInfoManufacturer.html">PrinterMoreInfoManufacturer</A>,
+<A HREF="../../../../javax/print/attribute/standard/PrinterName.html">PrinterName</A>,
+<A HREF="../../../../javax/print/attribute/standard/ReferenceUriScheme.html">ReferenceUriScheme</A>,
+<A HREF="../../../../javax/print/attribute/standard/SheetCollate.html">SheetCollate</A>.
+<P>
+<LI>
+Many of the individual abstract syntax classes
+and concrete attribute classes
+were changed to address issues
+identified at the 11-Apr-2000 Jini Printing Working Group meeting.
+See the <A HREF="http://developer.jini.org/exchange/users/jpgwg/JiniPrintService/issues/index.html">Jini Print Service API Issues List</A>
+for further information.
+</UL>
+<H4>Docs</H4>
+<UL>
+<LI>
+Interface <A HREF="../data/Doc.html">Doc</A>
+was changed to clarify that the
+<A HREF="../data/Doc.html#getReaderForText()">getReaderForText()</A> and
+<A HREF="../data/Doc.html#getStreamForBytes()">getStreamForBytes()</A> methods
+are required to return a valid reader or input stream object
+if the doc meets the stated criteria.
+<P>
+<LI>
+The methods in interface <A HREF="../data/Doc.html">Doc</A>
+were changed to throw an exception in two circumstances:
+(a) if the doc is leased and the lease object has not been obtained yet,
+(b) if the print data source
+cannot provide more than one piece of print data at a time
+and the printer has not yet finished obtaining
+a previous doc's print data.
+<P>
+<LI>
+The documentation in interfaces
+<A HREF="../data/Doc.html">Doc</A> and
+<A HREF="../data/LeasedDoc.html">LeasedDoc</A>
+was expanded to clarify
+how the doc leasing scheme works.
+The description of print job processing in interface
+<A HREF="../job/PrintJob.html">PrintJob</A>
+was revised to accord with the doc leasing scheme.
+<P>
+<LI>
+The restriction on the pattern which a Print Service
+uses to access the individual docs in a
+<A HREF="../data/MultiDoc.html">MultiDoc</A>
+was eliminated.
+<P>
+<LI>
+The documentation in class
+<A HREF="../../../../javax/print/data/DocFlavor.html">DocFlavor</A>
+describing typical doc flavors was rewritten.
+Classes nested inside class
+<A HREF="../../../../javax/print/data/DocFlavor.html">DocFlavor</A>
+were added to declare
+predefined static constant doc flavor objects
+for the example doc flavors.
+<P>
+<LI>
+In class
+<A HREF="../../../../javax/print/data/DocFlavor.html">DocFlavor</A>,
+support for plain text input stream print data
+and renderable image print data
+was made mandatory.
+</UL>
+<H4>Print Jobs</H4>
+<UL>
+<LI>
+The <A HREF="../job/PrintJob.html#getAttributes()"><CODE>PrintJob.getAttributes()</CODE></A>
+method's documentation was rewritten
+to clarify which attributes appear
+in a Print Job's attribute set.
+<P>
+<LI>
+The description of print job processing
+in interface <A HREF="../job/PrintJob.html">PrintJob</A>
+was expanded to clarify several points,
+including the treatment of multidoc print jobs
+in which different docs specify different attribute values
+for the same attribute category.
+<P>
+<LI>
+Interfaces
+<A HREF="../job/PrintRequest.html">PrintRequest</A>,
+<A HREF="../job/DocPrintRequest.html">DocPrintRequest</A>, and
+<A HREF="../job/MultiDocPrintRequest.html">MultiDocPrintRequest</A>
+were changed so the only methods 
+that throw a RemoteException
+are the methods for adding an event listener
+and submitting the Print Request.
+These are the only methods
+that might make a remote method call
+to the Print Service.
+The other methods are intended to be implemented locally
+and therefore no longer throw a RemoteException.
+</UL>
+<H4>Print Services</H4>
+<UL>
+<LI>
+The <A HREF="../service/PrintService.html#getAttributes()"><CODE>PrintService.getAttributes()</CODE></A>
+method's documentation was rewritten
+to clarify which attributes appear
+in a Print Service's attribute set.
+<P>
+<LI>
+The capability methods in interface
+<A HREF="../service/PrintService.html">PrintService</A>
+were revised.
+Class <A HREF="../service/Settings.html">Settings</A>
+was defined to hold the doc flavor and attributes
+for a supposed print job.
+To simplify the method signatures,
+and for consistency,
+all the capability methods were changed
+to take a Settings argument
+instead of separate doc flavor and/or attribute set arguments.
+The following capability methods were added:
+<A HREF="../service/PrintService.html#getDefaultAttributeValues(net.jini.print.service.Settings)"><CODE>PrintService.getDefaultAttributeValues()</CODE></A>,
+<A HREF="../service/PrintService.html#getUnsupportedSettings(net.jini.print.service.Settings)"><CODE>PrintService.getUnsupportedSettings()</CODE></A>.
+<P>
+<LI>
+A capability method was added to interface
+<A HREF="../service/MultiDocPrintService.html">MultiDocPrintService</A>:
+<A HREF="../service/MultiDocPrintService.html#getUnsupportedSettings(net.jini.print.service.MultiDocSettings)"><CODE>getUnsupportedSettings()</CODE></A>.
+Analogous to class <A HREF="../service/Settings.html">Settings</A>,
+class <A HREF="../service/MultiDocSettings.html">MultiDocSettings</A>
+was defined to hold the doc flavors,
+document-level attributes, and job-level attributes
+for a supposed multidoc print job.
+<P>
+<LI>
+Capability methods were added to interface
+<A HREF="../service/LocalizedPrintService.html">LocalizedPrintService</A>
+to determine the supported locales and the default locale.
+The documentation was expanded
+to clarify how the printer chooses a locale to use
+if the printer does not support the exact locale the client specifies.
+</UL>
+<H4>Events</H4>
+<UL>
+<LI>
+The printing event class hierarchy was changed
+to include additional events.
+Abstract base classes for printing events
+were added in a new package.
+See package <A HREF="../event/package-summary.html">net.jini.print.event</A>
+for details.
+<P>
+<LI>
+The event registration methods in interfaces
+<A HREF="../service/PrintService.html">PrintService</A>,
+<A HREF="../job/PrintRequest.html">PrintRequest</A>, and
+<A HREF="../job/PrintJob.html">PrintJob</A>
+were changed to align with the new printing event scheme.
+</UL>
+<H4>Lookup</H4>
+<UL>
+<LI>
+The <A HREF="../lookup/PrinterDescriptionEntry.html">PrinterDescriptionEntry</A>
+was changed to consist of fields that are printer description attributes
+instead of generic Integers and Booleans.
+The Jini Print Service lookup scheme in package
+<A HREF="../lookup/package-summary.html">net.jini.print.lookup</A>
+was revised accordingly.
+<P>
+<LI>
+Class <A HREF="../lookup/LocaleEntry.html">LocaleEntry</A> was added.
+The Jini Print Service lookup scheme in package
+<A HREF="../lookup/package-summary.html">net.jini.print.lookup</A>
+was revised to require a printer to register one
+<A HREF="../lookup/LocaleEntry.html">LocaleEntry</A>
+for each supported locale.
+</UL>
+<H4>Exceptions</H4>
+<UL>
+<LI>
+Mixin interfaces
+<A HREF="../../../../javax/print/exception/URLInaccessibleException.html">URLInaccessibleException</A> and
+<A HREF="../../../../javax/print/exception/URLSchemeNotSupportedException.html">URLSchemeNotSupportedException</A>
+were added to report specific error conditions
+involving a URL address.
+</UL>
+<H4>Doc Implementations</H4>
+<UL>
+<LI>
+The example implementations of interfaces
+<A HREF="../data/Doc.html">Doc</A> and
+<A HREF="../data/MultiDoc.html">MultiDoc</A>
+in package
+<A HREF="../../../../org/jpwg/jini/print/data/package-summary.html">org.jpwg.jini.print.data</A>
+were changed to conform to the new contracts
+for those interfaces.
+The doc implementation class hierarchy was reorganized
+and class
+<A HREF="../../../../org/jpwg/jini/print/data/LeasedAbstractDoc.html">LeasedAbstractDoc</A>
+was added.
+</UL>
+<H4>Unified Printing API</H4>
+<UL>
+<LI>
+The printing attribute classes and interfaces
+formerly in packages net.jini.print.attribute and
+net.jini.print.attribute.standard
+are now in packages
+<A HREF="../../../../javax/print/attribute/package-summary.html">javax.print.attribute</A> and
+<A HREF="../../../../javax/print/attribute/standard/package-summary.html">javax.print.attribute.standard</A>,
+respectively.
+<P>
+<LI>
+The printing exception classes and interfaces
+formerly in package net.jini.print.exception
+are now in package
+<A HREF="../../../../javax/print/exception/package-summary.html">javax.print.exception</A>.
+<P>
+<LI>
+Package <A HREF="../../../../javax/print/data/package-summary.html">javax.print.data</A>
+was added.
+Class <A HREF="../../../../javax/print/data/DocFlavor.html">DocFlavor</A>
+was moved to package
+<A HREF="../../../../javax/print/data/package-summary.html">javax.print.data</A>.
+Interfaces <A HREF="../../../../javax/print/data/Doc.html">Doc</A> and
+<A HREF="../../../../javax/print/data/MultiDoc.html">MultiDoc</A>
+were added to package
+<A HREF="../../../../javax/print/data/package-summary.html">javax.print.data</A>.
+Interfaces <A HREF="../data/Doc.html">net.jini.print.data.Doc</A> and
+<A HREF="../data/MultiDoc.html">net.jini.print.data.MultiDoc</A>
+remain in package <A HREF="../data/package-summary.html">net.jini.print.data</A>
+but were changed to extend the like-named superinterfaces in package
+<A HREF="../../../../javax/print/data/package-summary.html">javax.print.data</A>.
+</UL>
+<H4>Documentation</H4>
+<UL>
+<LI>
+The Tutorial was revised 
+to conform to the above changes.
+</UL>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Top" onClick="window.location.href='#top'">
+</FORM>
+
+<P>
+<HR>
+<A NAME="20000324"><H2>Draft Version 24-Mar-2000</H2></A>
+<H3>Description</H3>
+This draft incorporates revisions
+to resolve issues raised with the draft version of 07-Feb-2000.
+This is also the initial draft
+of all the capabilities of the first product release subset
+identified at the Jini Printing Working Group meeting
+in September 1999.
+See the
+<A HREF="http://developer.jini.org/exchange/users/jpgwg/roadmap/roadmap-19990928/firstsubset.htm">Jini Print Service Roadmap Prototyping Subset</A>
+for a list of these capabilities.
+<H3>Changes Since Previous Version</H3>
+<H4>Attributes</H4>
+<UL>
+<LI>
+The package summary for
+net.jini.print.attribute
+was rewritten and expanded
+to explain the rationale behind the design
+of the attribute classes.
+<P>
+<LI>
+Attribute sets,
+used for document attributes, job templates,
+print job status, and printer status,
+were changed to use a new general-purpose data structure,
+the <I>categorical set.</I>
+The categorical set data structure,
+defined by interface CategoricalSet
+in a new package net.jini.print.util,
+is designed to be part of the standard Java collections framework
+in the core JDK package java.util.
+Interface AttributeSet
+was changed to derive from
+interface CategoricalSet,
+and the printing attribute base interface
+Attribute
+was changed to integrate with the categorical set data structure.
+<P>
+<LI>
+The tagging interfaces
+AllOrNoneAttribute,
+RegisteredAttribute,
+and SpecialMatchAttribute
+were eliminated.
+These existed in the previous API draft
+to support service registration in the Jini Lookup Service (JLUS).
+This leaves the attribute classes in packages
+net.jini.print.attribute and
+net.jini.print.attribute.standard
+free of Jini-specific code,
+hence making them more suitable for use in other printing applications
+such as core JDK printing (package java.awt.print).
+<P>
+<LI>
+The abstract syntax classes were renamed from <CODE>"...Attribute"</CODE>
+to <CODE>"...Syntax"</CODE>,
+and they no longer implement interface Attribute,
+to emphasize that these classes are not themselves printing attributes,
+they are just information containers
+which in fact could possibly be used in applications besides printing.
+Each printing attribute class
+now implements interface Attribute
+(to mark it as a printing attribute)
+and extends the appropriate abstract syntax class
+(to obtain its implementation).
+<P>
+<LI>
+Class ResolutionSyntax
+(formerly ResolutionAttribute)
+was changed to store its values internally
+in standard units.
+Operations are provided for converting from the internal units
+to external units of dots per inch (dpi)
+or dots per centimeter (dpcm).
+<P>
+<LI>
+Classes DateTimeSyntax,
+Size2DSyntax,
+and WeightSyntax
+were added.
+<P>
+<LI>
+The doc description attributes and job template attributes in package
+net.jini.print.attribute.standard
+were extensively revised from the previous API draft
+to bring them in line with the above changes.
+Especially noteworthy revisions:
+The former Finishings attribute
+was split into two independent attributes,
+FinishingsBinding and
+FinishingsCover.
+Attribute JobHoldUntil
+was changed to let the client specify a job hold-until time
+as an exact date and time.
+The Media attribute
+became a collection of several independent attributes
+denoting different media characteristics.
+<P>
+<LI>
+Job description attributes and printer description attributes
+were added to package
+net.jini.print.attribute.standard,
+which now comprises 63 attribute classes.
+</UL>
+<H4>Docs</H4>
+<UL>
+<LI>
+Interface Doc was changed
+to address issues with docs in a distributed printing system.
+It is now a non-remote, Serializable interface.
+Its methods are now defined to behave idempotently;
+the <CODE>readPrintData()</CODE> method's name
+was changed back to
+<CODE>getPrintData()</CODE>.
+The documentation was changed
+to clarify what print data representation object is supposed to be returned
+if the <CODE>getPrintData()</CODE> method
+is called more than once.
+The <CODE>getAttributes()</CODE> method
+was changed to return an
+AttributeSet object
+instead of an array of attributes.
+<P>
+<LI>
+Interface LeasedDoc,
+an extension of interface Doc,
+was added to optionally convey a lease on the print data
+to the Print Job.
+<P>
+<LI>
+Interface DocIterator was eliminated
+and interface MultiDoc was resurrected
+to address issues with multiple doc print jobs
+in a distributed printing system.
+Interface MultiDoc
+now has idempotent <CODE>getDoc()</CODE>
+and <CODE>next()</CODE> methods
+providing a "linked list view" of a sequence of docs.
+The pattern in which a print service proxy
+is required to use a MultiDoc object
+was documented.
+<P>
+<LI>
+Class RemoteInputStream
+was moved to package net.jini.print.data.
+It was changed to be an abstract "tagging base class"
+extending class java.io.InputStream
+but with no implementation.
+Its purpose is to require certain behavior
+after a RemoteException occurs while reading a remote input stream
+that allows the consumer to recover from transient network failures;
+this behavior could be achieved in various ways
+in different concrete subclass implementations.
+Class RemoteReader,
+a similar abstract "tagging base class"
+extending class java.io.Reader, was added.
+<P>
+<LI>
+The utility methods
+<CODE>getReaderForText()</CODE> and
+<CODE>getStreamForBytes()</CODE>
+were moved from class DocFlavor
+to interface Doc.
+<P>
+</UL>
+<H4>Doc Implementations</H4>
+<UL>
+<LI>
+Package net.jini.print.data.standard was renamed
+org.jpwg.jini.print.data
+to emphasize that the implementations in that package
+are not part of the official Jini Print Service API,
+but are only examples
+that clients are free to use or not use
+as they see fit.
+<P>
+<LI>
+Package
+org.jpwg.jini.print.data
+(formerly package net.jini.print.data.standard)
+was reorganized.
+It now contains sample implementations of the
+Doc interface
+corresponding to the common print data representation classes
+for client formatted print data:
+classes StringDoc,
+InputStreamDoc,
+ReaderDoc,
+and URLDoc.
+It also contains variants of the input stream and reader docs
+with leases:
+classes LeasedInputStreamDoc
+and LeasedReaderDoc.
+Finally, it contains two sample implementations
+of the MultiDoc interface:
+class ArrayMultiDoc
+layered on top of an array of docs,
+and class IteratorMultiDoc
+layered on top of an Iterator over a collection of docs.
+<P>
+<LI>
+Class RmiInputStream
+was rewritten to support recoverable reading of remote byte streams
+as specified by class RemoteInputStream.
+<P>
+<LI>
+Class RmiReader
+was added to support recoverable reading of remote character streams
+as specified by class RemoteReader.
+</UL>
+<H4>Print Jobs</H4>
+<UL>
+<LI>
+Package net.jini.print.job
+was reorganized.
+It now declares interfaces for two job-related objects:
+a Print Request 
+representing a nascent print job being set up
+before being submitted to be printed,
+and a Print Job 
+representing an actual print job
+that has been submitted to be printed. 
+<P>
+<LI>
+Interfaces
+PrintRequest,
+DocPrintRequest, and
+MultiDocPrintRequest
+were added to define the class hierarchy for Print Requests.
+<P>
+<LI>
+Interface PrintJob was rewritten
+and interface CancelablePrintJob was added
+to define the class hierarchy for Print Jobs.
+Interfaces DocPrintJob and MultiDocPrintJob were eliminated
+(their roles were taken over by DocPrintRequest and MultiDocPrintRequest).
+<P>
+<LI>
+Classes PrintJobEvent
+and PrintDataEvent
+(formerly called PrintJobDataEvent)
+were rewritten to support
+the new Print Request/Print Job scheme.
+<P>
+<LI>
+The description of print job processing
+(in the documentation for interface PrintJob)
+was revised and expanded to support
+the new Print Request/Print Job scheme.
+</UL>
+<H4>Print Services</H4>
+<UL>
+<LI>
+Interface PrintService
+was changed to create doc Print Request objects
+instead of Print Job objects.
+Methods were added to examine the Print Service's
+set of printer description attributes
+and to register an event listener for print service events
+notifying of changes in the printer description attributes.
+The methods for querying a Print Service's capabilities
+were augmented to test for supported combinations
+of doc flavors and printing attributes.
+<P>
+<LI>
+Interface MultiDocPrintService
+was changed to create multidoc Print Request objects
+instead of Print Job objects.
+<P>
+<LI>
+Interface LocalizedPrintService
+and class PrintServiceEvent
+were added.
+</UL>
+<H4>Lookup</H4>
+<UL>
+<LI>
+The names of entry classes SupportedAttributeEntry and SupportedFlavorEntry
+were shortened to just
+AttributeEntry and
+FlavorEntry.
+<P>
+<LI>
+Entry class AttributeEntry
+was rewritten to include an attribute runtime class field
+as well as the attribute category and value fields.
+The attribute category and runtime class fields
+were changed from a Class to a String
+to save space and time in the JLUS.
+<P>
+<LI>
+Entry classes MediaEntry and
+PrinterDescriptionEntry
+were added.
+<P>
+<LI>
+All the Entry classes now implement interface ServiceControlled.
+<P>
+<LI>
+Class PrintServiceLookup was eliminated.
+Code to look up Jini Print Service instances in the JLUS
+does not properly belong in the core Jini Print Service API.
+The intention is to provide a class
+in a non-core package (such as org.jpwg.jini.print.lookup)
+that works with the Jini Service Discovery Manager
+to look up Jini Print Service instances.
+</UL>
+<H4>Exceptions</H4>
+<UL>
+<LI>
+The exception classes and interfaces
+formerly declared in package net.jini.print
+were moved to package net.jini.print.exception,
+except for the following:
+PrintServiceException
+is in package net.jini.print.service;
+PrintJobException
+is in package net.jini.print.job.
+<P>
+<LI>
+A new class PrintRequestException
+was added to package net.jini.print.job.
+</UL>
+<H4>Documentation</H4>
+<UL>
+<LI>
+The Overview, Tutorial, and package summaries
+were revised and expanded
+to conform to the above changes.
+</UL>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Top" onClick="window.location.href='#top'">
+</FORM>
+
+<P>
+<HR>
+<A NAME="20000207"><H2>Draft Version 07-Feb-2000</H2></A>
+<H3>Description</H3>
+This draft incorporates revisions
+agreed on at the Jini Printing Working Group telecon of 24-Jan-2000,
+at which the API draft version of 17-Jan-2000 was reviewed.
+See the <A HREF="http://developer.jini.org/exchange/users/jpgwg/JiniPrintService/issues/index.html">Jini Print Service API Issues List</A>
+for minutes of the telecon.
+This draft also takes a first step
+towards the capabilities of the first product release subset
+identified at the Jini Printing Working Group meeting
+in September 1999.
+See the
+<A HREF="http://developer.jini.org/exchange/users/jpgwg/roadmap/roadmap-19990928/firstsubset.htm">Jini Print Service Roadmap Prototyping Subset</A>
+for a list of these capabilities.
+<H3>Changes Since Previous Version</H3>
+<UL>
+<LI>
+The print exception scheme was changed.
+It now includes just base class PrintException
+and subclasses PrintJobException and PrintServiceException.
+It also includes several mixin interfaces
+which a print exception subclass can optionally implement
+to report additional data about the error.
+The Print Job and Print Service methods
+now are declared to throw just PrintJobException
+and PrintServiceException, respectively.
+<P>
+<LI>
+Two utility operations,
+<CODE>getReaderForText()</CODE> and
+<CODE>getStreamForBytes()</CODE>,
+were added to class DocFlavor
+to help a Doc's client extract client formatted print data. 
+<P>
+<LI>
+The leasing scheme was changed.
+The lease on the Print Service object was eliminated.
+The Print Job object's lease
+was pulled out of the Print Job itself.
+A Print Job object and its associated lease object
+are now returned together,
+wrapped in a PrintJobAndLease object.
+The lease on the Doc object was eliminated,
+as were the lease and landlord implementation classes
+in package net.jini.print.data.standard.
+<P>
+<LI>
+Print Job events were added.
+Interface PrintJob
+now includes a method to add a remote event listener
+to a Print Job.
+The only Print Job event defined so far
+is class PrintJobDataEvent
+which a Print Job reports
+in response to a <CODE>print()</CODE> method call
+to indicate whether the Print Job successfully obtained the print data.
+The documentation for class DocPrintJob
+was updated to specify when Print Job events are reported.
+<P>
+<LI>
+Interface MultiDocPrintJob
+was changed to obtain doc objects
+from a "doc iterator"
+(interface DocIterator)
+instead of a regular iterator
+(interface java.util.Iterator).
+A regular iterator is unsuitable
+because interface java.util.Iterator
+is not a remote interface.
+A doc iterator implementation layered on top of a regular iterator
+was added
+(class RemoteDocIterator).
+<P>
+<LI>
+The attribute tagging interface NonRegisteredAttribute was eliminated,
+and RegisteredAttribute
+took its place.
+Now, every attribute class included in the service registration
+in the Jini Lookup Service (JLUS)
+is explicitly tagged as either a
+RegisteredAttribute,
+AllOrNoneAttribute, or
+SpecialMatchAttribute.
+Attribute classes
+not included in the service registration
+are not tagged.
+<P>
+<LI>
+Attribute classes for job template attributes were added.
+However, job templates, job description attributes,
+and printer description attributes
+are not in the API yet.
+<P>
+<LI>
+The Jini Print Service lookup scheme was changed.
+Class ServiceIDEntry was eliminated.
+The Print Service Lookup Utility
+(class PrintServiceLookup)
+now supports searches based on all the job template attributes,
+and its methods are now directly analogous to the Jini Lookup Service's
+<CODE>lookup()</CODE> methods.
+</UL>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Top" onClick="window.location.href='#top'">
+</FORM>
+
+<P>
+<HR>
+<A NAME="20000117"><H2>Draft Version 17-Jan-2000</H2></A>
+<H3>Description</H3>
+This draft incorporates resolutions to issues
+about the 23-Dec-1999 draft version
+raised in the Jini Printing Working Group's email DL.
+See the <A HREF="http://developer.jini.org/exchange/users/jpgwg/JiniPrintService/issues/index.html">Jini Print Service API Issues List</A>
+for further information.
+This draft still includes just the capabilities of the prototyping subset
+identified at the Jini Printing Working Group meeting
+in September 1999.
+See the
+<A HREF="http://developer.jini.org/exchange/users/jpgwg/roadmap/roadmap-19990928/protosubset.htm">Jini Print Service Roadmap Prototyping Subset</A>
+for a list of these capabilities.
+<H3>Changes Since Previous Version</H3>
+<UL>
+<LI>
+Interface net.jini.print.data.MultiDoc was eliminated.
+Instead, a multidoc print job gets its print data
+from an array or Iterator of doc objects.
+This lets the client encapsulate a group of docs to be printed
+using any collection class that supports an Iterator.
+<P>
+<LI>
+The relationship between doc objects and Print Job objects was changed.
+Previously, a doc had been considered <I>part of</I> a Print Job.
+Now, a doc is considered to be <I>printed by</I> a Print Job,
+but not part of it.
+Specific consequences of this change are:
+<UL>
+<LI>
+The Print Service's print job creation methods
+no longer take a doc or multidoc as an argument;
+they simply create a Print Job
+without reference to a specific doc or multidoc.
+Instead, the doc or multidoc is supplied
+as a parameter of the Print Job's <CODE>print()</CODE> method.
+<LI>
+The Print Service's print job creation methods
+no longer verify whether the Jini Print Service instance
+can support printing the given doc or multidoc.
+Likewise, the Print Service's <CODE>isDocSupported()</CODE>
+and <CODE>isMultiDocSupported()</CODE> methods
+were eliminated.
+Instead, the Print Job's <CODE>print()</CODE> method
+does this verification.
+<LI>
+The Print Job's <CODE>getDoc()</CODE> and <CODE>getMultiDoc()</CODE> methods
+were eliminated.
+</UL>
+This change was done in anticipation
+of a future version of the API
+in which a client will be able to query a Print Service
+for its queued Print Jobs.
+These Print Jobs will be able to report their status
+in the form of attributes
+but will not in general be able to report
+the doc object from which their print data came.
+Thus, considering a doc to be "part of" a Print Job
+would be problematic.
+<P>
+<LI>
+Interface UniDocPrintJob was renamed DocPrintJob
+to eliminate confusion --
+that interface is used to print a doc, not a "unidoc."
+<P>
+<LI>
+The Print Job's <CODE>print()</CODE> method
+was split into three overloaded methods
+and moved into subinterfaces:
+<CODE>DocPrintJob.print(Doc)</CODE>,
+<CODE>MultiDocPrintJob.print(Doc[])</CODE>, and
+<CODE>MultiDocPrintJob.print(Iterator)</CODE>.
+Analogous changes were made
+to the print service lookup utility
+(class net.jini.print.lookup.PrintServiceLookup).
+<P>
+<LI>
+Package net.jini.print.data.impl,
+containing implementations of the Doc interface,
+was renamed net.jini.print.data.standard.
+<P>
+<LI>
+Leases were added to the Print Service, Print Job, and doc objects.
+For a Jini Print Service,
+the Print Service object's lease
+and the Print Job object's lease
+let the Jini Print Service
+detect and recover from client crashes.
+For a client,
+the doc object's lease
+lets the client detect and recover
+from Jini Print Service crashes.
+<P>
+<LI>
+The doc implementation class hierarchy
+in package net.jini.print.data.standard
+was reorganized to add lease implementations.
+To manage the doc leases for a client,
+a landlord implementation was added also
+(class net.jini.print.data.standard.DocLandlord).
+<P>
+<LI>
+Interface net.jini.print.data.Doc was changed to require
+the doc object implementation to function correctly
+whether its methods are called from the same JVM in which it was created
+or whether it is sent to a remote JVM and its methods are called from there.
+This affords greater flexibility
+to set up a distributed printing system.
+<P>
+<LI>
+A remote input stream implementation was added
+(class net.jini.print.data.standard.RemoteInputStream).
+This lets a doc object
+supply its print data via an input stream
+to a Jini Print Service executing either locally or remotely.
+<P>
+<LI>
+The fields of class net.jini.print.data.DocFlavor
+were changed from protected scope to private scope.
+Class net.jini.print.data.MimeType
+was changed from public scope to package scope.
+These changes hide implementation details from the client.
+<P>
+<LI>
+In class net.jini.print.data.DocFlavor,
+the default character set for a <CODE>"text/plain"</CODE> MIME type
+was changed from US-ASCII to UTF-8.
+<P>
+<LI>
+The implementation of class
+net.jini.print.attribute.EnumAttribute
+was simplified.
+<P>
+<LI>
+A locale field was added to class
+net.jini.print.attribute.TextAttribute
+to let a client optionally specify the text string's natural language.
+<P>
+<LI>
+Documentation throughout the API
+as well as the Tutorial
+were revised in accordance with the above changes.
+</UL>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Top" onClick="window.location.href='#top'">
+</FORM>
+
+<P>
+<HR>
+<A NAME="19991223"><H2>Draft Version 23-Dec-1999</H2></A>
+<H3>Description</H3>
+This draft incorporates revisions
+agreed on at the Jini Printing Working Group telecon of 06-Dec-1999,
+at which the API draft version of 15-Nov-1999 was reviewed.
+See the <A HREF="http://developer.jini.org/exchange/users/jpgwg/JiniPrintService/issues/index.html">Jini Print Service API Issues List</A>
+for minutes of the telecon.
+This draft still includes just the capabilities of the prototyping subset
+identified at the Jini Printing Working Group meeting
+in September 1999.
+See the
+<A HREF="http://developer.jini.org/exchange/users/jpgwg/roadmap/roadmap-19990928/protosubset.htm">Jini Print Service Roadmap Prototyping Subset</A>
+for a list of these capabilities.
+<H3>Changes Since Previous Version</H3>
+<UL>
+<LI>
+A new subpackage was added, package
+net.jini.print.data.
+Print data formats are now indicated by class DocFlavor
+instead of the DocumentFormat attribute (which was eliminated).
+A single piece of print data is encapsulated
+in an object that implements interface Doc.
+Multiple pieces of print data are encapsulated
+in an object that implements interface MultiDoc.
+<P>
+<LI>
+Another new subpackage was added, package net.jini.print.data.impl,
+containing example implementations of interfaces
+Doc and MultiDoc.
+<P>
+<LI>
+The PrintService interface
+was rewritten and split into a couple of subinterfaces.
+Interface PrintService itself
+contains methods for discovering a Print Service's
+supported doc flavors, printing attributes, and attribute values.
+Subinterface UniDocPrintService
+contains a method for creating a unidoc print job object
+that will print a specified Doc object,
+that is, a single piece of print data.
+Subinterface MultiDocPrintService
+contains a method for creating a multidoc print job object
+that will print a specified MultiDoc object,
+that is, multiple pieces of print data.
+<P>
+<LI>
+The PrintJob interface
+was rewritten and split into a couple of subinterfaces.
+Interface PrintJob itself
+contains a <CODE>print()</CODE> method
+that extracts the print data
+from the Doc or MultiDoc object
+the client supplied when the Print Job was created.
+Subinterfaces UniDocPrintJob and MultiDocPrintJob
+contain methods that pertain to unidoc print jobs
+and multidoc print jobs, respectively.
+<P>
+<LI>
+The print service lookup scheme
+in package net.jini.print.lookup
+was revised to let clients
+search for Jini Print Service instances
+that can print a specified Doc or MultiDoc object.
+<P>
+<LI>
+Documentation throughout the API
+as well as the Tutorial
+were revised in accordance with the above changes.
+<P>
+<LI>
+The <CODE>getKey()</CODE> method
+was added to interface Attribute.
+</UL>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Top" onClick="window.location.href='#top'">
+</FORM>
+
+<P>
+<HR>
+<A NAME="19991115"><H2>Draft Version 15-Nov-1999</H2></A>
+<H3>Description</H3>
+This draft is the starting point
+for reviewing the prototyping subset
+of the Jini Print Service API
+within the Jini Printing Working Group.
+It includes all capabilities of the prototyping subset
+identified at the Jini Printing Working Group meeting
+in September 1999.
+See the
+<A HREF="http://developer.jini.org/exchange/users/jpgwg/roadmap/roadmap-19990928/protosubset.htm">Jini Print Service Roadmap Prototyping Subset</A>
+for a list of these capabilities.
+<H3>Changes Since Previous Version</H3>
+<UL>
+<LI>
+Changed the print exception scheme
+to afford more flexibility
+to the client writing exception handlers.
+There are now three tiers of exceptions:
+a base exception class, PrintException;
+exceptions for indicating particular error conditions;
+and exceptions for indicating particular error conditions
+encountered by particular methods.
+See "Exception Classes"
+in package net.jini.print
+for further information.
+<P>
+<LI>
+Changed the semantics of the Print Job methods
+to follow a "create -- write -- close" pattern
+and added the ability to write multiple documents
+to a print job.
+This aligns the Print Job object's behavior
+with the printing model defined by the Internet Printing Protocol (IPP)
+in <A HREF="http://www.ietf.org/rfc/rfc2566.txt">RFC 2566</A>.
+See package net.jini.print.job
+for further information.
+<P>
+<LI>
+Changed back to interfaces
+net.jini.print.job.InputStreamPrintJob
+and net.jini.print.job.OutputStreamPrintJob
+from interfaces net.jini.print.job.StreamPrintJob and
+net.jini.print.job.StreamPrintData.
+Concern was that the two-stage process
+(get a StreamPrintData object from the print job,
+then get the actual stream from the StreamPrintData object)
+has too much potential for client programming errors;
+the one-stage process
+(get the stream directly from the print job)
+is simpler and less error-prone.
+<P>
+<LI>
+Eliminated the mixin interface SpecializedLookupAttribute
+and its methods
+in favor of adding simpler tagging interfaces.
+Right now just one is defined,
+interface NonRegisteredAttribute
+to indicate that a particular attribute
+is not registered into the Jini Lookup Service (JLUS).
+</UL>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Top" onClick="window.location.href='#top'">
+</FORM>
+
+<P>
+<HR>
+<A NAME="19991110"><H2>Draft Version 10-Nov-1999</H2></A>
+<H3>Description</H3>
+This is the third complete draft
+of a "synthesis API" for the Jini Print Service
+that includes all capabilities of the prototyping subset
+identified at the Jini Printing Working Group meeting
+in September 1999.
+See the
+<A HREF="http://developer.jini.org/exchange/users/jpgwg/roadmap/roadmap-19990928/protosubset.htm">Jini Print Service Roadmap Prototyping Subset</A>
+for a list of these capabilities.
+<H3>Changes Since Previous Version</H3>
+<UL>
+<LI>
+Got rid of the Print Service Factory
+and all related classes and interfaces.
+Philosophy is that we will not worry for the moment
+about client memory limitations,
+since the code space required to support RMI (about 1/2 a megabyte)
+seems much greater than the size of a Jini Print Service implementation,
+and since even low-end clients these days
+tend to have 2 MB or more of memory.
+Eliminating the Print Service Factory
+simplifies the API.
+But the issue of whether a Print Service Factory is needed
+will remain open
+until we get some implementation experience
+and see just how big Jini Print Service implementations are
+compared to low-end clients' memory capacities.
+<P>
+<LI>
+Simplified the attribute scheme
+by eliminating methods intended to support lookups
+for limited-resource clients.
+Attribute became a tagging interface again
+instead of an abstract base class with methods.
+<P>
+<LI>
+Eliminated the attribute tagging interfaces
+which were provided for compile-time safety
+to prevent attributes from being used
+in places where they shouldn't be.
+Concern was that this would limit flexibility
+by preventing attributes from being used in new contexts
+in the future.
+Instead, using an attribute improperly
+will throw an exception at run time.
+<P>
+<LI>
+Eliminated the DocumentLocale attribute.
+Although defined in IPP,
+it's not clear what this attribute will be used for
+in any actual printer.
+<P>
+<LI>
+Incorporated David Mendenhall's code of 14-Oct-1999 for
+interface Attribute,
+class EnumAttribute,
+and class TextAttribute.
+<P>
+<LI>
+Added mixin interface SpecializedLookupAttribute
+to support some of the special cases needed
+when searching the Jini Lookup Service
+for printing attributes.
+</UL>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Top" onClick="window.location.href='#top'">
+</FORM>
+
+<P>
+<HR>
+<A NAME="19991104"><H2>Draft Version 04-Nov-1999</H2></A>
+<H3>Description</H3>
+This is the second complete draft
+of a "synthesis API" for the Jini Print Service
+that includes all capabilities of the prototyping subset
+identified at the Jini Printing Working Group meeting
+in September 1999.
+See the
+<A HREF="http://developer.jini.org/exchange/users/jpgwg/roadmap/roadmap-19990928/protosubset.htm">Jini Print Service Roadmap Prototyping Subset</A>
+for a list of these capabilities.
+<H3>Changes Since Previous Version</H3>
+<UL>
+<LI>
+Changed from interfaces net.jini.print.job.InputStreamPrintJob
+and net.jini.print.job.OutputStreamPrintJob
+to interfaces
+net.jini.print.job.StreamPrintJob and
+net.jini.print.job.StreamPrintData.
+The stream print job object
+returns a stream print data object.
+The stream print data object
+lets the client write print data to an output stream (the push model)
+or lets the print service read print data from an input stream (the pull model).
+The stream print data object
+acts as an adapter between the client-side Java stream
+and the underlying mechanism that transports the print data
+to the (possibly remote) print service.
+<P>
+<LI>
+Changed the way print attributes
+are registered into the Jini Lookup Service (JLUS)
+in the service registration.
+Before, supported print attributes and supported print attribute values
+were wrapped into separate Entry objects.
+Now, the Entry object
+(class SupportedAttributeEntry)
+contains both items of information,
+a key field which is the supported print attribute class
+and a value field which is the supported print attribute value.
+This arrangement is anticipated to be needed
+when searching the JLUS for a Jini Print Service instance
+that can fulfill a given job template
+(a capability to be added in the next API revision).
+<P>
+<LI>
+Made net.jini.print.attribute.Attribute
+an abstract base class instead of an interface.
+Added methods to class Attribute
+to support the print service lookup scheme
+(see package net.jini.print.lookup).
+<P>
+<LI>
+Added a Tutorial lesson
+showing how a Jini Print Service instance
+would set up its service registration
+to go into the JLUS.
+<P>
+<LI>
+Moved the specific printing attribute classes
+from package net.jini.print.attribute
+to package net.jini.print.attribute.standard.
+This clarifies the distinction
+between classes and interfaces
+that pertain to attributes in general
+(in package net.jini.print.attribute)
+and classes for specific attributes
+(in package net.jini.print.attribute.standard).
+</UL>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Top" onClick="window.location.href='#top'">
+</FORM>
+
+<P>
+<HR>
+<A NAME="19991028"><H2>Draft Version 28-Oct-1999</H2></A>
+<H3>Description</H3>
+This is the first complete draft
+of a "synthesis API" for the Jini Print Service
+that includes all capabilities of the prototyping subset
+identified at the Jini Printing Working Group meeting
+in September 1999.
+See the
+<A HREF="http://developer.jini.org/exchange/users/jpgwg/roadmap/roadmap-19990928/protosubset.htm">Jini Print Service Roadmap Prototyping Subset</A>
+for a list of these capabilities.
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Top" onClick="window.location.href='#top'">
+</FORM>
+
+<P>
+<HR>
+<B>DRAFT STANDARD VERSION 1.0 (23-MAY-2000)</B>
+
+</P>
+</BODY>
+</HTML>

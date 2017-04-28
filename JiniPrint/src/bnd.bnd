@@ -1,0 +1,10 @@
+-exportcontents: \
+    net.jini.print.data,\
+    net.jini.print.event,\
+    net.jini.print.job,\
+    net.jini.print.lookup,\
+    net.jini.print.service,\
+    net.jini.print.attribute.standard,\
+    net.jini.print.exception,\
+    org.jpwg.jini.print
+-sources: true

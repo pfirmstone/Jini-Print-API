@@ -1,0 +1,354 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service Tutorial -- Lesson 5. Print Job Events</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%>
+<TR>
+<TD ALIGN="left" VALIGN="top">
+<PRE>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+</PRE>
+</TD>
+<TD ALIGN="left" VALIGN="top">
+<PRE>
+&nbsp;&nbsp;&nbsp;&nbsp;
+</PRE>
+</TD>
+<TD ALIGN="left" VALIGN="top">
+<PRE>
+<B>import java.io.IOException;</B>
+import java.rmi.RemoteException;
+<B>import java.rmi.server.UnicastRemoteObject;</B>
+import java.util.Locale;
+import javax.print.attribute.Attribute;
+import javax.print.attribute.HashDocAttributeSet;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintJobAttributeSet;
+import javax.print.attribute.PrintRequestAttribute;
+import javax.print.attribute.standard.DocumentName;
+import javax.print.attribute.standard.JobName;
+import javax.print.attribute.standard.JobState;
+import javax.print.attribute.standard.Media;
+import javax.print.attribute.standard.MediaColor;
+import javax.print.attribute.standard.MediaKind;
+import javax.print.attribute.standard.MediaOpacity;
+import javax.print.attribute.standard.MediaSize;
+import javax.print.attribute.standard.OrientationRequested;
+import javax.print.exception.PrintException;
+import net.jini.core.entry.Entry;
+<B>import net.jini.core.event.EventRegistration;</B>
+<B>import net.jini.core.event.RemoteEvent;</B>
+<B>import net.jini.core.event.RemoteEventListener;</B>
+import net.jini.core.lease.Lease;
+import net.jini.core.lease.UnknownLeaseException;
+import net.jini.core.lookup.ServiceRegistrar;
+import net.jini.core.lookup.ServiceTemplate;
+import net.jini.lease.LeaseRenewalManager;
+import net.jini.print.job.PrintJob;
+import net.jini.print.job.PrintJobAndLease;
+<B>import net.jini.print.job.PrintJobEvent;</B>
+import net.jini.print.job.PrintRequest;
+import net.jini.print.lookup.AttributeEntry;
+import net.jini.print.lookup.FlavorEntry;
+import net.jini.print.lookup.MediaEntry;
+import net.jini.print.service.PrintService;
+import org.jpwg.jini.print.data.StringDoc;
+. . .
+<B>class PrintJobEventListener</B>
+<B>    extends UnicastRemoteObject</B>
+<B>    implements RemoteEventListener</B>
+<B>    {</B>
+<B>    public PrintJobEventListener()</B>
+<B>        throws RemoteException</B>
+<B>        {</B>
+<B>        super();</B>
+<B>        }</B>
+<B>    public void notify</B>
+<B>        (RemoteEvent theEvent)</B>
+<B>        {</B>
+<B>        try</B>
+<B>            {</B>
+<B>            PrintJobEvent thePrintJobEvent = (PrintJobEvent) theEvent;</B>
+<B>            JobState theJobState = (JobState)</B>
+<B>                thePrintJobEvent.getAttributes().get (JobState.class);</B>
+<B>            System.out.println ("Job state = " + theJobState);</B>
+<B>            }</B>
+<B>        catch (ClassNotFoundException exc)</B>
+<B>            {</B>
+<B>            System.out.println ("Couldn't get attributes from print job event");</B>
+<B>            }</B>
+<B>        catch (IOException exc)</B>
+<B>            {</B>
+<B>            System.out.println ("Couldn't get attributes from print job event");</B>
+<B>            }</B>
+<B>        }</B>
+<B>    }</B>
+. . .
+try
+    {
+    LeaseRenewalManager theLRM = new LeaseRenewalManager();
+    Media theMedia = new Media
+        (new Attribute[]
+            {MediaSize.NA.LETTER,
+             MediaColor.PINK,
+             MediaOpacity.OPAQUE,
+             MediaKind.SHEET});
+    StringDoc theDoc =
+        new StringDoc
+            ("Hello, world!",
+             new HashDocAttributeSet
+                (new DocumentName
+                    ("Test String",
+                     Locale.getDefault())));
+    ServiceRegistrar theJLUS = // Obtain a Jini Lookup Service (JLUS) proxy
+    ServiceTemplate theServiceTemplate =
+        new ServiceTemplate
+            (null,
+             new Class[] {PrintService.class},
+             new Entry[]
+                {new FlavorEntry (theDoc.getDocFlavor()),
+                 new MediaEntry (theMedia),
+                 new AttributeEntry (OrientationRequested.LANDSCAPE)});
+    PrintService thePrintService =
+        (PrintService) theJLUS.lookup (theServiceTemplate);
+    if (thePrintService != null)
+        {
+        PrintRequest thePrintRequest =
+            thePrintService.createDocPrintRequest
+                (theDoc,
+                 new HashPrintRequestAttributeSet
+                    (new PrintRequestAttribute[]
+                        {theMedia,
+                         OrientationRequested.LANDSCAPE,
+                         new JobName
+                            ("Test Job",
+                             Locale.getDefault())}));
+<B>        EventRegistration theEventRegistration =</B>
+<B>            thePrintRequest.addEventListener</B>
+<B>                (false,</B>
+<B>                 false,</B>
+<B>                 new Class[] {JobState.class},</B>
+<B>                 null,</B>
+<B>                 false,</B>
+<B>                 new PrintJobEventListener(),</B>
+<B>                 null,</B>
+<B>                 Lease.ANY);</B>
+<B>        theLRM.renewUntil (theEventRegistration.getLease(), Lease.ANY, null);</B>
+        PrintJobAndLease theJobAndLease =
+            thePrintRequest.print (Lease.ANY);
+        PrintJob theJob = theJobAndLease.printJob;
+        theLRM.renewUntil (theJobAndLease.lease, Lease.ANY, null);
+        for (;;)
+            {
+            PrintJobAttributeSet theJobAttributes = theJob.getAttributes();
+            JobState theJobState =
+                (JobState) theJobAttributes.get (JobState.class);
+            System.out.println ("Job state = " + theJobState);
+            if (theJobState == JobState.ABORTED ||
+                    theJobState == JobState.CANCELED ||
+                    theJobState == JobState.COMPLETED)
+                {
+                break;
+                }
+            Thread.currentThread().sleep (<B>10000L</B>);
+            }
+<B>        theLRM.cancel (theEventRegistration.getLease());</B>
+        theLRM.cancel (theJobAndLease.lease);
+        }
+    else
+        {
+        // This code executed if the JLUS couldn't find any print services
+        }
+    }
+catch (PrintException exc)
+    {
+    // This code executed if a printing error occurred
+    // Thrown by any of the above
+    }
+catch (RemoteException exc)
+    {
+    // This code executed if a remote error occurred
+    // Thrown by any of the above
+    }
+catch (InterruptedException exc)
+    {
+    // This code executed if the current thread is interrupted
+    // Thrown by Thread.currentThread().sleep()
+    }
+catch (UnknownLeaseException exc)
+    {
+    // This code executed if the print job's lease is unknown
+    // Thrown by theLRM.cancel()
+    }
+</PRE>
+</TD>
+</TR>
+</TABLE>
+</BODY>
+</HTML>

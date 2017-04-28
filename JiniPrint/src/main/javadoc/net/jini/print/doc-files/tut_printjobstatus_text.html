@@ -1,0 +1,230 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service Tutorial -- Lesson 4. Print Job Status</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<H2>Jini Print Service Tutorial</H2>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=100%>
+<TR>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_index.html" TARGET="_parent">Introduction</A><BR>
+<A HREF="tut_basics.html" TARGET="_parent">Lesson 1. The Very Basics</A><BR>
+<A HREF="tut_printdataattr.html" TARGET="_parent">Lesson 2. Print Data Attributes</A><BR>
+<A HREF="tut_lookup.html" TARGET="_parent">Lesson 3. Lookup</A><BR>
+<B>Lesson 4. Print Job Status</B><BR>
+</FONT></TD>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_printjobevents.html" TARGET="_parent">Lesson 5. Print Job Events</A><BR>
+<A HREF="tut_inputstreamprintjob.html" TARGET="_parent">Lesson 6. File Print Jobs</A><BR>
+<A HREF="tut_urlprintjob.html" TARGET="_parent">Lesson 7. URL Print Jobs</A><BR>
+<A HREF="tut_registration.html" TARGET="_parent">Lesson 8. Service Registration</A>
+</FONT></TD>
+</TR>
+</TABLE>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_lookup.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_printjobevents.html'">
+</FORM>
+
+<HR>
+<H2>Lesson 4. Print Job Status</H2>
+<P>
+The Jini Print Service API
+lets you monitor the status of your print job
+after you have submitted the Print Request.
+There are two ways to do it,
+by polling the print job's attributes
+(covered in this Lesson)
+and by receiving event notifications from the print job
+(covered in <A HREF="tut_printjobevents.html" TARGET="_parent">Lesson 5</A>).
+<P>
+When you submit a Print Request,
+the Jini Print Service instance
+creates a Print Job object
+that implements interface
+<A HREF="../job/PrintJob.html" TARGET="_parent">PrintJob</A>.
+In the previous Lessons,
+this Print Job object was never returned
+to our client program
+and we never did anything with it.
+However, it is possible to have the Print Job object
+returned when you submit a Print Request.
+The Print Job object lets you,
+among other things,
+examine the job's <B>job description attributes.</B>
+Various job description attributes
+indicate the job's state,
+how many jobs are ahead of it in the print queue,
+how many sheets it has printed, and so on.
+The Jini Print Service instance
+updates the values of these attributes dynamically
+as it processes the print job.
+Some of these attributes are mandatory
+and will be reported by all Jini Print Service implementations;
+others are optional and may or may not be reported.
+See package
+<A HREF="../../../../javax/print/attribute/standard/package-summary.html" TARGET="_parent">javax.print.attribute.standard</A>
+for a list of all the job description attributes.
+<P>
+We want our example client program
+to report the print job's state once a second
+until the job is finished.
+Below is the example code fragment from
+<A HREF="tut_lookup.html" TARGET="_parent">Lesson 3</A>
+expanded to monitor and report the print job state.
+<P>
+Line 35 constructs a Lease Renewal Manager (LRM)
+which we will need later.
+<P>
+To monitor the print job's status,
+we have to get a Print Job object back
+when we submit the Print Request.
+Lines 72-73 do an alternate <CODE>print()</CODE> method call
+that returns a <A HREF="../job/PrintJobAndLease.html" TARGET="_parent">PrintJobAndLease</A>
+object,
+which is just a container for a Print Job object
+and its associated lease object.
+The <CODE>print()</CODE> method's argument
+is the requested initial duration
+for the Print Job's lease.
+Line 73 specifies <CODE>Lease.ANY</CODE>,
+meaning the Jini Print Service instance
+should pick the initial lease duration itself.
+Line 74 extracts and saves the Print Job object,
+an instance of interface 
+<A HREF="../job/PrintJob.html" TARGET="_parent">PrintJob</A>.
+<P>
+A Print Job object is a leased resource.
+As long as you need to use the Print Job object,
+you have to keep renewing its lease.
+If the Print Job's lease expires or is canceled,
+the Jini Print Service instance
+can perform any cleanup actions needed
+and discard the Print Job object.
+This lets the Jini Print Service instance
+recover from a distributed failure,
+such as if our client program crashes
+or if a network outage occurs.
+<P>
+To do the lease renewal,
+we'll use the LRM we constructed back on line 35.
+Line 75 tells the LRM to start renewing
+the Print Job's lease.
+The first argument is the lease to be renewed,
+namely the Print Job's lease
+extracted from the 
+<A HREF="../job/PrintJobAndLease.html" TARGET="_parent">PrintJobAndLease</A> object.
+The second argument is the duration
+for which to keep renewing the lease;
+<CODE>Lease.ANY</CODE> tells the LRM
+to keep on renewing the lease forever
+until it is explicitly canceled.
+The third argument, null,
+means we're not interested
+in receiving event notifications
+about lease renewals.
+The LRM then takes care
+of renewing the Print Job's lease for us,
+and we can forget about it.
+<P>
+Now we are ready to start monitoring the Print Job's status.
+Line 76 sets up a polling loop
+that is executed once a second.
+A pass through the loop begins
+with line 78 calling the <CODE>getAttributes()</CODE> method
+on the Print Job,
+which returns a
+<A HREF="../../../../javax/print/attribute/PrintJobAttributeSet.html" TARGET="_parent">PrintJobAttributeSet</A>
+object containing a snapshot
+of the Print Job's job description attribute values
+at that instant.
+Each time through the loop,
+we must take a new snapshot;
+the returned attribute set object
+is <I>not</I> updated
+when the Print Job's attribute values change.
+<P>
+<A HREF="../../../../javax/print/attribute/PrintJobAttributeSet.html" TARGET="_parent">PrintJobAttributeSet</A>
+specifies the interface for a restricted attribute set
+that can contain only job description attributes.
+A job description attribute class
+implements the tagging interface
+<A HREF="../../../../javax/print/attribute/PrintJobAttribute.html" TARGET="_parent">PrintJobAttribute</A>.
+Some printing attributes
+are both job level attributes 
+that can appear in a Print Request's attribute set
+and job description attributes
+that can appear in a Print Job's attribute set;
+such attribute classes implement both tagging interfaces
+<A HREF="../../../../javax/print/attribute/PrintRequestAttribute.html" TARGET="_parent">PrintRequestAttribute</A>
+and
+<A HREF="../../../../javax/print/attribute/PrintJobAttribute.html" TARGET="_parent">PrintJobAttribute</A>.
+Some printing attributes
+are just job description attributes
+that can only appear in a Print Job's attribute set;
+such attribute classes implement just the one tagging interface
+<A HREF="../../../../javax/print/attribute/PrintJobAttribute.html" TARGET="_parent">PrintJobAttribute</A>.
+<P>
+We are interested in the Print Job's
+<A HREF="../../../../javax/print/attribute/standard/JobState.html" TARGET="_parent">JobState</A>
+attribute.
+Lines 79-80 extract the job state attribute
+out of the attribute set
+by calling the attribute set's <CODE>get()</CODE> method.
+The argument is the class of the attribute we want,
+namely <CODE>JobState.class</CODE>.
+The <CODE>get()</CODE> method returns
+the job state attribute upcast to class Object,
+so we downcast it back to class
+<A HREF="../../../../javax/print/attribute/standard/JobState.html" TARGET="_parent">JobState</A>
+and save it.
+<P>
+Now we use the job state attribute.
+Line 81 prints it out.
+Lines 82-84 test whether the job state
+is one of the three possible final states
+denoted by the declared constants
+<A HREF="../../../../javax/print/attribute/standard/JobState.html#ABORTED" TARGET="_parent"><CODE>JobState.ABORTED</CODE></A>,
+<A HREF="../../../../javax/print/attribute/standard/JobState.html#CANCELED" TARGET="_parent"><CODE>JobState.CANCELED</CODE></A>, or
+<A HREF="../../../../javax/print/attribute/standard/JobState.html#COMPLETED" TARGET="_parent"><CODE>JobState.COMPLETED</CODE></A>.
+If the job state is one of these,
+the job is finished and we exit the polling loop.
+Otherwise,
+the job is not finished and we stay in the polling loop,
+delaying for one second on line 88
+before doing the next iteration.
+The program may print something like this:
+<PRE>
+    Job state = pending
+    Job state = pending
+    Job state = pending
+    Job state = processing
+    Job state = processing
+    Job state = completed
+</PRE>
+After we exit the polling loop,
+we no longer need to use the Print Job object.
+Accordingly, line 90 tells the LRM
+to cancel its lease.
+<P>
+Lines 107-116 add exception handlers
+for two checked exceptions
+thrown by the code we added.
+These are needed for the code to compile.
+
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_lookup.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_printjobevents.html'">
+</FORM>
+<HR>
+<P>
+<B>DRAFT STANDARD VERSION 1.0 (23-MAY-2000)</B>
+</P>
+</BODY>
+</HTML>

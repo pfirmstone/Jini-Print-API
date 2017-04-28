@@ -1,0 +1,206 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service Tutorial -- Lesson 6. File Print Jobs</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%>
+<TR>
+<TD ALIGN="left" VALIGN="top">
+<PRE>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+</PRE>
+</TD>
+<TD ALIGN="left" VALIGN="top">
+<PRE>
+&nbsp;&nbsp;&nbsp;&nbsp;
+</PRE>
+</TD>
+<TD ALIGN="left" VALIGN="top">
+<PRE>
+<B>import java.io.BufferedInputStream;</B>
+<B>import java.io.FileInputStream;</B>
+<B>import java.io.FileNotFoundException;</B>
+import java.rmi.RemoteException;
+import java.util.Locale;
+import javax.print.attribute.Attribute;
+import javax.print.attribute.HashDocAttributeSet;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttribute;
+import javax.print.attribute.standard.DocumentName;
+import javax.print.attribute.standard.JobName;
+import javax.print.attribute.standard.Media;
+import javax.print.attribute.standard.MediaColor;
+import javax.print.attribute.standard.MediaKind;
+import javax.print.attribute.standard.MediaOpacity;
+import javax.print.attribute.standard.MediaSize;
+import javax.print.attribute.standard.OrientationRequested;
+import javax.print.exception.PrintException;
+import net.jini.core.entry.Entry;
+import net.jini.core.lookup.ServiceRegistrar;
+import net.jini.core.lookup.ServiceTemplate;
+import net.jini.print.job.PrintRequest;
+import net.jini.print.lookup.AttributeEntry;
+import net.jini.print.lookup.FlavorEntry;
+import net.jini.print.lookup.MediaEntry;
+import net.jini.print.service.PrintService;
+<B>import org.jpwg.jini.print.data.InputStreamDoc;</B>
+. . .
+try
+    {
+    Media theMedia = new Media
+        (new Attribute[]
+            {MediaSize.NA.LETTER,
+             MediaColor.PINK,
+             MediaOpacity.OPAQUE,
+             MediaKind.SHEET});
+<B>    InputStreamDoc theDoc =</B>
+<B>        new InputStreamDoc</B>
+<B>            (new BufferedInputStream</B>
+<B>                (new FileInputStream ("foobar.txt")),</B>
+<B>             "text/plain; charset=us-ascii",</B>
+             new HashDocAttributeSet
+                (new DocumentName
+                    (<B>"foobar.txt"</B>,
+                     Locale.getDefault())));
+    ServiceRegistrar theJLUS = // Obtain a Jini Lookup Service (JLUS) proxy
+    ServiceTemplate theServiceTemplate =
+        new ServiceTemplate
+            (null,
+             new Class[] {PrintService.class},
+             new Entry[]
+                {new FlavorEntry (theDoc.getDocFlavor()),
+                 new MediaEntry (theMedia),
+                 new AttributeEntry (OrientationRequested.LANDSCAPE)});
+    PrintService thePrintService =
+        (PrintService) theJLUS.lookup (theServiceTemplate);
+    if (thePrintService != null)
+        {
+        PrintRequest thePrintRequest =
+            thePrintService.createDocPrintRequest
+                (theDoc,
+                 new HashPrintRequestAttributeSet
+                    (new PrintRequestAttribute[]
+                        {theMedia,
+                         OrientationRequested.LANDSCAPE,
+                         new JobName
+                            ("Test Job",
+                             Locale.getDefault())}));
+        thePrintRequest.print();
+        }
+    else
+        {
+        // This code executed if the JLUS couldn't find any print services
+        }
+    }
+catch (PrintException exc)
+    {
+    // This code executed if a printing error occurred
+    // Thrown by any of the above
+    }
+catch (RemoteException exc)
+    {
+    // This code executed if a remote error occurred
+    // Thrown by any of the above
+    }
+<B>catch (FileNotFoundException exc)</B>
+<B>    {</B>
+<B>    // This code executed if the file could not be opened</B>
+<B>    // Thrown by new FileInputStream()</B>
+<B>    }</B>
+</PRE>
+</TD>
+</TR>
+</TABLE>
+</BODY>
+</HTML>

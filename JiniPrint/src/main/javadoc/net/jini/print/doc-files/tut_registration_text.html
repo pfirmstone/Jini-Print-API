@@ -1,0 +1,188 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service Tutorial -- Lesson 8. Service Registration</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<H2>Jini Print Service Tutorial</H2>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=100%>
+<TR>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_index.html" TARGET="_parent">Introduction</A><BR>
+<A HREF="tut_basics.html" TARGET="_parent">Lesson 1. The Very Basics</A><BR>
+<A HREF="tut_printdataattr.html" TARGET="_parent">Lesson 2. Print Data Attributes</A><BR>
+<A HREF="tut_lookup.html" TARGET="_parent">Lesson 3. Lookup</A><BR>
+<A HREF="tut_printjobstatus.html" TARGET="_parent">Lesson 4. Print Job Status</A><BR>
+</FONT></TD>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_printjobevents.html" TARGET="_parent">Lesson 5. Print Job Events</A><BR>
+<A HREF="tut_inputstreamprintjob.html" TARGET="_parent">Lesson 6. File Print Jobs</A><BR>
+<A HREF="tut_urlprintjob.html" TARGET="_parent">Lesson 7. URL Print Jobs</A><BR>
+<B>Lesson 8. Service Registration</B>
+</FONT></TD>
+</TR>
+</TABLE>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_urlprintjob.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="">
+</FORM>
+
+<HR>
+<H2>Lesson 8. Service Registration</H2>
+<P>
+Turning from the print client's point of view
+to the print service provider's point of view,
+below is an example code fragment
+showing how a Jini Print Service instance
+might set up its service registration
+(class net.jini.core.lookup.ServiceItem)
+to go into the Jini Lookup Service (JLUS).
+The general scheme is described in package
+<A HREF="../lookup/package-summary.html" TARGET="_parent">net.jini.print.lookup</A>.
+This code shows how to realize the lookup scheme
+for a particular printer,
+the one (hypothetically) located in U.S. President Bill Clinton's office,
+which happens to be a (fictitious) PaperEater 440 printer
+made by the (imaginary) Papyrophagus Corporation.
+<P>
+The service registration comprises three things:
+the service ID,
+the service proxy object,
+and the service attributes.
+Line 47 obtains a reference
+to the Jini Print Service instance's service ID.
+According to the rules of good Jini citizenship,
+the print service got the service ID from some JLUS
+the first time the print service ever registered,
+and the print service saved its assigned service ID
+in persistent storage
+for use in all subsequent registrations.
+(The details are not shown here.)
+<P>
+Line 48 obtains a reference
+to the Jini Print Service instance's service proxy object.
+(Again, the details are not shown here.)
+The service proxy object mandatorily implements interface
+<A HREF="../service/PrintService.html" TARGET="_parent">PrintService</A>.
+The service proxy object may also implement other
+<A HREF="../service/PrintService.html" TARGET="_parent">PrintService</A>
+subinterfaces if the printer supports the corresponding capabilities.
+For this example,
+the optional capabilities are not supported.
+<P>
+Line 49 creates an array of service attributes
+(which are subclasses of class net.jini.core.entry.Entry)
+following the requirements in package
+<A HREF="../lookup/package-summary.html" TARGET="_parent">net.jini.print.lookup</A>.
+There are three categories of service attributes:
+general attributes,
+supported doc flavors,
+and supported printing attributes.
+<P>
+Lines 51-92 set up the general attributes.
+These include a mandatory
+<A HREF="../lookup/PrinterDescriptionEntry.html" TARGET="_parent">PrinterDescriptionEntry</A>
+with the following characteristics:
+<UL>
+<LI>
+The printer's name is the Presidential Printer.
+<LI>
+The printer's location is the Oval Office.
+<LI>
+The printer's information says not to use this printer
+unless you're Bill Clinton.
+<LI>
+The URL from which to obtain more information
+about this particular printer is <CODE>http://billsprinter</CODE>.
+<LI>
+The printer make and model is Papyrophagus PaperEater 440.
+<LI>
+The URL from which to obtain more information
+about this kind of printer is
+<CODE>http://www.papyrophagus.com/support/papereater440/</CODE>.
+<LI>
+This printer supports color.
+<LI>
+This printer will attempt to override job instructions in the print data
+with the printing attribute settings in the Print Request.
+<LI>
+This printer does 8 pages per minute black and white.
+<LI>
+This printer does 4 pages per minute color.
+</UL>
+<P>
+The general attributes also include
+the print service's address, location, name, service info, and comment
+stored in the appropriate standard Jini Entry classes
+from package net.jini.lookup.entry;
+these service attributes are optional.
+<P>
+Lines 94-109 set up the supported doc flavors.
+This Jini Print Service instance
+happens to support plain text, HTML, and PostScript documents.
+It can obtain them from an input stream and from a URL.
+It supports plain text and HTML
+encoded in the default, US-ASCII, and UTF-8 character sets.
+This Jini Print Service instance
+also supports printing plain text Unicode strings
+and renderable images.
+Support for plain text from an input stream
+and for renderable images
+is mandatory;
+this printer additionally supports
+the HTML and PostScript MIME types
+and the String and URL print data representation classes.
+For each supported doc flavor,
+one instance of class
+<A HREF="../lookup/FlavorEntry.html" TARGET="_parent">FlavorEntry</A>
+wrapping the doc flavor
+goes into the service registration.
+<P>
+Lines 111-135 set up the supported printing attributes,
+each wrapped in an
+<A HREF="../lookup/AttributeEntry.html" TARGET="_parent">AttributeEntry</A>
+(or a
+<A HREF="../lookup/MediaEntry.html" TARGET="_parent">MediaEntry</A>
+for a supported
+<A HREF="../attribute/standard/Media.html" TARGET="_parent">Media</A>
+attribute).
+This Jini Print Service instance
+happens to support the following printing attributes:
+<UL>
+<LI>
+Printing documents in monochrome or color (lines 111-112).
+<LI>
+Uncompressed print data (line 113).
+<LI>
+Any number of copies of a job (line 114).
+<LI>
+Only one kind of media:
+8.5 x 11 inch white opaque 24-pound (90 g/m<SUP>2</SUP>) nonrecycled bond sheets
+with no holes, preprinting, tabs, back coating, or front coating
+(lines 115-131).
+<LI>
+Portrait or landscape orientation (lines 132-133).
+<LI>
+Printing at 600 x 600 dots per inch (lines 134-135).
+</UL>
+<P>
+Finally, lines 136-137
+bundle the previously set up service ID, service proxy object, and service attributes
+into a service item (class net.jini.core.lookup.ServiceItem)
+that can be passed to a JLUS's <CODE>register()</CODE> method.
+
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_urlprintjob.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="">
+</FORM>
+<HR>
+<P>
+<B>DRAFT STANDARD VERSION 1.0 (23-MAY-2000)</B>
+</P>
+</BODY>
+</HTML>

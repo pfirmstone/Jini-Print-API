@@ -1,0 +1,149 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service Tutorial -- Lesson 7. URL Print Jobs</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<H2>Jini Print Service Tutorial</H2>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=100%>
+<TR>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_index.html" TARGET="_parent">Introduction</A><BR>
+<A HREF="tut_basics.html" TARGET="_parent">Lesson 1. The Very Basics</A><BR>
+<A HREF="tut_printdataattr.html" TARGET="_parent">Lesson 2. Print Data Attributes</A><BR>
+<A HREF="tut_lookup.html" TARGET="_parent">Lesson 3. Lookup</A><BR>
+<A HREF="tut_printjobstatus.html" TARGET="_parent">Lesson 4. Print Job Status</A><BR>
+</FONT></TD>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_printjobevents.html" TARGET="_parent">Lesson 5. Print Job Events</A><BR>
+<A HREF="tut_inputstreamprintjob.html" TARGET="_parent">Lesson 6. File Print Jobs</A><BR>
+<B>Lesson 7. URL Print Jobs</B><BR>
+<A HREF="tut_registration.html" TARGET="_parent">Lesson 8. Service Registration</A>
+</FONT></TD>
+</TR>
+</TABLE>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_inputstreamprintjob.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_registration.html'">
+</FORM>
+
+<HR>
+<H2>Lesson 7. URL Print Jobs</H2>
+<P>
+You use an input stream doc object
+(illustrated in <A HREF="tut_inputstreamprintjob.html" TARGET="_parent">Lesson 6</A>)
+when you want a Print Job
+to print the contents of a local file.
+What about documents located anywhere on the Internet?
+Yet another kind of doc flavor
+lets you print any document
+available at a Uniform Resource Locator (URL) address.
+<P>
+Below is an example code fragment
+that prints the Internet Engineering Task Force's (IETF's) home page,
+whose URL is <CODE>"http://www.ietf.org/index.html"</CODE>.
+<P>
+Lines 36-43 construct a
+<A HREF="../../../../org/jpwg/jini/print/data/URLDoc.html" TARGET="_parent">URLDoc</A> object.
+The three parameters are the document's URL address,
+the MIME type of the data in the document,
+and an attribute set containing document level printing attributes.
+The IETF's home page is a Hypertext Markup Language (HTML) document,
+not a plain text document.
+So the MIME type is <CODE>"text/html"</CODE>,
+not <CODE>"text/plain"</CODE>.
+This doc object then undergoes the standard printing process.
+<P>
+To get this code to compile,
+lines 84-88 add an exception handler
+for the checked exception java.net.MalformedURLException.
+This exception will be thrown
+by the <CODE>URL()</CODE> constructor on line 38
+if, for example, if the URL address string had bad syntax.
+<P>
+Class
+<A HREF="../../../../org/jpwg/jini/print/data/URLDoc.html" TARGET="_parent">URLDoc</A>'s
+doc flavor uses a representation class of <CODE>"java.net.URL"</CODE>,
+rather than a representation class of <CODE>"java.io.InputStream"</CODE>
+as in the previous example.
+This causes the Jini Print Service instance to behave differently
+when told to print the doc object.
+Instead of obtaining an input stream from the doc object
+and reading bytes from the input stream,
+this time the Jini Print Service instance obtains a URL from the doc object.
+To obtain the actual print data,
+the printer goes straight to the URL address on the Internet
+and downloads the document directly,
+bypassing the client.
+For this reason,
+use a URL doc object
+only for a document whose URL the printer can access directly.
+<P>
+If the printer cannot access the URL directly
+but the client can,
+instead of a URL doc object
+use an input stream doc object
+constructed like this:
+<P>
+<PRE>
+    InputStreamDoc theDoc =
+        new InputStreamDoc
+            (new BufferedInputStream
+                (new URL ("http://www.ietf.org/index.html").openStream()),
+             "text/html",
+             new HashDocAttributeSet
+                (new DocumentName
+                    ("IETF Home Page",
+                     Locale.getDefault())));
+</PRE>
+With an input stream doc object constructed this way,
+the client opens an input stream on the URL,
+and the doc object passes that input stream
+to the Jini Print Service instance
+when the Jini Print Service instance
+asks the doc object for the print data.
+When the Jini Print Service instance reads the input stream,
+it will go through the client to get the print data
+rather than going directly to the URL to get the print data.
+<P>
+This example requires a considerably different printer capability
+from the previous examples.
+<A HREF="tut_inputstreamprintjob.html" TARGET="_parent">Lesson 6</A>
+used a doc object
+that provided plain text via an input stream
+to the Jini Print Service instance --
+a doc flavor of
+(MIME type = <CODE>"text/plain"</CODE>,
+print data representation class = <CODE>"java.io.InputStream"</CODE>).
+This example uses a doc object
+that provides HTML text via a URL
+to the Jini Print Service instance --
+a doc flavor of
+(MIME type = <CODE>"text/html"</CODE>,
+print data representation class = <CODE>"java.net.URL"</CODE>).
+To support the latter doc flavor,
+the Jini Print Service instance
+must be able to access URLs directly
+and must be able to render HTML documents.
+In other words, the Jini Print Service instance
+has to do pretty much everything a web browser does.
+Suppose the print service lookup 
+couldn't find any printers with that capability --
+is there any way the client can get its job printed?
+That will be the topic of Lesson <I>TBD.</I>
+
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_inputstreamprintjob.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_registration.html'">
+</FORM>
+<HR>
+<P>
+<B>DRAFT STANDARD VERSION 1.0 (23-MAY-2000)</B>
+</P>
+</BODY>
+</HTML>

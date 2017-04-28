@@ -1,0 +1,257 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service Tutorial -- Lesson 3. Lookup</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<H2>Jini Print Service Tutorial</H2>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=100%>
+<TR>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_index.html" TARGET="_parent">Introduction</A><BR>
+<A HREF="tut_basics.html" TARGET="_parent">Lesson 1. The Very Basics</A><BR>
+<A HREF="tut_printdataattr.html" TARGET="_parent">Lesson 2. Print Data Attributes</A><BR>
+<B>Lesson 3. Lookup</B><BR>
+<A HREF="tut_printjobstatus.html" TARGET="_parent">Lesson 4. Print Job Status</A><BR>
+</FONT></TD>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_printjobevents.html" TARGET="_parent">Lesson 5. Print Job Events</A><BR>
+<A HREF="tut_inputstreamprintjob.html" TARGET="_parent">Lesson 6. File Print Jobs</A><BR>
+<A HREF="tut_urlprintjob.html" TARGET="_parent">Lesson 7. URL Print Jobs</A><BR>
+<A HREF="tut_registration.html" TARGET="_parent">Lesson 8. Service Registration</A>
+</FONT></TD>
+</TR>
+</TABLE>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_printdataattr.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_printjobstatus.html'">
+</FORM>
+
+<HR>
+<H2>Lesson 3. Lookup</H2>
+<P>
+The second shortcoming of the code in
+<A HREF="tut_basics.html" TARGET="_parent">Lesson 1</A>
+is that it asks the Jini Lookup Service (JLUS)
+to find any old Jini Print Service instance.
+There's no guarantee
+that the Jini Print Service instance it finds
+will be able to do what we need it to do --
+that is, print in landscape orientation,
+on 8.5 x 11 inch pink paper, and so on.
+If the Jini Print Service instance
+doesn't support those printing attributes,
+it will report an error
+and the job won't print.
+However, it would be far better
+to find a Jini Print Service instance
+that supported those printing attributes in the first place
+than to report an error
+after picking a Jini Print Service instance
+that happened not to support those attributes.
+<P>
+To tell the JLUS to find a print service
+that supports the features needed,
+include <B>service attributes</B> in the service template
+used for lookup.
+Below is the example code fragment from
+<A HREF="tut_printdataattr.html" TARGET="_parent">Lesson 2</A>
+with an augmented service template.
+<P>
+First, lines 28-33 construct and save the
+<A HREF="../../../../javax/print/attribute/standard/Media.html" TARGET="_parent">Media</A>
+attribute we want.
+We will use this Media attribute in two places later.
+<P>
+One characteristic of a doc object
+is its "doc flavor."
+The doc flavor specifies the format of the print data
+obtained from the doc.
+The print data format consists of two things,
+a MIME type
+and a print data representation class.
+The doc flavor of the doc class we're using,
+class <A HREF="../../../../org/jpwg/jini/print/data/StringDoc.html" TARGET="_parent">StringDoc</A>,
+uses a MIME type of <CODE>"text/plain; charset=unicode"</CODE>
+and a print data representation class name of <CODE>"java.lang.String"</CODE>.
+When the Jini Print Service instance
+asks the doc object for the print data,
+the doc object returns
+an instance of the print data representation class --
+String in this case.
+The Jini Print Service instance
+knows how to extract the actual print data
+from the print data representation object
+(as specified in interface
+<A HREF="../job/PrintJob.html" TARGET="_parent">PrintJob</A>).
+When the Jini Print Service instance gets the print data,
+it interprets the print data based on the MIME type --
+in this case, plain text in the Unicode character set.
+<P>
+A Jini Print Service instance
+typically supports several doc flavors
+with various combinations
+of various MIME types
+and various print data representation classes.
+See class <A HREF="../../../../javax/print/data/DocFlavor.html" TARGET="_parent">DocFlavor</A>
+for a list of typical doc flavors
+that may be supported.
+Furthermore, a Jini Print Service instance
+advertises the doc flavors it supports
+by including <A HREF="../lookup/FlavorEntry.html" TARGET="_parent">FlavorEntry</A>
+service attributes
+in its service registration in the JLUS.
+<P>
+In addition, a Jini Print Service instance
+advertises the printing attribute values it supports
+by including <A HREF="../lookup/AttributeEntry.html" TARGET="_parent">AttributeEntry</A>
+service attributes
+in its service registration in the JLUS.
+Support for Media attributes
+is advertised with another service attribute,
+<A HREF="../lookup/MediaEntry.html" TARGET="_parent">MediaEntry</A>.
+<P>
+The fact that a Jini Print Service instance
+advertises the doc flavors and printing attribute values it supports
+in its service registration
+means that we can search the JLUS
+for Jini Print Service instances
+that are guaranteed to be able to print our job.
+We do it by setting up a different service template
+on lines 43-49.
+The service ID is still null (wildcard)
+and the service object's type is still
+<A HREF="../service/PrintService.html" TARGET="_parent">PrintService</A>.
+But now we will also specify some service attributes
+as an array of class net.jini.core.entry.Entry.
+(Keep in mind that there is a distinction
+between a <I>service</I> attribute used when calling JLUS methods
+and a <I>printing</I> attribute used when calling Jini Print Service methods.)
+<P>
+The service attributes are of three kinds:
+<UL>
+<LI>
+Service attributes that denote doc flavors
+we are going to use,
+which we need the Jini Print Service instance to support.
+<LI>
+Service attributes that denote printing attributes
+we are going to specify,
+which we need the Jini Print Service instance to support.
+<LI>
+Service attributes that denote general characteristics
+like printer name, location, manufacturer, and so on.
+</UL>
+<P>
+To specify a needed doc flavor
+in the service template,
+wrap the doc flavor
+inside a service attribute of class
+<A HREF="../lookup/FlavorEntry.html" TARGET="_parent">FlavorEntry</A>.
+Line 47 gets the doc flavor from our doc object
+and wraps it inside a
+<A HREF="../lookup/FlavorEntry.html" TARGET="_parent">FlavorEntry</A>.
+<P>
+To specify a needed Media attribute value
+in the service template,
+wrap the Media attribute value
+inside a service attribute of class
+<A HREF="../lookup/MediaEntry.html" TARGET="_parent">MediaEntry</A>.
+Line 48 wraps the required Media attribute
+(created back on line 28)
+inside a <A HREF="../lookup/MediaEntry.html" TARGET="_parent">MediaEntry</A>.
+<P>
+To specify a needed printing attribute value
+(other than Media)
+in the service template,
+wrap the printing attribute value
+inside a service attribute of class
+<A HREF="../lookup/AttributeEntry.html" TARGET="_parent">AttributeEntry</A>.
+Line 49 wraps the required orientation attribute,
+<A HREF="../../../../javax/print/attribute/standard/OrientationRequested.html#LANDSCAPE" TARGET="_parent"><CODE>OrientationRequested.LANDSCAPE</CODE></A>,
+inside an
+<A HREF="../lookup/AttributeEntry.html" TARGET="_parent">AttributeEntry</A>.
+<P>
+The
+<A HREF="../../../../javax/print/attribute/standard/DocumentName.html" TARGET="_parent">DocumentName</A>
+and
+<A HREF="../../../../javax/print/attribute/standard/JobName.html" TARGET="_parent">JobName</A>
+attributes are not used for searching the JLUS
+and should not be included in the service template.
+Since all printers let you specify any document name or job name for a print job,
+there's no point in searching for a printer
+based on whether it supports the document name or job name attributes.
+<P>
+To specify a general characteristic
+in the service template,
+include a service attribute of class
+<A HREF="../lookup/PrinterDescriptionEntry.html" TARGET="_parent">PrinterDescriptionEntry</A>
+with the required fields filled in
+and the other fields set to null.
+The example code doesn't put any general characteristics
+in the service template.
+But if, for example,
+we had wanted to find a Jini Print Service instance
+that could print our job
+and that was named <CODE>"Bill Clinton's Printer"</CODE>,
+we might have added something like this
+to the service template
+after line 49:
+<P>
+<PRE>
+    new PrinterDescriptionEntry
+        (new PrinterName ("Bill Clinton's Printer", Locale.getDefault()),
+         null, null, null, null, null, null, null, null, null)});
+</PRE>
+<P>
+Line 51 calls the JLUS's <CODE>lookup()</CODE> method
+to get the service object.
+With this more specific service template,
+the JLUS will only find a Jini Print Service instance
+(a service that has registered a service object of class
+<A HREF="../service/PrintService.html" TARGET="_parent">PrintService</A>)
+that supports printing plain text strings
+in landscape orientation
+on 8.5 x 11 inch pink paper
+(a service that has registered service attributes
+equal to those on lines 47-49).
+The Jini Print Service API
+has detailed requirements for
+the service attributes a Jini Print Service instance
+must include in its service registration.
+These service attributes
+describe the Jini Print Service instance's capabilities
+and permit the JLUS to perform searches
+like the one coded here.
+See package <A HREF="../lookup/package-summary.html" TARGET="_parent">net.jini.print.lookup</A>
+for further information on the service attribute scheme.
+<P>
+It should be noted that in this example,
+the JLUS's search algorithm,
+which matches attributes for equality,
+did the right thing
+for the attributes we specified.
+This would not be the case for all attributes.
+For some attributes,
+equality is not the right criterion
+to decide whether the attribute
+in the Jini Print Service instance's service registration
+matches the attribute
+the client specified in the service template.
+Later Lessons will give examples of such attributes.
+
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_printdataattr.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_printjobstatus.html'">
+</FORM>
+<HR>
+<P>
+<B>DRAFT STANDARD VERSION 1.0 (23-MAY-2000)</B>
+</P>
+</BODY>
+</HTML>

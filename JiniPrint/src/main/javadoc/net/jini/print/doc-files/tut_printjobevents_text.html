@@ -1,0 +1,197 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service Tutorial -- Lesson 5. Print Job Events</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<H2>Jini Print Service Tutorial</H2>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=100%>
+<TR>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_index.html" TARGET="_parent">Introduction</A><BR>
+<A HREF="tut_basics.html" TARGET="_parent">Lesson 1. The Very Basics</A><BR>
+<A HREF="tut_printdataattr.html" TARGET="_parent">Lesson 2. Print Data Attributes</A><BR>
+<A HREF="tut_lookup.html" TARGET="_parent">Lesson 3. Lookup</A><BR>
+<A HREF="tut_printjobstatus.html" TARGET="_parent">Lesson 4. Print Job Status</A><BR>
+</FONT></TD>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<B>Lesson 5. Print Job Events</B><BR>
+<A HREF="tut_inputstreamprintjob.html" TARGET="_parent">Lesson 6. File Print Jobs</A><BR>
+<A HREF="tut_urlprintjob.html" TARGET="_parent">Lesson 7. URL Print Jobs</A><BR>
+<A HREF="tut_registration.html" TARGET="_parent">Lesson 8. Service Registration</A>
+</FONT></TD>
+</TR>
+</TABLE>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_printjobstatus.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_inputstreamprintjob.html'">
+</FORM>
+
+<HR>
+<H2>Lesson 5. Print Job Events</H2>
+<P>
+Before you submit a Print Request,
+you can register an event listener with the Print Request
+that will receive event notifications
+as the Jini Print Service processes the resulting Print Job.
+You can register to receive three kinds of events:
+<UL>
+<LI>
+A <A HREF="../job/PrintDataEvent.html" TARGET="_parent">PrintDataEvent</A>
+that tells you whether the Jini Print Service instance
+successfully obtained the print data for the job.
+<P>
+<LI>
+A <A HREF="../job/PrintJobEvent.html" TARGET="_parent">PrintJobEvent</A>
+that informs you whenever a selected job description attribute or attributes
+changes in the Print Job's attribute set.
+<P>
+<LI>
+A <A HREF="../job/PrintJobFinishedEvent.html" TARGET="_parent">PrintJobFinishedEvent</A>
+that tells you when the Print Job finishes
+and what its final state was.
+</UL>
+<P>
+We want our example client program
+to report the print job's state only when it changes
+using print job event notifications.
+Below is the example code fragment from
+<A HREF="tut_printjobstatus.html" TARGET="_parent">Lesson 4</A>
+expanded to report print job state changes
+using print job events.
+<P>
+To process a Jini event,
+we need an <B>event listener</B> object
+which must be a remote object
+implementing interface net.jini.core.event.RemoteEventListener.
+Lines 39-67 declare our event listener class, PrintJobEventListener.
+The key method is <CODE>notify()</CODE> on lines 48-66.
+Whenever a print job event arrives,
+the <CODE>notify()</CODE> method gets called,
+as explained later.
+<P>
+On lines 108-118, we set up the print job event listener.
+Lines 109-117 call the Print Request's
+<CODE>addEventListener()</CODE> method.
+This is done after we create the Print Request
+but <I>before</I> we submit the Print Request to be printed;
+adding the event listener at this point
+ensures that we will receive all event notifications
+from the point of submission onwards.
+The first five arguments specify
+which print job events we want to receive.
+All these arguments except the third
+are false or null
+indicating we don't want to receive
+the corresponding events.
+The third argument is an array of Class objects
+specifying the printing attribute category or categories
+about which we want to receive event notifications.
+Here we specify just the one attribute category we're interested in,
+<CODE>JobState.class</CODE>.
+We will therefore receive an event notification
+whenever the Print Job's job state changes,
+but not when any other Print Job attributes change.
+The sixth argument is the event listener object
+that will receive the event notification,
+a new instance of class PrintJobEventListener.
+The seventh argument is a handback object
+which we won't use here, so it is set to null.
+The eighth and final argument
+is the requested initial duration
+for the event registration's lease;
+<CODE>Lease.ANY</CODE> means the Jini Print Service instance
+should pick the initial lease duration itself.
+The Print Request's <CODE>addEventListener()</CODE> method
+returns an EventRegistration object.
+From that we extract the event registration's lease
+and pass it to the LRM,
+telling the LRM to keep renewing it forever
+until explicitly canceled.
+<P>
+Lines 119-122 submit the Print Request
+and get back a Print Job as before.
+We keep the polling loop to detect when the Print Job finishes,
+but we will poll less frequently,
+once every 10 seconds instead of once every second.
+Also, we will not print the job state in the polling loop;
+instead, our event listener will print the job state.
+<P>
+As the Jini Print Service instance
+processes the Print Job,
+it sends a <A HREF="../job/PrintJobEvent.html" TARGET="_parent">PrintJobEvent</A>
+to our event listener
+whenever the Print Job's job state changes.
+When the event arrives,
+the event listener's <CODE>notify()</CODE> method on line 48 is called,
+with the event passed in as the argument.
+Line 53 downcasts the event object
+from the superclass net.jini.core.event.RemoteEvent
+back to the actual class
+<A HREF="../job/PrintJobEvent.html" TARGET="_parent">PrintJobEvent</A>.
+Line 55 calls the print job event's <CODE>getAttributes()</CODE> method,
+which returns a
+<A HREF="../../../../javax/print/attribute/PrintJobAttributeSet.html" TARGET="_parent">PrintJobAttributeSet</A>
+containing just the attribute or attributes that changed
+from among the monitored attribute categories
+we specified when we registered the event listener.
+This method can throw a ClassNotFoundException or an IOException,
+handled on lines 58-65,
+if there is a problem unmarshaling the attribute set object.
+In our case,
+we know that the only attribute that could have changed
+is the job state,
+so lines 54-55 extract the new value of the job state attribute
+from the attribute set,
+and line 56 prints it out.
+The program may print something like this:
+<PRE>
+    Job state = pending
+    Job state = processing
+    Job state = completed
+</PRE>
+After the Print Job finishes and we exit the polling loop,
+we no longer need to use the Print Job object
+and we no longer need to receive print job event notifications.
+Accordingly, lines 137-138 tell the LRM
+to cancel both those leases.
+<P>
+So which approach is better for monitoring Print Job status,
+polling or events?
+Both have their downsides.
+To detect state changes in a timely manner using polling,
+you have to poll frequently,
+which chews up network bandwidth continually
+even when the state is not changing.
+Events use network bandwidth only when the state changes,
+but on the other hand, events are not necessarily reliable;
+they may get lost, be delayed, or arrive out of order
+in a distributed system.
+For complete reliability, you may need a hybrid approach:
+rely mainly on event notifications to detect state changes,
+but poll the state occasionally as well
+in case a state change reporting event got lost.
+This example uses the hybrid approach --
+events are used to print out the job state,
+but polling is used to detect when the job finishes.
+If we relied on an event
+(instead of polling)
+to detect when the job finishes
+and that event got lost,
+our example program would never terminate.
+
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_printjobstatus.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_inputstreamprintjob.html'">
+</FORM>
+<HR>
+<P>
+<B>DRAFT STANDARD VERSION 1.0 (23-MAY-2000)</B>
+</P>
+</BODY>
+</HTML>

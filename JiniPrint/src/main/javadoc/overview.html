@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<!--
+Copyright 2017 peter.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>
+            <P>
+                The Jini Print Service
+                provides a printing service
+                to a Jini federation.
+            </P><P>
+                Draft Standard Version 1.0
+                of the Jini Print Service API
+                represents the first version
+                released from the Jini Printing Working Group
+                to the entire Jini Community.
+                It is denoted a "draft <I>standard</I>"
+                so developers can create Jini Print Service implementations and clients
+                based on a common standard.
+                It is denoted a "<I>draft</I> standard"
+                to recognize that implementation experience
+                may necessitate changing the API
+                before finalizing it as a full standard.
+            </P><P>
+                To learn about the Jini Print Service,
+                the following course of study is recommended:
+            <OL TYPE=1>
+                <LI>
+                    Read this Overview.
+                <LI>
+                    Work through the Tutorial
+                    to see a detailed description
+                    of how to use the Jini Print Service.
+                <LI>
+                    Browse the documentation for the Jini Print Service API's
+                    packages, interfaces, and classes.
+            </OL>
+
+
+            <HR>
+            <H2>Package Organization</H2>
+            The Jini Print Service is organized into five major divisions.
+            See the package documentation referenced below for further information.
+            <UL>
+                <LI>
+                    <B>Print Service Lookup</B> --
+                    Lets clients search for print services
+                    via standard Jini Lookup Service (JLUS) attributes
+                    stored in one or more <CODE>Entry</CODE> objects.
+                    See package <A HREF="net/jini/print/lookup/package-summary.html">net.jini.print.lookup</A>.
+
+                <LI>
+                    <B>Print Service</B> --
+                    Abstraction of a printer; creates Print Job objects.
+                    A Print Service object is registered into the JLUS
+                    as the service proxy object.
+                    See package <A HREF="net/jini/print/service/package-summary.html">net.jini.print.service</A>.
+
+                <LI>
+                    <B>Print Job</B> --
+                    Abstraction of a print job; performs actual printouts.
+                    See package <A HREF="net/jini/print/job/package-summary.html">net.jini.print.job</A>.
+
+                <LI>
+                    <B>Print Data</B> --
+                    Abstraction of a piece of print data;
+                    provided by a client for a Print Job to obtain the print data.
+                    See package <A HREF="net/jini/print/data/package-summary.html">net.jini.print.data</A>.
+
+                <LI>
+                    <B>Print Events</B> --
+                    Events reported to a client
+                    pertaining to a change of state of a Print Service
+                    or the progress of processing of a Print Job.
+                    See package <A HREF="net/jini/print/event/package-summary.html">net.jini.print.event</A>.
+            </UL>
+            <P>
+                Four additional packages are used in
+                the Jini Print Service API.
+                However, these packages are not part of
+                the Jini Print Service API.
+                Rather, they exist in the javax.print namespace
+                so that they can be used
+                both by the Jini Print Service API
+                and by the Unified Printing API
+                (Java Specification Request
+                <A HREF="http://java.sun.com/aboutJava/communityprocess/jsr/jsr_006_print.html">JSR-000006</A>).
+                See the package documentation referenced below for further information.
+            </P>
+            <UL>
+                <LI>
+                    <B>Package <A HREF="javax/print/attribute/package-summary.html">javax.print.attribute</A></B>
+                    contains classes and interfaces
+                    that pertain to printing attributes in general.
+                    Attributes are used in several areas
+                    of the Jini Print Service API for various purposes,
+                    including discovering printer capabilities,
+                    specifying print data characteristics,
+                    specifying job settings,
+                    and others.
+
+                <LI>
+                    <B>Package <A HREF="javax/print/attribute/standard/package-summary.html">javax.print.attribute.standard</A></B>
+                    contains classes for specific printing attributes.
+
+                <LI>
+                    <B>Package <A HREF="javax/print/data/package-summary.html">javax.print.data</A></B>
+                    contains classes and interfaces for providing print data.
+
+                <LI>
+                    <B>Package <A HREF="javax/print/exception/package-summary.html">javax.print.exception</A></B>
+                    contains exception classes and interfaces.
+            </UL>
+            <P>
+                The following package is not part of the Jini Print Service API,
+                but is provided for the convenience of client developers.
+            </P>
+            <UL>
+                <LI>
+                    <B>Package <A HREF="org/jpwg/jini/print/data/package-summary.html">org.jpwg.jini.print.data</A></B>
+                    contains sample implementations
+                    of the interfaces in package
+                    <A HREF="net/jini/print/data/package-summary.html">net.jini.print.data</A>.
+            </UL>
+
+
+            <HR>
+            <H2>Objects and Interactions</H2>
+            <P>
+                Here is a brief, high-level sketch
+                of the objects involved in using a Jini Print Service instance
+                and the interactions among them.
+            </P>
+            <H3>Single Doc Print Jobs</H3>
+            <CENTER>
+                <IMG SRC="net/jini/print/doc-files/NetJiniPrintFig1.gif" ALT="Single Doc Print Jobs Graphic" WIDTH=549 HEIGHT=315>
+            </CENTER>
+            <P>
+                The above interaction diagram
+                shows the interfaces involved
+                in printing a job
+                consisting of just one doc.
+                ("Doc" is a short, easy-to-pronounce term
+                that means "a piece of print data.")
+                The Jini Print Service instance
+                supplies the Print Service, Print Request, and Print Job objects,
+                and the client supplies the Doc object.
+            </P>
+            <OL TYPE=1>
+                <LI>
+                    The client searches the Jini Lookup Service (JLUS)
+                    for a Jini Print Service instance,
+                    and the JLUS returns a Print Service object
+                    which implements the base interface
+                    <A HREF="net/jini/print/service/PrintService.html">PrintService</A>.
+                    (See package <A HREF="net/jini/print/lookup/package-summary.html">net.jini.print.lookup</A>.)
+
+                <LI>
+                    The client calls a method in interface
+                    <A HREF="net/jini/print/service/PrintService.html">PrintService</A>
+                    telling the printer
+                    to create a Print Request to print a single Doc.
+                    The printer then returns
+                    a Print Request object
+                    which implements interface
+                    <A HREF="net/jini/print/job/DocPrintRequest.html">DocPrintRequest</A>
+                    as well as the base interface
+                    <A HREF="net/jini/print/job/PrintRequest.html">PrintRequest</A>.
+                    (See package <A HREF="net/jini/print/service/package-summary.html">net.jini.print.service</A>.)
+
+                <LI>
+                    The client calls methods in interfaces
+                    <A HREF="net/jini/print/job/PrintRequest.html">PrintRequest</A> and
+                    <A HREF="net/jini/print/job/DocPrintRequest.html">DocPrintRequest</A>
+                    to specify the doc object to be printed
+                    and a set of job-level printing attributes to use for the job.
+                    The client can also register event listeners
+                    to receive event notifications for the job.
+                    Finally, the client calls a method to submit the Print Request
+                    to be printed,
+                    and the printer returns a Print Job object
+                    which implements interface
+                    <A HREF="net/jini/print/job/PrintJob.html">PrintJob</A>.
+                    (See package <A HREF="net/jini/print/job/package-summary.html">net.jini.print.job</A>.)
+
+                <LI>
+                    The printer calls methods in interface
+                    <A HREF="net/jini/print/data/Doc.html">Doc</A>
+                    to obtain the print data format,
+                    the document-level printing attributes,
+                    and the actual print data,
+                    then proceeds to print the job.
+                    (See package <A HREF="net/jini/print/data/package-summary.html">net.jini.print.data</A>.)
+
+                <LI>
+                    The client calls methods in interface
+                    <A HREF="net/jini/print/job/PrintJob.html">PrintJob</A>
+                    to monitor the Print Job's progress
+                    and control the Print Job as the printer processes it.
+                    The client can also register event listeners
+                    to receive event notifications for the job.
+                    Alternatively,
+                    if the client doesn't need to monitor or control the job,
+                    the client can simply disregard the returned Print Job object.
+                    (See package <A HREF="net/jini/print/job/package-summary.html">net.jini.print.job</A>.)
+            </OL>
+
+            <H3>Multiple Doc Print Jobs</H3>
+            <CENTER>
+                <IMG SRC="net/jini/print/doc-files/NetJiniPrintFig2.gif" alt="Multi Doc Print Jobs Graphic" WIDTH=657 HEIGHT=405>
+            </CENTER>
+            <P>
+                The above interaction diagram
+                shows the interfaces involved
+                in printing a job
+                consisting of more than one doc -- a "multidoc."
+                It is much the same as the previous scenario,
+                except a few different interfaces are involved.
+            </P>
+            <OL TYPE=1>
+                <LI>
+                    The client searches the Jini Lookup Service (JLUS)
+                    for a Jini Print Service instance,
+                    and the JLUS returns a Print Service object
+                    which implements interface
+                    <A HREF="net/jini/print/service/MultiDocPrintService.html">MultiDocPrintService</A>
+                    as well as the base interface
+                    <A HREF="net/jini/print/service/PrintService.html">PrintService</A>.
+                    (See package <A HREF="net/jini/print/lookup/package-summary.html">net.jini.print.lookup</A>.)
+
+                <LI>
+                    The client calls a method in interface
+                    <A HREF="net/jini/print/service/MultiDocPrintService.html">MultiDocPrintService</A>
+                    telling the Print Service
+                    to create a Print Request to print a MultiDoc.
+                    The printer then returns
+                    a Print Request object
+                    which implements interface
+                    <A HREF="net/jini/print/job/MultiDocPrintRequest.html">MultiDocPrintRequest</A>
+                    as well as the base interface
+                    <A HREF="net/jini/print/job/PrintRequest.html">PrintRequest</A>.
+                    (See package <A HREF="net/jini/print/service/package-summary.html">net.jini.print.service</A>.)
+
+                <LI>
+                    The client calls methods in interfaces
+                    <A HREF="net/jini/print/job/PrintRequest.html">PrintRequest</A> and
+                    <A HREF="net/jini/print/job/MultiDocPrintRequest.html">MultiDocPrintRequest</A>
+                    to specify the multidoc object to be printed
+                    and a set of job-level printing attributes to use for the job.
+                    The client can also register event listeners
+                    to receive event notifications for the job.
+                    Finally, the client calls a method to submit the Print Request
+                    to be printed,
+                    and the printer returns a Print Job object
+                    which implements interface
+                    <A HREF="net/jini/print/job/PrintJob.html">PrintJob</A>.
+                    (See package <A HREF="net/jini/print/job/package-summary.html">net.jini.print.job</A>.)
+
+                <LI>
+                    The multidoc provides a "linked list view"
+                    of the docs to be printed.
+                    The printer calls a method in interface
+                    <A HREF="net/jini/print/data/MultiDoc.html">MultiDoc</A> on the current multidoc object
+                    to get the current doc to be printed.
+                    (See package <A HREF="net/jini/print/data/package-summary.html">net.jini.print.data</A>.)
+
+                <LI>
+                    The printer calls methods in interface
+                    <A HREF="net/jini/print/data/Doc.html">Doc</A>
+                    on the current doc object
+                    to obtain the print data format,
+                    the document-level printing attributes,
+                    and the actual print data.
+                    (See package <A HREF="net/jini/print/data/package-summary.html">net.jini.print.data</A>.)
+
+                <LI>
+                    The printer calls a method in interface
+                    <A HREF="net/jini/print/data/MultiDoc.html">MultiDoc</A> on the current multidoc object
+                    to get the next multidoc object,
+                    and repeats from Step 4 until it has gotten all the docs.
+                    The printer then proceeds to print the job consisting of all the docs.
+                    (See package <A HREF="net/jini/print/data/package-summary.html">net.jini.print.data</A>.)
+
+                <LI>
+                    The client calls methods in interface
+                    <A HREF="net/jini/print/job/PrintJob.html">PrintJob</A>
+                    to monitor the Print Job's progress
+                    and control the Print Job as the printer processes it.
+                    The client can also register event listeners
+                    to receive event notifications for the job.
+                    Alternatively,
+                    if the client doesn't need to monitor or control the job,
+                    the client can simply disregard the returned Print Job object.
+                    (See package <A HREF="net/jini/print/job/package-summary.html">net.jini.print.job</A>.)
+            </OL>
+
+
+            <HR>
+            <H2>Tutorial</H2>
+            Now work through the <A HREF="net/jini/print/doc-files/tut_index.html">Tutorial</A>
+            <P>
+                to see a detailed description
+                of how to use the Jini Print Service.
+                To view the Tutorial, your browser must support frames.
+
+            </P>
+            <HR>
+            <H3>Contacts</H3>
+            <P>
+                The Jini Print Service API
+                is being developed by the Jini Printing Working Group (JPWG).
+                The JPWG's online document repository,
+                including several draft versions of the API
+                and the Jini Print Service API Issues List,
+                is available on the jini.org web site at
+                <A HREF="http://developer.jini.org/exchange/users/jpgwg/">http://developer.jini.org/exchange/users/jpgwg/</A>.
+                The JPWG's email distribution list is
+                <A HREF="mailto:jini-printing@jini.org">jini-printing@jini.org</A>.
+                Archives of the email DL are at
+                <A HREF="http://developer.jini.org/cgi-bin/wilma/jini-printing">http://developer.jini.org/cgi-bin/wilma/jini-printing</A>.
+            </P><P>
+                Please post comments and discussion about the Jini Print Service API
+                on the <A HREF="mailto:jini-printing@jini.org">jini-printing@jini.org</A> DL.
+            </P><P>
+                The Jini Print Service API documentation editor is Alan Kaminsky
+                (<A HREF="mailto:akaminsky@crt.xerox.com">akaminsky@crt.xerox.com</A>).
+            </P><P>
+            <H3>Revision History</H3>
+            <A HREF="net/jini/print/doc-files/revisionhistory.html#20000523">Draft Standard Version 1.0 (23-May-2000)</A><BR>
+            <A HREF="net/jini/print/doc-files/revisionhistory.html#20000324">Draft Version 24-Mar-2000</A><BR>
+            <A HREF="net/jini/print/doc-files/revisionhistory.html#20000207">Draft Version 07-Feb-2000</A><BR>
+            <A HREF="net/jini/print/doc-files/revisionhistory.html#20000117">Draft Version 17-Jan-2000</A><BR>
+            <A HREF="net/jini/print/doc-files/revisionhistory.html#19991223">Draft Version 23-Dec-1999</A><BR>
+            <A HREF="net/jini/print/doc-files/revisionhistory.html#19991115">Draft Version 15-Nov-1999</A><BR>
+            <A HREF="net/jini/print/doc-files/revisionhistory.html#19991110">Draft Version 10-Nov-1999</A><BR>
+            <A HREF="net/jini/print/doc-files/revisionhistory.html#19991104">Draft Version 04-Nov-1999</A><BR>
+            <A HREF="net/jini/print/doc-files/revisionhistory.html#19991028">Draft Version 28-Oct-1999</A><BR>
+
+            <B>DRAFT STANDARD VERSION 1.0 (23-MAY-2000)</B>
+
+
+        </div>
+    </body>
+</html>

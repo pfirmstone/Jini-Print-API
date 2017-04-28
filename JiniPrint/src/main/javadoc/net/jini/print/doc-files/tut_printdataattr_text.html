@@ -1,0 +1,248 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service Tutorial -- Lesson 2. Print Data Attributes</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<H2>Jini Print Service Tutorial</H2>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=100%>
+<TR>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_index.html" TARGET="_parent">Introduction</A><BR>
+<A HREF="tut_basics.html" TARGET="_parent">Lesson 1. The Very Basics</A><BR>
+<B>Lesson 2. Print Data Attributes</B><BR>
+<A HREF="tut_lookup.html" TARGET="_parent">Lesson 3. Lookup</A></BR>
+<A HREF="tut_printjobstatus.html" TARGET="_parent">Lesson 4. Print Job Status</A><BR>
+</FONT></TD>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_printjobevents.html" TARGET="_parent">Lesson 5. Print Job Events</A><BR>
+<A HREF="tut_inputstreamprintjob.html" TARGET="_parent">Lesson 6. File Print Jobs</A><BR>
+<A HREF="tut_urlprintjob.html" TARGET="_parent">Lesson 7. URL Print Jobs</A><BR>
+<A HREF="tut_registration.html" TARGET="_parent">Lesson 8. Service Registration</A>
+</FONT></TD>
+</TR>
+</TABLE>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_basics.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_lookup.html'">
+</FORM>
+
+<HR>
+<H2>Lesson 2. Print Data Attributes</H2>
+<P>
+The first shortcoming of the code in
+<A HREF="tut_basics.html" TARGET="_parent">Lesson 1</A>
+is that it doesn't tell the Jini Print Service instance
+how we want the job to be printed --
+what kind of paper to use,
+how many copies to print, and so on.
+As a consequence,
+the Jini Print Service instance
+uses implementation-dependent default values
+for each of these characteristics.
+If those defaults happen to be what we want,
+we're in luck.
+But Murphy's Law says they won't be what we want,
+so we have to tell the Jini Print Service instance
+which printing attributes to use for the job.
+Suppose, for this example, we want the job to print as follows:
+<OL TYPE=1>
+<LI> The document being printed is named <CODE>"Test String"</CODE>.
+<LI> It must print on letter-sized (8.5 x 11 inch) pink paper.
+<LI> It must print in landscape orientation (text running the long way on the paper).
+<LI> The print job is named <CODE>"Test Job"</CODE>.
+</OL>
+<P>
+Below is the example code fragment from
+<A HREF="tut_basics.html" TARGET="_parent">Lesson 1</A>
+augmented to specify additional printing characteristics.
+The changed and added lines of code are marked in <CODE><B>bold</B></CODE>.
+We will focus our attention only on these new lines;
+the other lines behave just as before.
+<P>
+You specify the print data characteristics
+by associating <B>printing attributes</B>
+with the print data and/or the print job.
+The Jini Print Service defines many printing attributes
+in package
+<A HREF="../../../../javax/print/attribute/standard/package-summary.html" TARGET="_parent">javax.print.attribute.standard</A>
+for the purpose of specifying print data or print job characteristics.
+The Jini Print Service also defines
+an <B>attribute set</B> data structure
+(interface <A HREF="../../../../javax/print/attribute/AttributeSet.html" TARGET="_parent">AttributeSet</A>)
+to hold a set of printing attributes.
+<P>
+You can specify printing attributes when you construct the doc object.
+Line 26 specifies the print data as before, the string <CODE>"Hello, world!"</CODE>.
+But now, instead of specifying null,
+lines 27-30 supply an attribute set
+containing one or more printing attributes for the doc.
+Here we use class
+<A HREF="../../../../javax/print/attribute/HashDocAttributeSet.html" TARGET="_parent">HashDocAttributeSet</A>
+to convey the doc's attributes
+(later we'll say more about why we chose that particular class).
+The doc's attribute set contains only one attribute,
+a <A HREF="../../../../javax/print/attribute/standard/DocumentName.html" TARGET="_parent">DocumentName</A>
+attribute giving the document's name, <CODE>"Test String"</CODE>.
+All string-valued printing attributes
+in the Jini Print Service API
+are localized,
+meaning they indicate the string's natural language
+as well as the string itself.
+Line 30 specifies the default locale
+as the document name's natural language.
+<P>
+You can also specify printing attributes
+in the Print Request object.
+Lines 42-43 create the Print Request as before.
+But now, instead of specifying null,
+lines 44-55 supply an attribute set --
+this time, a
+<A HREF="../../../../javax/print/attribute/HashPrintRequestAttributeSet.html" TARGET="_parent">HashPrintRequestAttributeSet</A> --
+containing printing attributes for the whole job.
+Line 45 supplies an array of three attributes
+to the HashPrintRequestAttributeSet constructor
+to populate the attribute set.
+<P>
+For the first print job attribute,
+lines 46-51 construct a
+<A HREF="../../../../javax/print/attribute/standard/Media.html" TARGET="_parent">Media</A>
+attribute
+to specify letter-sized pink paper.
+The Media attribute is a collection
+of orthogonal media characteristics,
+which are themselves printing attributes.
+Line 47 supplies an array of four attributes
+to the Media constructor
+to populate the Media object:
+<UL>
+<LI>
+The declared constant
+<A HREF="../../../../javax/print/attribute/standard/MediaSize.NA.html#LETTER" TARGET="_parent"><CODE>MediaSize.NA.LETTER</CODE></A>
+indicating a media size of 8.5 x 11 inches.
+<LI>
+The declared constant
+<A HREF="../../../../javax/print/attribute/standard/MediaColor.html#PINK" TARGET="_parent"><CODE>MediaColor.PINK</CODE></A>
+to make sure we get pink paper instead of some other color.
+<LI>
+The declared constant
+<A HREF="../../../../javax/print/attribute/standard/MediaOpacity.html#OPAQUE" TARGET="_parent"><CODE>MediaOpacity.OPAQUE</CODE></A>
+to make sure we don't get transparencies.
+<LI>
+The declared constant
+<A HREF="../../../../javax/print/attribute/standard/MediaKind.html#SHEET" TARGET="_parent"><CODE>MediaKind.SHEET</CODE></A>
+to make sure we get a sheet of paper instead of, say, an envelope.
+</UL>
+There are other media characteristics we could specify,
+but these are the only ones we care about.
+<P>
+For the second print job attribute,
+line 52 specifies the declared constant
+<A HREF="../../../../javax/print/attribute/standard/OrientationRequested.html#LANDSCAPE" TARGET="_parent"><CODE>OrientationRequested.LANDSCAPE</CODE></A>
+to make sure we get landscape orientation instead of portrait.
+<P>
+For the third and final print job attribute,
+lines 53-55 specify a
+<A HREF="../../../../javax/print/attribute/standard/JobName.html" TARGET="_parent">JobName</A>
+attribute with the job name, <CODE>"Test Job"</CODE>.
+<P>
+Thus, printing attributes can be associated with the doc --
+<B>document level attributes</B>
+which pertain just to that doc.
+Printing attributes can also be associated with the Print Request --
+<B>job level attributes</B>
+which pertain to the whole job.
+For a print job consisting of a single doc,
+it really makes no difference
+whether attributes are specified at the document level
+or the job level.
+But it does make a difference
+for a print job consisting of more than one doc.
+Then you can specify common attributes at the job level
+which apply to all the docs,
+and for each doc you can specify its own
+unique document level attributes.
+<P>
+However, not every printing attribute is a document level attribute,
+and not every printing attribute is a job level attribute.
+To specify how a particular printing attribute is used,
+the attribute class implements one or more tagging interfaces --
+<A HREF="../../../../javax/print/attribute/DocAttribute.html" TARGET="_parent">DocAttribute</A>
+for document level attributes,
+<A HREF="../../../../javax/print/attribute/PrintRequestAttribute.html" TARGET="_parent">PrintRequestAttribute</A>
+for job level attributes.
+Some attributes can be used at both levels
+and so implement both tagging interfaces.
+Likewise, interfaces are defined
+for attribute sets restricted to contain
+only one kind of attribute --
+<A HREF="../../../../javax/print/attribute/DocAttributeSet.html" TARGET="_parent">DocAttributeSet</A>
+for document level attribute sets,
+<A HREF="../../../../javax/print/attribute/PrintRequestAttributeSet.html" TARGET="_parent">PrintRequestAttributeSet</A>
+for job level attribute sets.
+To ensure that only document level attributes
+can appear in a doc's attribute set,
+a doc class's constructor requires
+an instance of the more restrictive
+<A HREF="../../../../javax/print/attribute/DocAttributeSet.html" TARGET="_parent">DocAttributeSet</A>
+interface rather than the general
+<A HREF="../../../../javax/print/attribute/AttributeSet.html" TARGET="_parent">AttributeSet</A>
+interface.
+To ensure that only job level attributes
+can appear in a Print Request's attribute set,
+the Print Service's factory method requires
+an instance of the more restrictive
+<A HREF="../../../../javax/print/attribute/PrintRequestAttributeSet.html" TARGET="_parent">PrintRequestAttributeSet</A>
+interface.
+The Jini Print Service provides classes
+<A HREF="../../../../javax/print/attribute/HashDocAttributeSet.html" TARGET="_parent">HashDocAttributeSet</A>
+and
+<A HREF="../../../../javax/print/attribute/HashPrintRequestAttributeSet.html" TARGET="_parent">HashPrintRequestAttributeSet</A>
+that implement the corresponding interfaces,
+and we used those classes
+to set up the doc and Print Request objects.
+<P>
+When the Print Request is told to submit itself on line 56,
+the Jini Print Service instance will extract
+the job level and document level attributes
+from the Print Request object
+and the doc object
+and will make sure the Jini Print Service instance
+can support the specified attributes and attribute values.
+If the Jini Print Service instance
+doesn't support one or more
+of the specified attributes or attribute values,
+the job won't print.
+(Such a failure is reported
+with an event notification --
+see <A HREF="tut_printjobevents.html" TARGET="_parent">Lesson 5</A>.)
+The Print Service object has <B>capability methods</B>
+that let you test whether a given print data attribute is supported
+without actually trying to create or print a job.
+See interface <A HREF="../service/PrintService.html" TARGET="_parent">PrintService</A>
+for further information.
+This code does not test whether the attributes are supported
+but just sets them unconditionally.
+<P>
+Having extracted the printing attributes,
+the Jini Print Service instance will then extract the print data
+from the doc object
+and print the job,
+using the specified attribute values
+to determine how to print the job.
+
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_basics.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_lookup.html'">
+</FORM>
+<HR>
+<P>
+<B>DRAFT STANDARD VERSION 1.0 (23-MAY-2000)</B>
+</P>
+</BODY>
+</HTML>

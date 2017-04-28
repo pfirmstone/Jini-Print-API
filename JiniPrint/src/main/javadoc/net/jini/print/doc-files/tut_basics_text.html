@@ -1,0 +1,206 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service Tutorial -- Lesson 1. The Very Basics</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<H2>Jini Print Service Tutorial</H2>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=100%>
+<TR>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_index.html" TARGET="_parent">Introduction</A><BR>
+<B>Lesson 1. The Very Basics</B><BR>
+<A HREF="tut_printdataattr.html" TARGET="_parent">Lesson 2. Print Data Attributes</A><BR>
+<A HREF="tut_lookup.html" TARGET="_parent">Lesson 3. Lookup</A><BR>
+<A HREF="tut_printjobstatus.html" TARGET="_parent">Lesson 4. Print Job Status</A><BR>
+</FONT></TD>
+<TD WIDTH="50%" VALIGN="TOP"><FONT SIZE=2>
+<A HREF="tut_printjobevents.html" TARGET="_parent">Lesson 5. Print Job Events</A><BR>
+<A HREF="tut_inputstreamprintjob.html" TARGET="_parent">Lesson 6. File Print Jobs</A><BR>
+<A HREF="tut_urlprintjob.html" TARGET="_parent">Lesson 7. URL Print Jobs</A><BR>
+<A HREF="tut_registration.html" TARGET="_parent">Lesson 8. Service Registration</A>
+</FONT></TD>
+</TR>
+</TABLE>
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_printdataattr.html'">
+</FORM>
+
+<HR>
+<H2>Lesson 1. The Very Basics</H2>
+<P>
+Below is an example code fragment that uses the Jini Print Service
+to print a simple string, the proverbial "Hello, world!"
+<P>
+Lines 1-7 import all the requisite Java classes and interfaces.
+Line 9 sets up an exception handling context
+for dealing with errors that may occur while printing.
+The real meat comprises lines 11-25.
+<P>
+To print anything with a Jini Print Service,
+you have to wrap up whatever you're going to print
+inside an object called a "doc."
+The Jini Print Service instance
+will discover everything it needs to know about your job
+by calling methods on the doc object,
+which are declared in interface
+<A HREF="../data/Doc.html" TARGET="_parent">Doc</A>.
+Line 11 constructs a doc object
+which is an instance of class
+<A HREF="../../../../org/jpwg/jini/print/data/StringDoc.html" TARGET="_parent">StringDoc</A>.
+This class
+(provided as a sample implementation
+in package <A HREF="../../../../org/jpwg/jini/print/data/package-summary.html" TARGET="_parent">org.jpwg.jini.print.data</A>
+but not part of the Jini Print Service API)
+is designed for printing Java strings.
+(We could have written our own implementation
+of interface <A HREF="../data/Doc.html" TARGET="_parent">Doc</A>,
+but it's less work to use the existing class.)
+The first constructor argument is the string to be printed,
+<CODE>"Hello, world!"</CODE>.
+The second constructor argument, null,
+says to use default values for the doc's printing attributes
+(more on this in <A HREF="tut_printdataattr.html" TARGET="_parent">Lesson 2</A>).
+<P>
+Now that we have a doc object,
+we need a Jini Print Service instance
+to print it on.
+Line 12 obtains the Jini Lookup Service's (JLUS's) proxy object,
+which implements interface ServiceRegistrar.
+The JLUS's proxy object can be obtained
+using any of several standard techniques
+which are not covered here.
+<P>
+Lines 13-17 construct a service template
+that will be used to search the JLUS
+for a Jini Print Service instance.
+The first constructor parameter is null,
+signifying that any service ID will match our search.
+The second constructor parameter
+is an array of one class,
+signifying that any service object
+that implements interface
+<A HREF="../service/PrintService.html" TARGET="_parent">PrintService</A>
+will match our search.
+<A HREF="../service/PrintService.html" TARGET="_parent">PrintService</A>
+is an interface implemented
+by the service object every Jini Print Service instance
+registers into the JLUS;
+it is the relevant interface for our purpose
+of printing out a single doc.
+The third constructor parameter is null,
+signifying that any JLUS service attributes whatsoever
+will match our search.
+So, we are simply looking for any Jini Print Service instance;
+we don't care what its service ID is
+or what its attributes are.
+<P>
+Lines 18-19 obtain the Jini Print Service instance's service object
+from the JLUS.
+By using this form of the <CODE>lookup()</CODE> method,
+we are saying we don't care which Jini Print Service instance we get
+if more than one happens to be registered in the JLUS.
+The returned service object is cast from class Object
+to interface
+<A HREF="../service/PrintService.html" TARGET="_parent">PrintService</A>,
+which is the interface we need to call.
+<P>
+Now that we have a doc object and a Print Service object,
+we can start setting up the print job.
+After making sure on line 20
+that the JLUS really did find an instance of the Jini Print Service,
+line 23 uses a factory method in the Print Service object
+to create a Print Request object
+that is bound to this Jini Print Service instance.
+The first argument is the doc to be printed,
+namely, the doc object containing the <CODE>"Hello, world!"</CODE> string.
+The second argument, null,
+says to use default values for the print job's printing attributes
+(again, more on this in <A HREF="tut_printdataattr.html" TARGET="_parent">Lesson 2</A>).
+The returned Print Request object
+encapsulates the specified doc and printing attributes.
+The Print Request object implements interfaces
+<A HREF="../job/PrintRequest.html" TARGET="_parent">PrintRequest</A> and
+<A HREF="../job/DocPrintRequest.html" TARGET="_parent">DocPrintRequest</A>
+as well as other interfaces depending on
+this Jini Print Service instance's capabilities.
+Line 22 stores the returned Print Request object
+as an instance of interface
+<A HREF="../job/PrintRequest.html" TARGET="_parent">PrintRequest</A>,
+which is the interface we need to call.
+<P>
+Line 24 tells the Print Request to submit itself
+to the printer.
+The printer calls the Print Request's doc object's methods
+to extract the print data,
+namely the characters in the string,
+and prints a job with that data.
+The job prints on the printer
+associated with the Jini Print Service instance
+that created the Print Request.
+<P>
+Finally, lines 26-40 contain error and exception handling code
+for various error conditions.
+The exceptions are checked exceptions
+thrown by the methods called in lines 11-25,
+so exception handlers must be written for them
+or the code will not compile.
+<P>
+The first exception handler,
+for <A HREF="../../../../javax/print/exception/PrintException.html" TARGET="_parent">PrintException</A>,
+catches all printing-related error conditions.
+<A HREF="../../../../javax/print/exception/PrintException.html" TARGET="_parent">PrintException</A>
+is a base class;
+the Print Service and Print Job methods
+actually throw more specific exceptions
+that are subclasses of
+<A HREF="../../../../javax/print/exception/PrintException.html" TARGET="_parent">PrintException</A>.
+This gives you programming flexibility:
+you can either write one exception handler
+for all the printing error conditions,
+as this example does,
+or you can write separate exception handlers
+to do different things for different printing error conditions.
+<P>
+The second exception handler, for RemoteException,
+would be executed if the Jini Print Service instance's service object
+used a remote implementation
+and a remote error happened --
+the remote server crashed, the network failed.
+If the Jini Print Service instance's service object
+used a local implementation,
+RemoteException would never get thrown.
+But since the client code doesn't know
+how the Jini Print Service instance's service object is implemented,
+the client code must provide for the possibility of a RemoteException.
+<P>
+To summarize, the basic pattern for printing
+using the Jini Print Service is:
+<OL TYPE=1>
+<LI> Create a Doc object.
+<LI> Obtain the Jini Print Service instance's Print Service object from the JLUS.
+<LI> Create a Print Request object encapsulating the Doc object.
+<LI> Submit the Print Request to be printed.
+</OL>
+<P>
+Although this code will probably work,
+it has several shortcomings.
+The next several lessons will
+rectify these shortcomings.
+
+<FORM>
+<INPUT TYPE=BUTTON VALUE="Overview" onClick="window.parent.location.href='../../../../overview-summary.html'">
+<INPUT TYPE=BUTTON VALUE="Tutorial" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Previous Page" onClick="window.parent.location.href='tut_index.html'">
+<INPUT TYPE=BUTTON VALUE="Next Page" onClick="window.parent.location.href='tut_printdataattr.html'">
+</FORM>
+<HR>
+<P>
+<B>DRAFT STANDARD VERSION 1.0 (23-MAY-2000)</B>
+</P>
+</BODY>
+</HTML>

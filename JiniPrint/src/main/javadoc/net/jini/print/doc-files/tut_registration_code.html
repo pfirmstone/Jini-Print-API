@@ -1,0 +1,302 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>Jini Print Service Tutorial -- Lesson 8. Service Registration</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%>
+<TR>
+<TD ALIGN="left" VALIGN="top">
+<PRE>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+</PRE>
+</TD>
+<TD ALIGN="left" VALIGN="top">
+<PRE>
+&nbsp;&nbsp;&nbsp;&nbsp;
+</PRE>
+</TD>
+<TD ALIGN="left" VALIGN="top">
+<PRE>
+import java.net.URL;
+import java.util.Locale;
+import javax.print.attribute.standard.Chromaticity;
+import javax.print.attribute.standard.Compression;
+import javax.print.attribute.standard.ColorSupported;
+import javax.print.attribute.standard.CopiesSupported;
+import javax.print.attribute.standard.MediaColor;
+import javax.print.attribute.standard.MediaHoleCount;
+import javax.print.attribute.standard.MediaKind;
+import javax.print.attribute.standard.MediaLoaded;
+import javax.print.attribute.standard.MediaOpacity;
+import javax.print.attribute.standard.MediaOrderCount;
+import javax.print.attribute.standard.MediaPrePrinted;
+import javax.print.attribute.standard.MediaRecycled;
+import javax.print.attribute.standard.MediaSize;
+import javax.print.attribute.standard.MediaStock;
+import javax.print.attribute.standard.MediaTabs;
+import javax.print.attribute.standard.MediaWeightEnglish;
+import javax.print.attribute.standard.MediaWeightMetric;
+import javax.print.attribute.standard.OrientationRequested;
+import javax.print.attribute.standard.PagesPerMinute;
+import javax.print.attribute.standard.PagesPerMinuteColor;
+import javax.print.attribute.standard.PDLOverrideSupported;
+import javax.print.attribute.standard.PrinterInfo;
+import javax.print.attribute.standard.PrinterMakeAndModel;
+import javax.print.attribute.standard.PrinterMoreInfo;
+import javax.print.attribute.standard.PrinterMoreInfoManufacturer;
+import javax.print.attribute.standard.PrinterName;
+import javax.print.attribute.standard.PrinterLocation;
+import javax.print.attribute.standard.PrinterResolution;
+import javax.print.data.DocFlavor;
+import net.jini.core.entry.Entry;
+import net.jini.core.lookup.ServiceID;
+import net.jini.core.lookup.ServiceItem;
+import net.jini.lookup.entry.Address;
+import net.jini.lookup.entry.Comment;
+import net.jini.lookup.entry.Location;
+import net.jini.lookup.entry.Name;
+import net.jini.lookup.entry.ServiceInfo;
+import net.jini.print.lookup.AttributeEntry;
+import net.jini.print.lookup.FlavorEntry;
+import net.jini.print.lookup.MediaEntry;
+import net.jini.print.lookup.PrinterDescriptionEntry;
+import net.jini.print.service.PrintService;
+. . .
+Locale defaultLocale = Locale.getDefault();
+ServiceID theServiceID = // Jini Print Service instance's service ID
+PrintService theProxy =  // Jini Print Service instance's service proxy
+Entry[] theServiceAttributes = new Entry[]
+// General Attributes
+    {new PrinterDescriptionEntry // mandatory
+        (new PrinterName
+            ("The Presidential Printer",
+             defaultLocale),
+         new PrinterLocation
+            ("The Oval Office",
+             defaultLocale),
+         new PrinterInfo
+            ("Don't use this printer unless you're Bill Clinton!",
+             defaultLocale),
+         new PrinterMoreInfo
+            (new URL ("http://billsprinter")),
+         new PrinterMakeAndModel
+            ("Papyrophagus PaperEater 440",
+             defaultLocale),
+         new PrinterMoreInfoManufacturer
+            (new URL ("http://www.papyrophagus.com/support/papereater440/")),
+         ColorSupported.SUPPORTED,
+         PDLOverrideSupported.ATTEMPTED,
+         new PagesPerMinute (8),
+         new PagesPerMinuteColor (4)),
+     new Address
+        (/*street            */ "1600 Pennsylvania Avenue",
+         /*organization      */ "United States Executive Branch",
+         /*organizationalUnit*/ "Office of the President",
+         /*locality          */ "Washington",
+         /*stateOrProvince   */ "DC",
+         /*postalCode        */ "20500",
+         /*country           */ "USA"),
+     new Location
+        (/*floor   */ "2",
+         /*room    */ "The Oval Office",
+         /*building*/ "The White House"),
+     new Name ("The Presidential Printer"),
+     new ServiceInfo
+        (/*name        */ "Jini Print Service",
+         /*manufacturer*/ "Papyrophagus Corporation",
+         /*vendor      */ "Papyrophagus Corporation",
+         /*version     */ "1.0",
+         /*model       */ "PaperEater 440",
+         /*serialNumber*/ "895244746"),
+     new Comment ("Don't use this printer unless you're Bill Clinton!"),
+// Supported Doc Flavors
+     new FlavorEntry (DocFlavor.INPUT_STREAM.TEXT_PLAIN), // mandatory
+     new FlavorEntry (DocFlavor.INPUT_STREAM.TEXT_PLAIN_US_ASCII), // mandatory
+     new FlavorEntry (DocFlavor.INPUT_STREAM.TEXT_PLAIN_UTF_8), // mandatory
+     new FlavorEntry (DocFlavor.INPUT_STREAM.TEXT_HTML),
+     new FlavorEntry (DocFlavor.INPUT_STREAM.TEXT_HTML_US_ASCII),
+     new FlavorEntry (DocFlavor.INPUT_STREAM.TEXT_HTML_UTF_8),
+     new FlavorEntry (DocFlavor.INPUT_STREAM.POSTSCRIPT),
+     new FlavorEntry (DocFlavor.URL.TEXT_PLAIN),
+     new FlavorEntry (DocFlavor.URL.TEXT_PLAIN_US_ASCII),
+     new FlavorEntry (DocFlavor.URL.TEXT_PLAIN_UTF_8),
+     new FlavorEntry (DocFlavor.URL.TEXT_HTML),
+     new FlavorEntry (DocFlavor.URL.TEXT_HTML_US_ASCII),
+     new FlavorEntry (DocFlavor.URL.TEXT_HTML_UTF_8),
+     new FlavorEntry (DocFlavor.URL.POSTSCRIPT),
+     new FlavorEntry (DocFlavor.STRING.TEXT_PLAIN),
+     new FlavorEntry (DocFlavor.SERVICE_FORMATTED.RENDERABLE_IMAGE), // mandatory
+// Supported Printing Attributes
+     new AttributeEntry (Chromaticity.MONOCHROME),
+     new AttributeEntry (Chromaticity.COLOR),
+     new AttributeEntry (Compression.NONE), // mandatory
+     new AttributeEntry (new CopiesSupported (1, Integer.MAX_VALUE)),
+     new MediaEntry
+        (MediaSize.NA.LETTER,
+         MediaColor.WHITE,
+         MediaOpacity.OPAQUE,
+         new MediaHoleCount (0),
+         MediaKind.SHEET,
+         new MediaWeightEnglish (24),
+         new MediaWeightMetric (90),
+         MediaStock.BOND,
+         MediaRecycled.NONE,
+         MediaPrePrinted.BLANK,
+         MediaTabs.NONE,
+         new MediaOrderCount (1),
+         null, /* no MediaBackCoating */ 
+         null, /* no MediaFrontCoating */ 
+         MediaLoaded.LOADED,
+         null  /* no MediaDescription */ ),
+     new AttributeEntry (OrientationRequested.PORTRAIT),
+     new AttributeEntry (OrientationRequested.LANDSCAPE),
+     new AttributeEntry
+        (new PrinterResolution (600, 600, PrinterResolution.DPI))};
+ServiceItem theServiceItem =
+    new ServiceItem (theServiceID, theProxy, theServiceAttributes);
+. . .
+</PRE>
+</TD>
+</TR>
+</TABLE>
+</BODY>
+</HTML>
