@@ -26,7 +26,6 @@ import javax.print.PrintException;
  * additional information about which object encountered the error, namely a
  * Print Job object.
  *
- * DRAFT STANDARD VERSION 1.0 (23-MAY-2000)
  */
 public class PrintJobException extends PrintException {
 

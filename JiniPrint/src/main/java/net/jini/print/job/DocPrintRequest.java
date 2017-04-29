@@ -13,13 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.job;
 
+import net.jini.print.data.Doc;
+
 /**
+ * Interface DocPrintRequest specifies the interface for conveying to a Jini
+ * Print Service instance a request to print a job consisting of a single piece
+ * of print data. Interface DocPrintRequest extends interface PrintRequest with
+ * a method to specify the Doc object to be printed. ("Doc" is a short,
+ * easy-to-pronounce term that means "a piece of print data.")
  *
- * @author peter
+ * Interface DocPrintRequest's methods do not throw RemoteException; these
+ * methods are not intended to make remote method calls and must be implemented
+ * locally.
  */
 public interface DocPrintRequest extends PrintRequest {
-    
+
+    /**
+     * Specify the doc for this print request. The previous print data is
+     * replaced with the given doc.
+     *
+     * The setDoc() method does not verify whether this Jini Print Service
+     * instance supports the given doc's doc flavor and printing attributes.
+     * This verification is done during Print Job processing after this Print
+     * Request has been submitted.
+     *
+     * @param theDoc Doc to be printed.
+     */
+    public void setDoc(Doc theDoc);
+
 }

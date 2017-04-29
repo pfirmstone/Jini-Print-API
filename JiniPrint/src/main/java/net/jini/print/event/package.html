@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<!--
+Copyright 2017 peter.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body><P>
+                Package net.jini.print.event
+                contains classes for reporting printing events
+                to a Jini Print Service client.
+            <P>
+            <H3>Kinds of Events</H3>
+            A Jini Print Service instance
+            can report the following kinds of events
+            to registered event listeners.
+            The following events pertain to the Print Service itself:
+            <OL TYPE=1>
+                <LI> <!-- 1 -->
+                    In the Print Service's attribute set,
+                    attributes' values changed
+                    in a given attribute category or categories.
+                    This lets a client track changes in an attribute
+                    regardless of which specific values the attribute achieves.
+                    <P>
+                <LI> <!-- 2 -->
+                    In the Print Service's attribute set,
+                    attributes' values became equal
+                    to a given value or values.
+                    This lets a client be notified
+                    only when an attribute achieves a specific value or values.
+            </OL>
+            <P>
+                The following events,
+                although originating from the Print Service,
+                pertain to a Print Job being processed by the Print Service:
+            <OL TYPE=1 START=3>
+                <LI> <!-- 3 -->
+                    The Print Service successfully obtained
+                    one piece of print data for the Print Job.
+                    This lets a client obtain confirmation
+                    that the print data completely arrived
+                    at the Print Service.
+                    <P>
+                <LI> <!-- 4 -->
+                    The Print Service failed to obtain
+                    one piece of print data for the Print Job.
+                    This lets a client find out what went wrong
+                    (in the form of an exception)
+                    when the Print Service tried to get the print data.
+                    <P>
+                <LI> <!-- 5 -->
+                    In the Print Job's attribute set,
+                    attributes' values changed
+                    in a given attribute category or categories.
+                    This lets a client track changes in an attribute
+                    regardless of which specific values the attribute achieves.
+                    <P>
+                <LI> <!-- 6 -->
+                    In the Print Job's attribute set,
+                    attributes' values became equal
+                    to a given value or values.
+                    This lets a client be notified
+                    only when an attribute achieves a specific value or values.
+                    <P>
+                <LI> <!-- 7 -->
+                    The Print Job finished processing,
+                    having achieved some final state
+                    such as "completed," "canceled," or "aborted."
+                    This lets a client be notified
+                    only when a Print Job is finished
+                    and discover its final state.
+            </OL>
+            <P>
+            <H3>Event Classes</H3>
+            The UML class diagram below
+            shows the classes used to report printing events.
+            These all follow the standard Jini event class pattern,
+            deriving from class net.jini.core.event.RemoteEvent.
+            <P>
+            <CENTER>
+                <IMG SRC="../doc-files/NetJiniPrintEventFig1.gif" WIDTH=604 HEIGHT=676>
+            </CENTER>
+            <P>
+                Package net.jini.print.event
+                contains common printing event base classes:
+            <UL>
+                <LI>
+                    <A HREF="PrintEvent.html">PrintEvent</A>
+            </UL>
+            <P>
+                Package <A HREF="../service/package-summary.html">net.jini.print.service</A>
+                contains classes for events
+                pertaining to a Print Service:
+            <UL>
+                <LI>
+                    <A HREF="../service/PrintServiceEvent.html">PrintServiceEvent</A>
+                    (event kinds #1 and #2)
+            </UL>
+            <P>
+                Package <A HREF="../job/package-summary.html">net.jini.print.job</A>
+                contains classes for events
+                pertaining to a Print Job:
+            <UL>
+                <LI>
+                    <A HREF="../job/PrintDataEvent.html">PrintDataEvent</A>
+                    (event kinds #3 and #4)
+                <LI>
+                    <A HREF="../job/PrintJobEvent.html">PrintJobEvent</A>
+                    (event kinds #5 and #6)
+                <LI>
+                    <A HREF="../job/PrintJobFinishedEvent.html">PrintJobFinishedEvent</A>
+                    (event kind #7)
+            </UL>
+            <P>
+            <H3>Event Registration</H3>
+            You can register to receive events pertaining to a Print Service
+            by calling the
+            <A HREF="../service/PrintService.html#addEventListener(java.lang.Class[], javax.print.attribute.PrintServiceAttribute[], net.jini.core.event.RemoteEventListener, java.rmi.MarshalledObject, long)"><CODE>PrintService.addEventListener()</CODE></A>
+            method, specifying five arguments:
+            <UL>
+                <LI>
+                    An array of zero or more attribute categories.
+                    When an attribute in any of the given categories
+                    in the Print Service's attribute set
+                    experiences a change in its value,
+                    the Print Service reports a
+                    <A HREF="../service/PrintServiceEvent.html">PrintServiceEvent</A>
+                    to the event listener
+                    (event kind #1).
+                    <P>
+                <LI>
+                    An array of zero or more print service attribute values.
+                    When an attribute in the Print Service's attribute set
+                    achieves any of the given values,
+                    the Print Service reports a
+                    <A HREF="../service/PrintServiceEvent.html">PrintServiceEvent</A>
+                    to the event listener
+                    (event kind #2).
+                    <P>
+                <LI>
+                    A remote event listener object to receive the reported events.
+                    <P>
+                <LI>
+                    A handback object reported to the event listener along with the event itself.
+                    <P>
+                <LI>
+                    A requested initial duration
+                    for the event registration lease.
+            </UL>
+            <P>
+                As part of the process of setting up a Print Request,
+                you can register to receive events pertaining to the resulting Print Job
+                by calling the
+                <A HREF="../job/PrintRequest.html#addEventListener(boolean, boolean, java.lang.Class[], javax.print.attribute.PrintJobAttribute[], boolean, net.jini.core.event.RemoteEventListener, java.rmi.MarshalledObject, long)"><CODE>PrintRequest.addEventListener()</CODE></A>
+                method, specifying eight arguments:
+            <UL>
+                <LI>
+                    Whether to report a
+                    <A HREF="../job/PrintDataEvent.html">PrintDataEvent</A>
+                    to the event listener
+                    when the Print Service successfully obtains
+                    print data for the job
+                    (event kind #3).
+                    <P>
+                <LI>
+                    Whether to report a
+                    <A HREF="../job/PrintDataEvent.html">PrintDataEvent</A>
+                    to the event listener
+                    when the Print Service fails to obtain
+                    print data for the job
+                    (event kind #4).
+                    <P>
+                <LI>
+                    An array of zero or more attribute categories.
+                    When an attribute in any of the given categories
+                    in the Print Job's attribute set
+                    experiences a change in its value,
+                    the Print Service reports a
+                    <A HREF="../job/PrintJobEvent.html">PrintJobEvent</A>
+                    to the event listener
+                    (event kind #5).
+                    <P>
+                <LI>
+                    An array of zero or more print job attribute values.
+                    When an attribute in the Print Job's attribute set
+                    achieves any of the given values,
+                    the Print Service reports a
+                    <A HREF="../job/PrintJobEvent.html">PrintJobEvent</A>
+                    to the event listener
+                    (event kind #6).
+                    <P>
+                <LI>
+                    Whether to report a
+                    <A HREF="../job/PrintJobFinishedEvent.html">PrintJobFinishedEvent</A>
+                    to the event listener
+                    when the Print Service finishes processing the job
+                    (event kind #7).
+                    <P>
+                <LI>
+                    A remote event listener object to receive the reported events.
+                    <P>
+                <LI>
+                    A handback object reported to the event listener along with the event itself.
+                    <P>
+                <LI>
+                    A requested initial duration
+                    for the event registration lease.
+            </UL>
+            <P>
+                These events pertain to the Print Job
+                that results when the Print Request is submitted for printing;
+                these events do not pertain
+                to the Print Request per se.
+            <P>
+                You can also register to receive events
+                pertaining to an existing Print Job
+                by calling the
+                <A HREF="../job/PrintJob.html#addEventListener(boolean, boolean, java.lang.Class[], javax.print.attribute.PrintJobAttribute[], boolean, net.jini.core.event.RemoteEventListener, java.rmi.MarshalledObject, long)"><CODE>PrintJob.addEventListener()</CODE></A>
+                method, specifying the same eight arguments.
+                However, depending on the Print Service implementation,
+                you may miss receiving some Print Job events
+                that happen before the event registration takes effect.
+                By registering for event notifications
+                with the Print Request before it is submitted,
+                you are guaranteed to receive all Print Job events
+                from the point of submission onwards.
+            <P>
+                Following the standard Jini pattern,
+                event registrations are leased.
+                You must maintain the event registration leases
+                for as long as you wish to receive event notifications.
+                When you no longer need to receive event notifications,
+                you should cancel the leases.
+                (If you fail to cancel the leases,
+                they will eventually expire anyway.)
+                When an event registration lease expires,
+                the Print Service discards that event registration
+                and stops sending the event notifications
+                specified for that event registration.
+            <P>
+                Placement of this package under package net.jini.print
+                is preliminary and not yet approved by the Jini Community.
+            <P>
+    </body>
+</html>

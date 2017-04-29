@@ -16,9 +16,16 @@
 package net.jini.print.service;
 
 import java.io.IOException;
+import javax.print.DocFlavor;
+import javax.print.attribute.Attribute;
+import javax.print.attribute.AttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.PrintServiceAttribute;
+import javax.print.attribute.PrintServiceAttributeSet;
 import net.jini.core.event.EventRegistration;
 import net.jini.io.MarshalledInstance;
+import net.jini.print.data.Doc;
+import net.jini.print.job.DocPrintRequest;
 
 /**
  * <P>
@@ -137,6 +144,55 @@ import net.jini.io.MarshalledInstance;
 public interface PrintService {
 
     /**
+     * Create a Print Request object, bound to this Print Service object, that
+     * is able to print a single doc. The returned Print Request object
+     * implements interfaces PrintRequest and DocPrintRequest, and it may
+     * implement additional interfaces in package net.jini.print.job depending
+     * on the Print Service implementation. The returned Print Request object
+     * has neither a doc nor a set of job-level printing attributes; these must
+     * be populated by calling methods on the Print Request object.
+     *
+     * @return Print Request object.
+     * @throws PrintServiceException Thrown if this Print Service could not
+     * create a Print Request object. The detail message may provide further
+     * information about the error. The exception object may be an instance of a
+     * PrintServiceException subclass that implements one or more of the mixin
+     * interfaces, such as NestedException, to provide further information about
+     * the error.
+     * @throws IOException Thrown if a remote error occurred.
+     */
+    public DocPrintRequest createDocPrintRequest()
+	    throws PrintServiceException,
+	    IOException;
+
+    /**
+     * Create a Print Request object, bound to this Print Service object, to
+     * print the given doc with the given set of printing attributes. The
+     * returned Print Request object implements interfaces PrintRequest and
+     * DocPrintRequest, and it may implement additional interfaces in package
+     * net.jini.print.job depending on the Print Service implementation. The
+     * returned Print Request object is populated with the given doc and set of
+     * job-level printing attributes.
+     *
+     * @param theDoc Doc to be printed, or null to specify no doc (in which case
+     * the doc must be specified later by calling a method on the returned Print
+     * Request object).
+     * @param theAttributes Attribute set, or null to specify no attributes.
+     * @return Print Request object.
+     * @throws PrintServiceException Thrown if this Print Service could not
+     * create a Print Request object. The detail message may provide further
+     * information about the error. The exception object may be an instance of a
+     * PrintServiceException subclass that implements one or more of the mixin
+     * interfaces, such as NestedException, to provide further information about
+     * the error.
+     * @throws IOException Thrown if a remote error occurred.
+     */
+    public DocPrintRequest createDocPrintRequest(Doc theDoc,
+	    PrintRequestAttributeSet theAttributes)
+	    throws PrintServiceException,
+	    IOException;
+
+    /**
      * <p>
      * Add an event listener to this Print Service. Henceforth, the Jini Print
      * Service instance will report, to theListener, events of class
@@ -201,4 +257,396 @@ public interface PrintService {
 	    net.jini.core.event.RemoteEventListener theListener,
 	    MarshalledInstance theHandbackObject,
 	    long theRequestedLeaseDuration) throws IOException;
+
+    /**
+     * Obtain a snapshot of this Print Service's attribute set. The returned
+     * attribute set object is unmodifiable.
+     * <P>
+     * This Print Service's attribute set is a <A
+     * HREF="../../../../javax/print/attribute/PrintServiceAttributeSet.html"><CODE>PrintServiceAttributeSet</CODE></A>
+     * object containing a number of <A
+     * HREF="../../../../javax/print/attribute/PrintServiceAttribute.html"><CODE>PrintServiceAttribute</CODE></A>
+     * objects. There are two kinds of attributes in the attribute set:
+     * <UL>
+     * <LI>
+     * Attributes reporting this Print Service's status -- printer state, number
+     * of queued jobs, etc. These attributes change values in the attribute set
+     * dynamically as the printer operates.
+     * <LI>
+     * Attributes describing this Print Service's general features -- name,
+     * location, etc. These attributes rarely or never change values. (If an
+     * administrator reconfigures the printer, these attributes might change.)
+     * </UL>
+     * <P>
+     * The returned attribute set object is a "snapshot" of this Print Service's
+     * attribute set at the time of the <CODE>getAttributes()</CODE> method
+     * call; that is, the returned attribute set object's contents will
+     * <I>not</I> be updated if this Print Service's attribute set's contents
+     * change in the future. To detect changes in attribute values, call
+     * <CODE>getAttributes()</CODE> again and compare the new attribute set to
+     * the previous attribute set; alternatively, register a listener for print
+     * service events.
+     * <P>
+     * @return Unmodifiable snapshot of this Print Service's attribute set.
+     * @throws IOException Thrown if a remote error occurred.
+     */
+    public PrintServiceAttributeSet getAttributes()
+	    throws IOException;
+
+    /**
+     * Determine the print data formats a client can specify when setting up a
+     * job for this Print Service. A print data format is designated by a "doc
+     * flavor" (class <A
+     * HREF="../../../../javax/print/data/DocFlavor.html"><CODE>DocFlavor</CODE></A>)
+     * consisting of a MIME type plus a print data representation class.
+     * <P>
+     * The settings argument gives the context for deciding which doc flavors
+     * are supported:
+     * <UL>
+     * <LI>
+     * If <CODE>theSettings</CODE> is null, this method returns all the print
+     * data formats this Print Service supports for any possible job.
+     * <LI>
+     * If <CODE>theSettings</CODE> is not null, its <CODE>attributes</CODE>
+     * field contains both job-level and document-level attributes for a
+     * supposed print job. This method returns just the print data formats that
+     * are compatible with the given attributes. (The <CODE>flavor</CODE> field
+     * of <CODE>theSettings</CODE> is ignored.)
+     * </UL>
+     *
+     * @param theSettings Settings for a supposed print job, or null.
+     * @return Array of supported doc flavors.
+     * @throws IOException Thrown if a remote error occurred.
+     */
+    public DocFlavor[] getSupportedDocFlavors(Settings theSettings)
+	    throws IOException;
+
+    /**
+     * Determine whether a client can specify the given print data format when
+     * setting up a job for this Print Service. A print data format is
+     * designated by a "doc flavor" (class <A
+     * HREF="../../../../javax/print/data/DocFlavor.html"><CODE>DocFlavor</CODE></A>)
+     * consisting of a MIME type plus a print data representation class.
+     * <P>
+     * The settings argument gives the context for deciding whether the given
+     * doc flavor is supported:
+     * <UL>
+     * <LI>
+     * If <CODE>theSettings</CODE> is null, this method tells whether this Print
+     * Service supports <CODE>theFlavor</CODE> for some possible combination of
+     * attributes.
+     * <LI>
+     * If <CODE>theSettings</CODE> is not null, its <CODE>attributes</CODE>
+     * field contains both job-level and document-level attributes for a
+     * supposed print job. This method tells whether this Print Service supports
+     * <CODE>theFlavor</CODE> in combination with the given attributes. (The
+     * <CODE>flavor</CODE> field of <CODE>theSettings</CODE> is ignored.)
+     * </UL>
+     *
+     * @param theFlavor Doc flavor to test.
+     * @param theSettings Settings for a supposed print job, or null.
+     * @return True if this Print Service supports theFlavor, false if it
+     * doesn't.
+     * @throws IOException Thrown if a remote error occurred.
+     */
+    public boolean isDocFlavorSupported(DocFlavor theFlavor,
+	    Settings theSettings)
+	    throws IOException;
+
+    /**
+     * Determine the printing attribute categories a client can specify when
+     * setting up a job for this Print Service. A printing attribute category is
+     * designated by a <A
+     * HREF="file:///C:/jdk1.2.2/docs/api/java/lang/Class.html"><CODE>Class</CODE></A>
+     * that implements interface
+     * <A
+     * HREF="../../../../javax/print/attribute/Attribute.html"><CODE>Attribute</CODE></A>.
+     * This method returns just the attribute <I>categories</I> that are
+     * supported; it does not return the particular attribute <I>values</I> that
+     * are supported.
+     * <P>
+     * The settings argument gives the context for deciding which attribute
+     * categories are supported:
+     * <UL>
+     * <LI>
+     * If <CODE>theSettings</CODE> is null, this method returns all the printing
+     * attribute categories this Print Service supports for any possible job.
+     * <LI>
+     * If <CODE>theSettings</CODE> is not null, its <CODE>flavor</CODE> field
+     * contains the print data format for a supposed print job, and its
+     * <CODE>attributes</CODE> field contains both job-level and document-level
+     * attributes for a supposed print job. This method returns just the
+     * printing attribute categories that are compatible with the given doc
+     * flavor and/or attributes.
+     * </UL>
+     *
+     * @param theSettings Settings for a supposed print job, or null.
+     * @return Array of printing attribute categories which the client can
+     * specify as a doc-level or job-level attribute in a Print Request. Each
+     * element in the array is a Class that implements interface Attribute.
+     * @throws IOException Thrown if a remote error occurred.
+     */
+    public Class<? extends Attribute>[] getSupportedAttributeCategories(Settings theSettings)
+	    throws IOException;
+
+    /**
+     * Determine whether a client can specify the given printing attribute
+     * category when setting up a job for this Print Service. A printing
+     * attribute category is designated by a <A
+     * HREF="file:///C:/jdk1.2.2/docs/api/java/lang/Class.html"><CODE>Class</CODE></A>
+     * that implements interface <A
+     * HREF="../../../../javax/print/attribute/Attribute.html"><CODE>Attribute</CODE></A>.
+     * This method tells whether the attribute <I>category</I> is supported; it
+     * does not tell whether a particular attribute <I>value</I>
+     * is supported.
+     * <P>
+     * The settings argument gives the context for deciding whether the given
+     * attribute category is supported:
+     * <UL>
+     * <LI>
+     * If <CODE>theSettings</CODE> is null, this method tells whether this Print
+     * Service supports <CODE>theCategory</CODE> for some possible combination
+     * of doc flavor and attributes.
+     * <LI>
+     * If <CODE>theSettings</CODE> is not null, its <CODE>flavor</CODE> field
+     * contains the print data format for a supposed print job, and its
+     * <CODE>attributes</CODE> field contains both job-level and document-level
+     * attributes for a supposed print job. This method tells whether this Print
+     * Service supports <CODE>theCategory</CODE> in combination with the given
+     * doc flavor and/or attributes.
+     * </UL>
+     *
+     * @param theCategory Printing attribute category to test. It must be a
+     * Class that implements interface Attribute.
+     * @param theSettings Settings for a supposed print job, or null.
+     * @return True if this Print Service supports specifying a doc-level or
+     * job-level attribute in theCategory in a Print Request, false if it
+     * doesn't.
+     * @throws IOException Thrown if a remote error occurred.
+     * @throws IllegalArgumentException (unchecked exception) Thrown if
+     * theCategory is not a Class that implements interface Attribute.
+     * @throws NullPointerException (unchecked exception) Thrown if theCategory
+     * is null.
+     */
+    public boolean isAttributeCategorySupported(Class<? extends Attribute> theCategory,
+	    Settings theSettings)
+	    throws IOException;
+
+    /**
+     * Determine this Print Service's default printing attribute value in the
+     * given category. A printing attribute value is an instance of a class that
+     * implements interface <A
+     * HREF="../../../../javax/print/attribute/Attribute.html"><CODE>Attribute</CODE></A>.
+     * If a client sets up a print job and does not specify any attribute value
+     * in the given category, this Print Service will use the default attribute
+     * value instead.
+     * <P>
+     * The settings argument gives the context for determining the default
+     * attribute value:
+     * <UL>
+     * <LI>
+     * If <CODE>theSettings</CODE> is null, this method returns the default
+     * attribute value for <CODE>theCategory</CODE>, assuming all the other
+     * settings are defaulted.
+     * <LI>
+     * If <CODE>theSettings</CODE> is not null, its <CODE>flavor</CODE> field
+     * contains the print data format for a supposed print job, and its
+     * <CODE>attributes</CODE> field contains both job-level and document-level
+     * attributes for a supposed print job. This method returns the default
+     * attribute value for <CODE>theCategory</CODE> that will be used in
+     * combination with the given doc flavor and/or attributes, assuming any
+     * unspecified settings are defaulted.
+     * </UL>
+     * <P>
+     * This method will return null in two cases:
+     * <OL TYPE=a>
+     * <LI>
+     * This Print Service either does not support <CODE>theCategory</CODE> at
+     * all or does not support <CODE>theCategory</CODE> in combination with the
+     * given doc flavor and/or attributes.
+     * <LI>
+     * There is no fixed default value this Print Service will use if no
+     * attribute in <CODE>theCategory</CODE> is specified. (For example, if the
+     * job name is not specified, the printer may generate a unique job name for
+     * each job rather than use a fixed default job name.)
+     * </OL>
+     * These two cases may be distinguished by calling the <A
+     * HREF="../../../../net/jini/print/service/PrintService.html#isAttributeCategorySupported(java.lang.Class,
+     * net.jini.print.service.Settings)"><CODE><CODE>isAttributeCategorySupported()</CODE></CODE></A>
+     * method, which returns false in case (a) and true in case (b).
+     * <P>
+     *
+     * @param theCategory Printing attribute category for which the default
+     * attribute value is requested. It must be a Class that implements
+     * interface Attribute.
+     * @param theSettings Settings for a supposed print job, or null.
+     * @return Default attribute value for theCategory, an instance of the
+     * attribute class designated by theCategory. If the attribute category is
+     * not supported, if there is no fixed default attribute value in that
+     * category, or if the default value depends on the print job settings but
+     * no settings were specified, null is returned.
+     * @throws IOException Thrown if a remote error occurred.
+     * @throws NullPointerException (unchecked exception) Thrown if theCategory
+     * is null.
+     * @throws IllegalArgumentException (unchecked exception) Thrown if
+     * theCategory is not a Class that implements interface Attribute.
+     */
+    public Attribute getDefaultAttributeValue(Class<? extends Attribute> theCategory,
+	    Settings theSettings)
+	    throws IOException;
+
+    /**
+     * Determine all of this Print Service's default printing attribute values.
+     * The returned object is an attribute set containing the attribute objects
+     * that would have been returned by calling <A
+     * HREF="../../../../net/jini/print/service/PrintService.html#getDefaultAttributeValue(java.lang.Class,
+     * net.jini.print.service.Settings)"><CODE><CODE>getDefaultAttributeValue(<I>C</I>,theSettings)</CODE></CODE></A>
+     * for every attribute category <I>C</I> this Print Service supports.
+     *
+     * @param theSettings Settings for a supposed print job, or null.
+     * @return Set of all default attribute values.
+     * @throws IOException Thrown if a remote error occurred.
+     */
+    public AttributeSet getDefaultAttributeValues(Settings theSettings)
+	    throws IOException;
+
+    /**
+     * Determine the printing attribute values a client can specify in the given
+     * category when setting up a job for this Print Service. A printing
+     * attribute value is an instance of a class that implements interface
+     * <A
+     * HREF="../../../../javax/print/attribute/Attribute.html"><CODE>Attribute</CODE></A>.
+     * <P>
+     * The settings argument gives the context for deciding which attribute
+     * values are supported:
+     * <UL>
+     * <LI>
+     * If <CODE>theSettings</CODE> is null, this method returns all the printing
+     * attribute values in <CODE>theCategory</CODE> this Print Service supports
+     * for any possible job.
+     * <LI>
+     * If <CODE>theSettings</CODE> is not null, its <CODE>flavor</CODE> field
+     * contains the print data format for a supposed print job, and its
+     * <CODE>attributes</CODE> field contains both job-level and document-level
+     * attributes for a supposed print job. This method returns just the
+     * printing attribute values in <CODE>theCategory</CODE> that are compatible
+     * with the given doc flavor and/or attributes.
+     * </UL>
+     * <P>
+     * This method returns an Object because different printing attribute
+     * categories indicate the supported attribute values in different ways. The
+     * documentation for each printing attribute in package <A
+     * HREF="../../../../javax/print/attribute/standard/package-summary.html">javax.print.attribute.standard</A>
+     * describes how each attribute indicates its supported values. Possible
+     * ways of indicating support include:
+     * <UL>
+     * <LI>
+     * Return a single instance of the attribute category to indicate that any
+     * value is legal -- used, for example, by an attribute whose value is an
+     * arbitrary text string. (The value of the returned attribute object is
+     * irrelevant.)
+     * <LI>
+     * Return an array of one or more instances of the attribute category,
+     * containing the legal values -- used, for example, by an attribute with a
+     * list of enumerated values.
+     * <LI>
+     * Return a single object (of some class other than the attribute category)
+     * that indicates bounds on the legal values -- used, for example, by an
+     * integer-valued attribute that must lie within a certain range.
+     * <LI>
+     * Return null to indicate <CODE>theCategory</CODE> is not supported at all
+     * or is not supported in combination with <CODE>theSettings</CODE>.
+     * </UL>
+     *
+     *
+     * @param theCategory Printing attribute category to test. It must be a
+     * Class that implements interface Attribute.
+     * @param theSettings Settings for a supposed print job, or null.
+     * @return Object indicating supported values for theCategory, or null if
+     * there are none.
+     * @throws IOException Thrown if a remote error occurred.
+     * @throws NullPointerException (unchecked exception) Thrown if theCategory
+     * is null.
+     * @throws IllegalArgumentException (unchecked exception) Thrown if
+     * theCategory is not a Class that implements interface Attribute.
+     */
+    public Object getSupportedAttributeValues(Class<? extends Attribute> theCategory,
+	    Settings theSettings)
+	    throws IOException;
+
+    /**
+     * Determine whether a client can specify the given printing attribute value
+     * when setting up a job for this Print Service. A printing attribute value
+     * is an instance of a class that implements interface <A
+     * HREF="../../../../javax/print/attribute/Attribute.html"><CODE>Attribute</CODE></A>.
+     * <P>
+     * The settings argument gives the context for deciding whether the given
+     * attribute value is supported:
+     * <UL>
+     * <LI>
+     * If <CODE>theSettings</CODE> is null, this method tells whether this Print
+     * Service supports <CODE>theValue</CODE> for some possible combination of
+     * doc flavor and set of attributes.
+     * <LI>
+     * If <CODE>theSettings</CODE> is not null, its <CODE>flavor</CODE> field
+     * contains the print data format for a supposed print job, and its
+     * <CODE>attributes</CODE> field contains both job-level and document-level
+     * attributes for a supposed print job. This method tells whether this Print
+     * Service supports <CODE>theValue</CODE> in combination with the given doc
+     * flavor and/or attributes.
+     * </UL>
+     *
+     * @param theValue Printing attribute value to test.
+     * @param theSettings Settings for a supposed print job, or null.
+     * @return True if this Print Service supports specifying theValue as a
+     * doc-level or job-level attribute in a Print Request, false if it doesn't.
+     * @throws IOException Thrown if a remote error occurred.
+     * @throws NullPointerException (unchecked exception) Thrown if theValue is
+     * null.
+     */
+    public boolean isAttributeValueSupported(Attribute theValue,
+	    Settings theSettings)
+	    throws IOException;
+
+    /**
+     * Determine the settings for a supposed print job that this Print Service
+     * does not support, if any. The <CODE>flavor</CODE> field of
+     * <CODE>theSettings</CODE> contains the print data format for a supposed
+     * print job, and the <CODE>attributes</CODE> field of
+     * <CODE>theSettings</CODE> contains both job-level and document-level
+     * attributes for a supposed print job.
+     * <P>
+     * If this Print Service can print a job with all the given settings
+     * (including the case where <CODE>theSettings</CODE> is null), this method
+     * returns null indicating there are no unsupported settings.
+     * <P>
+     * If this Print Service cannot print a job with all the given settings,
+     * because some settings are not supported either individually or in
+     * combination, this method returns another settings object containing just
+     * the settings that are not supported. Specifically, the returned settings
+     * object's <CODE>flavor</CODE> field will be the same as the
+     * <CODE>flavor</CODE> field of <CODE>theSettings</CODE> if that doc flavor
+     * is not supported, or the returned settings object's <CODE>flavor</CODE>
+     * field will be null if that doc flavor is supported. The returned settings
+     * object's <CODE>attributes</CODE> field will be an attribute set
+     * containing just the unsupported attributes from the
+     * <CODE>attributes</CODE> field of <CODE>theSettings</CODE>, or the
+     * returned settings object's <CODE>attributes</CODE> field will be null if
+     * all the attributes are supported.
+     * <P>
+     * This method lets a client "validate" the settings for a supposed print
+     * job without actually submitting the job. A null return means the settings
+     * are okay. A non-null return means the settings are not okay, and the
+     * returned object tells precisely what's wrong.
+     *
+     * @param theSettings Settings for a supposed print job, or null.
+     * @return If this Print Service supports all of theSettings, null is
+     * returned, otherwise a settings object containing the unsupported settings
+     * is returned.
+     * @throws IOException Thrown if a remote error occurred.
+     */
+    public Settings getUnsupportedSettings(Settings theSettings)
+	    throws IOException;
+    
+    
 }
