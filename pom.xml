@@ -132,6 +132,13 @@
             </plugins>
         </pluginManagement>
     </build>
+    <repositories>
+        <repository>
+            <id>local-snapshots</id>
+            <url>file:\C:\Users\Peter\Documents\repo</url>
+        </repository>
+    </repositories>
+    
     <modules>
         <module>JiniPrint</module>
     </modules>

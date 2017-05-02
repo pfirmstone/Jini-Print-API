@@ -200,3 +200,75 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
+<------------------------------------------------------------------------------>
+
+Legal Notice
+Use of this document is subject to the following conditions which are deemed accepted by any person or entity
+making use hereof.
+Copyright Notice
+Copyright © 2000-2013, International Cooperation for the Integration of Processes in Prepress, Press and Postpress
+(CIP4) with registered office in Zurich, Switzerland. All Rights Reserved. CIP4 hereby grants to any person or entity
+obtaining a copy of the Specification and associated documentation files (the “Specification”) a perpetual, worldwide,
+non-exclusive, fully paid-up, royalty-free copyright license to use, copy, publish, distribute, publicly display,
+publicly perform, and/or sublicense the Specification in whole or in part verbatim and without modification, unless
+otherwise expressly permitted by CIP4, subject to the following conditions. This legal notice SHALL be included in
+all copies containing the whole or substantial portions of the Specification. Copies of excerpts of the Specification
+which do not exceed five (5) pages SHALL include the following short form Copyright Notice: Copyright © 2000-
+2013, International Cooperation for the Integration of Processes in Prepress, Press and Postpress (CIP4) with registered
+office in Zurich, Switzerland.
+Trademarks and Tradenames
+International Cooperation for the Integration of Processes in Prepress, Press and Postpress, CIP4, Job Definition Format,
+JDF, Job Messaging Format, JMF, and the CIP4 logo are trademarks of CIP4. Rather than put a trademark symbol
+in every occurrence of other trademarked names, we state that we are using the names only in an editorial fashion,
+and to the benefit of the trademark owner, with no intention of infringement of the trademark.
+Except as contained in this legal notice or as allowed by membership in CIP4, the name of CIP4 SHALL not be used
+in advertising or otherwise to promote the use or other dealings in this Specification without prior written authorization
+from CIP4.
+Waiver of Liability
+The JDF Specification is provided as is, without warranty of any kind, express, implied, or otherwise, including
+but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
+In no event will CIP4 be liable for any claim, damages or other liability, whether in an action of contract, tort
+or otherwise, arising from, out of, or in connection with the JDF Specification or the use or other dealings in
+the JDF Specification.
+
+<------------------------------------------------------------------------------>
+
+ * Copyright (C) 2004, The Printer Working Group. All rights reserved. This
+ * document may be copied and furnished to others, and derivative works that
+ * comment on, or otherwise explain it or assist in its implementation may
+ * be prepared, copied, published and distributed, in whole or in part, without
+ * restriction of any kind, provided that th e above copyright notice, this
+ * paragraph and the title of the Document as referenced below are included on
+ * all such copies and derivative works. However, this document itself may not
+ * be modified in any way, such as by removing the copyright notice or
+ * references to the Printer Working Group, a program of the IEEE-ISTO. Title:
+ * Internet Printing Protocol (IPP): Production Printing Attributes – Set1 The
+ * IEEE-ISTO and the Printer Working Group DISCLAIM ANY AND ALL WARRANTIES,
+ * WHETHER EXPRESS OR IMPLIED INCLUDING (WITHOUT LIMITATION) ANY IMPLIED
+ * WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. The
+ * Printer Working Group, a program of the IEEE-ISTO, reserves the right to
+ * make changes to the document without further notice. The document may be
+ * updated, replaced or made obsolete by other documents at any time. The
+ * IEEE-ISTO and the Printer Working Group, a program of the IEEE-ISTO take no
+ * position regarding the validity or scope of any intellectual property or
+ * other rights that might be claim ed to pertain to the implementation or use
+ * of the technology described in this document or the extent to which any
+ * license under such rights might or might not be available; neither does it
+ * represent that it has made any effort to identify any such rights. The
+ * IEEE-ISTO and the Printer Working Group, a program of the IEEE-ISTO invite
+ * any interested party to bring to its attention any copyrights, patents, or
+ * patent applications, or other proprietary rights, which may cover
+ * technology that may be required to implement the contents of this document.
+ *  The IEEE-ISTO and its program s shall not be responsible for identifying
+ * patents for which a license may be required by a document and/or IEEE-ISTO
+ * Industry Group Standard or for conducting inquiries into the legal validity
+ * or scope of those patents that are brought to its attention. Inquiries may
+ * be submitted to the IEEE-ISTO by e- mail at: info@ieee-isto.org The Printer
+ * Working Group acknowledges that the IEEE-ISTO (acting itself or through its
+ * designees) is, and shall at all times, be the sole entity that may
+ * authorize the use of certification marks, trademarks, or other special
+ * designations to indicate compliance with these materials. Use of this document
+ *  is wholly voluntary. The existence of this document does not imply that
+ * there are no other ways to produce, test, m easure, purchase, market, or
+ * provide other goods and services related to its scope.
+
