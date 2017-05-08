@@ -31,7 +31,8 @@ import javax.print.attribute.PrintJobAttribute;
  */
 public class PageOrderReceived extends EnumSyntax implements PrintJobAttribute {
 
-    public static final PageOrderReceived _1_TO_N_ORDER = new PageOrderReceived(0),//[PWG5100.3]
+    public static final PageOrderReceived 
+	    _1_TO_N_ORDER = new PageOrderReceived(0),//[PWG5100.3]
 	    N_TO_1_ORDER = new PageOrderReceived(1);//[PWG5100.3]
 
     protected PageOrderReceived(int i) {

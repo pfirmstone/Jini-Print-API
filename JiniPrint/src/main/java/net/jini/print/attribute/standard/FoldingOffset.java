@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
@@ -21,22 +20,46 @@ import net.jini.print.attribute.Dimension;
 
 /**
  *
+ * The "folding-offset" member attribute specifies where the fold is made. The
+ * value is the distance from the reference edge specified by the
+ * "folding-reference-edge" member attribute toward the center of the medium in
+ * hundredths of millimeters (1/2540th of an inch). The default value is
+ * generally derived from the "finishing-template" value and output media.
+ *
+ * @see FinishingsCollection
+ * @see FinishingsTemplate
+ * @see FoldingReferenceEdge
+ * @see Folding
+ * 
  * @author peter
  */
 public class FoldingOffset extends Dimension implements Attribute {
-    
-    FoldingOffset(int i, UNIT unit){
-	super(i, unit);
+
+    /**
+     * 
+     * @param distance distance from the reference edge.
+     * @param unit unit of measure.
+     */
+    public FoldingOffset(int distance, UNIT unit) {
+	super(distance, unit);
     }
 
+    /**
+     * 
+     * @return FoldingOffset.class
+     */
     @Override
     public Class<? extends Attribute> getCategory() {
 	return FoldingOffset.class;
     }
 
+    /**
+     * 
+     * @return "folding-offset" string.
+     */
     @Override
     public String getName() {
 	return "folding-offset";
     }
-    
+
 }

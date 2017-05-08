@@ -13,45 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
+ * <p>
+ * The "folding" member attribute specifies the location and direction of folds
+ * to apply to the hardcopy output. Printers with a folding finisher MUST
+ * support this member attribute and all "folding-xxx" member attributes if they
+ * support the "finishings-col" attribute.
+ * </p><p>
+ * Note: The order of “folding” values is significant and is part of the fold
+ * intent. Printers MAY re-order “folding” values so long as the final result
+ * matches the specified intent.
+ * </p><p>
+ * Note: This specification only defines folds parallel to the reference edge.
+ * Diagonal folds are explicitly not supported.</p>
+ * 
+ * @see FinishingCollection
+ * @see FoldingSeq
  *
  * @author peter
  */
-public class Folding extends CollectionSyntax implements Attribute {
+public class Folding extends CollectionSyntax {
+
     private final FoldingDirection direction;
     private final FoldingOffset offset;
     private final FoldingReferenceEdge referenceEdge;
-    
+
     public Folding(
 	    FoldingDirection direction,
 	    FoldingOffset offset,
-	    FoldingReferenceEdge referenceEdge    
-	)
-    {
-	this.direction =direction;
+	    FoldingReferenceEdge referenceEdge
+    ) {
+	this.direction = direction;
 	this.offset = offset;
 	this.referenceEdge = referenceEdge;
     }
 
     @Override
-    protected Attribute[] getAttributes() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Class<? extends Attribute> getCategory() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getName() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Attribute[] getAttributes() {
+	return new Attribute[]{direction, offset, referenceEdge};
     }
 
     /**
@@ -74,5 +78,5 @@ public class Folding extends CollectionSyntax implements Attribute {
     public FoldingReferenceEdge getReferenceEdge() {
 	return referenceEdge;
     }
-    
+
 }

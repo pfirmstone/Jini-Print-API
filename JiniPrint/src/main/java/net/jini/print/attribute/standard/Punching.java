@@ -37,7 +37,7 @@ public class Punching extends CollectionSyntax implements Attribute {
     }
 
     @Override
-    protected Attribute[] getAttributes() {
+    public Attribute[] getAttributes() {
 	return new Attribute []{locations, offset, edge};
     }
 

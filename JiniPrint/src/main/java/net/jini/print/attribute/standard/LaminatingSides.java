@@ -17,16 +17,20 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "laminating-sides" member attribute specifies which sides of the sheets
+ * are laminated: 'front', 'back', or 'both', If not specified, an
+ * implementation or site defined default value is used.
  *
+ * @see Laminating
+ * @see FinishingsCollection
+ * 
  * @author peter
  */
-public class LaminatingSides extends EnumSyntax implements PrintJobAttribute {
+public class LaminatingSides extends EnumSyntax implements Attribute {
 
-    public static final LaminatingSides 
-	    BACK = new LaminatingSides(0),//[PWG5100.1]
+    public static final LaminatingSides BACK = new LaminatingSides(0),//[PWG5100.1]
 	    BOTH = new LaminatingSides(1),//[PWG5100.1]
 	    FRONT = new LaminatingSides(2);//[PWG5100.1]
 

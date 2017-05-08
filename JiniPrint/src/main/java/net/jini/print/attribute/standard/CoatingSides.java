@@ -20,10 +20,16 @@ import javax.print.attribute.EnumSyntax;
 import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "coating-sides" member attribute specifies which sides of the sheets are
+ * coated: 'front', 'back', or 'both', If not specified, an implementation or
+ * site defined default value is used.
+ *
+ * @see Coating
+ * @see FinishingsCollection
  *
  * @author peter
  */
-public class CoatingSides extends EnumSyntax implements PrintJobAttribute {
+public class CoatingSides extends EnumSyntax implements Attribute {
 
     public static final CoatingSides 
 	    BACK = new CoatingSides(0),//[PWG5100.1]
@@ -34,6 +40,10 @@ public class CoatingSides extends EnumSyntax implements PrintJobAttribute {
 	super(i);
     }
 
+    /**
+     * 
+     * @return CoatingSides.class
+     */
     @Override
     public Class<? extends Attribute> getCategory() {
 	return CoatingSides.class;

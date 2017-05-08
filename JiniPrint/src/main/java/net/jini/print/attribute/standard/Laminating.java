@@ -13,28 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
+ * The "laminating" member attribute specifies which material to apply to the
+ * hardcopy output. Printers with a laminating finisher MUST support this member
+ * attribute and all "laminating-xxx" member attributes if they support the
+ * "finishings-col" attribute.
+ * 
+ * @see FinishingsCollection
  *
  * @author peter
  */
-public class Laminating extends CollectionSyntax implements Attribute{
+public class Laminating extends CollectionSyntax implements Attribute {
+
     private final LaminatingSides sides;
     private final LaminatingType type;
-    
+
     public Laminating(LaminatingSides sides,
-	    LaminatingType type){
+	    LaminatingType type) {
 	this.sides = sides;
 	this.type = type;
     }
 
     @Override
-    protected Attribute[] getAttributes() {
+    public Attribute[] getAttributes() {
 	return new Attribute[]{sides, type};
     }
 
@@ -47,5 +53,5 @@ public class Laminating extends CollectionSyntax implements Attribute{
     public String getName() {
 	return "laminating";
     }
-    
+
 }

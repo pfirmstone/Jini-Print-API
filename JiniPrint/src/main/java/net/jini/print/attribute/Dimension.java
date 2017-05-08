@@ -36,7 +36,7 @@ public abstract class Dimension extends IntegerSyntax implements Comparable<Dime
     
     public static enum UNIT {
 
-	MM(10000), INCH(254000), HUNDTH_MM(100), THOU_INCH(245);
+	MM(10000), INCH(254000), HUNDREDTH_MM(100), THOU_INCH(245);
 
 	private final int mul;
 	private final int div;

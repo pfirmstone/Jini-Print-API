@@ -17,16 +17,22 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "covering-name" member attribute specifies which cover to apply. The
+ * default is implementation or site defined. The name typically represents a
+ * pre-printed, pre-cut, or generic cover that is available to the Printer.
+ * Clients MUST query the value of the "covering-name-supported" (section 6.7)
+ * Printer attribute for the list of supported values.
+ *
+ * @see Covering
+ * @see FinishingsCollection
  *
  * @author peter
  */
-public class CoveringName extends EnumSyntax implements PrintJobAttribute {
+public class CoveringName extends EnumSyntax implements Attribute {
 
-    public static final CoveringName 
-	    PLAIN = new CoveringName(0),//[PWG5100.1]
+    public static final CoveringName PLAIN = new CoveringName(0),//[PWG5100.1]
 	    PRE_CUT = new CoveringName(1),//[PWG5100.1]
 	    PRE_PRINTED = new CoveringName(2);//[PWG5100.1]
 

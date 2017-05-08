@@ -20,6 +20,7 @@ import java.util.Locale;
 import javax.print.attribute.TextSyntax;
 
 /**
+ * User defined "finishing-template" string.
  *
  * @author peter
  */

@@ -19,6 +19,7 @@ import javax.print.attribute.Attribute;
 import javax.print.attribute.DocAttribute;
 import javax.print.attribute.PrintJobAttribute;
 import javax.print.attribute.PrintRequestAttribute;
+import javax.print.attribute.standard.Media;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
@@ -28,7 +29,7 @@ import net.jini.print.attribute.CollectionSyntax;
  * @author Peter Firmstone
  *
  */
-public class MediaCollection extends CollectionSyntax 
+public class MediaCollection extends CollectionSyntax
 	implements DocAttribute, PrintRequestAttribute, PrintJobAttribute {
 
     /**
@@ -44,176 +45,72 @@ public class MediaCollection extends CollectionSyntax
     private final MediaSource mediaSource;
     private final MediaSourceProperties mediaSourceProp;
     private final MediaSizeName mediaSizeName;
-
-    /**
-     *
-     * @return Media key, or null if not specified.
-     */
-    public MediaKey getMediaKey() {
-	return mediaKey;
-    }
     /**
      * Media type, or null if not specified.
      *
      * @serialField
      */
     private final MediaType mediaType;
-
-    /**
-     *
-     * @return Media Type, or null if not specified.
-     */
-    public MediaType getMediaType() {
-	return mediaType;
-    }
     /**
      * Media info, or null if not specified.
      *
      * @serialField
      */
     private final MediaInfo mediaInfo;
-
-    /**
-     *
-     * @return Media Info, or null if not specified.
-     */
-    public MediaInfo getMediaInfo() {
-	return mediaInfo;
-    }
     /**
      * Media color, or null if not specified.
      *
      * @serialField
      */
     private final MediaColor mediaColor;
-
-    /**
-     *
-     * @return Media , or null if not specified.
-     */
-    public MediaColor getMediaColor() {
-	return mediaColor;
-    }
     /**
      * Media pre-printed, or null if not specified.
      *
      * @serialField
      */
     private final MediaPrePrinted mediaPrePrinted;
-
-    /**
-     *
-     * @return Media PrePrinted, or null if not specified.
-     */
-    public MediaPrePrinted getMediaPrePrinted() {
-	return mediaPrePrinted;
-    }
     /**
      * Media hole count, or null if not specified.
      *
      * @serialField
      */
     private final MediaHoleCount mediaHoleCount;
-
-    /**
-     *
-     * @return Media HoleCount, or null if not specified.
-     */
-    public MediaHoleCount getMediaHoleCount() {
-	return mediaHoleCount;
-    }
     /**
      * Media order count, or null if not specified.
      *
      * @serialField
      */
     private final MediaOrderCount mediaOrderCount;
-
-    /**
-     *
-     * @return Media OrderCount, or null if not specified.
-     */
-    public MediaOrderCount getMediaOrderCount() {
-	return mediaOrderCount;
-    }
     /**
      * Media size, or null if not specified.
      *
      * @serialField
      */
     private final MediaSize mediaSize;
-
-    /**
-     * Note that Java's MediaSize is incorrect, its x, y dimensions need to be
-     * defined in hundredths of millimeters. So we'll need to do some sort of
-     * conversion. TODO: implement MediaSize according to the standard.
-     *
-     * @return Media Size, or null if not specified.
-     */
-    public MediaSize getMediaSize() {
-	return mediaSize;
-    }
     /**
      * Media metric weight, or null if not specified.
      *
      * @serialField
      */
     private final MediaWeightMetric mediaWeightMetric;
-
-    /**
-     *
-     * @return Media WeightMetric, or null if not specified.
-     */
-    public MediaWeightMetric getMediaWeightMetric() {
-	return mediaWeightMetric;
-    }
-
     /**
      * Media back coating, or null if not specified.
      *
      * @serialField
      */
     private final MediaBackCoating mediaBackCoating;
-
-    /**
-     *
-     * @return Media BackCoating , or null if not specified.
-     */
-    public MediaBackCoating getMediaBackCoating() {
-	return mediaBackCoating;
-    }
-
     /**
      * Media front coating, or null if not specified.
      *
      * @serialField
      */
     private final MediaFrontCoating mediaFrontCoating;
-
-    /**
-     *
-     * @return Media FrontCoating, or null if not specified.
-     */
-    public MediaFrontCoating getMediaFrontCoating() {
-	return mediaFrontCoating;
-    }
-
     /**
      * Media recycled, or null if not specified.
      *
      * @serialField
      */
     private final MediaRecycled mediaRecycled;
-
-    /**
-     *
-     * @return Media Recycled, or null if not specified.
-     */
-    public MediaRecycled getMediaRecycled() {
-	return mediaRecycled;
-    }
-    
-    
 
     /**
      *
@@ -276,9 +173,9 @@ public class MediaCollection extends CollectionSyntax
 	this.mediaSourceProp = mediaSourceProp;
 	this.mediaSizeName = null;
     }
-    
+
     /**
-     * 
+     *
      * @param mediaKey
      * @param mediaType
      * @param mediaInfo
@@ -296,7 +193,7 @@ public class MediaCollection extends CollectionSyntax
      * @param mediaRightMargin
      * @param mediaTopMargin
      * @param mediaSource
-     * @param mediaSourceProp 
+     * @param mediaSourceProp
      */
     public MediaCollection(
 	    MediaKey mediaKey,
@@ -358,7 +255,6 @@ public class MediaCollection extends CollectionSyntax
 //		get(theCharacteristics, MediaRecycled.class)
 //	);
 //    }
-
     private static <T> T get(Attribute[] charac, Class<T> clas) {
 	int n = charac == null ? 0 : charac.length;
 	for (int i = 0; i < n; ++i) {
@@ -369,31 +265,100 @@ public class MediaCollection extends CollectionSyntax
 	return null;
     }
 
-    @Override
-    public Class<? extends Attribute> getCategory() {
-	return MediaCollection.class;
+    /**
+     *
+     * @return Media key, or null if not specified.
+     */
+    public MediaKey getMediaKey() {
+	return mediaKey;
     }
 
-    @Override
-    public String getName() {
-	return "media-col";
+    /**
+     *
+     * @return Media Type, or null if not specified.
+     */
+    public MediaType getMediaType() {
+	return mediaType;
     }
 
-    @Override
-    protected Attribute[] getAttributes() {
-	return new Attribute[]{
-	    this.mediaKey,
-	    this.mediaType,
-	    this.mediaInfo,
-	    this.mediaColor,
-	    this.mediaPrePrinted,
-	    this.mediaHoleCount,
-	    this.mediaOrderCount,
-	    this.mediaSize,
-	    this.mediaWeightMetric,
-	    this.mediaBackCoating,
-	    this.mediaFrontCoating,
-	    this.mediaRecycled,};
+    /**
+     *
+     * @return Media Info, or null if not specified.
+     */
+    public MediaInfo getMediaInfo() {
+	return mediaInfo;
+    }
+
+    /**
+     *
+     * @return Media , or null if not specified.
+     */
+    public MediaColor getMediaColor() {
+	return mediaColor;
+    }
+
+    /**
+     *
+     * @return Media PrePrinted, or null if not specified.
+     */
+    public MediaPrePrinted getMediaPrePrinted() {
+	return mediaPrePrinted;
+    }
+
+    /**
+     *
+     * @return Media HoleCount, or null if not specified.
+     */
+    public MediaHoleCount getMediaHoleCount() {
+	return mediaHoleCount;
+    }
+
+    /**
+     *
+     * @return Media OrderCount, or null if not specified.
+     */
+    public MediaOrderCount getMediaOrderCount() {
+	return mediaOrderCount;
+    }
+
+    /**
+     *
+     * @return Media Size, or null if not specified.
+     */
+    public MediaSize getMediaSize() {
+	return mediaSize;
+    }
+
+    /**
+     *
+     * @return Media WeightMetric, or null if not specified.
+     */
+    public MediaWeightMetric getMediaWeightMetric() {
+	return mediaWeightMetric;
+    }
+
+    /**
+     *
+     * @return Media BackCoating , or null if not specified.
+     */
+    public MediaBackCoating getMediaBackCoating() {
+	return mediaBackCoating;
+    }
+
+    /**
+     *
+     * @return Media FrontCoating, or null if not specified.
+     */
+    public MediaFrontCoating getMediaFrontCoating() {
+	return mediaFrontCoating;
+    }
+
+    /**
+     *
+     * @return Media Recycled, or null if not specified.
+     */
+    public MediaRecycled getMediaRecycled() {
+	return mediaRecycled;
     }
 
     /**
@@ -437,4 +402,45 @@ public class MediaCollection extends CollectionSyntax
     public MediaSourceProperties getMediaSourceProp() {
 	return mediaSourceProp;
     }
+
+    /**
+     * @return the mediaSizeName
+     */
+    public MediaSizeName getMediaSizeName() {
+	return mediaSizeName;
+    }
+
+    @Override
+    public Class<? extends Attribute> getCategory() {
+	return Media.class;
+    }
+
+    @Override
+    public String getName() {
+	return "media-col";
+    }
+
+    @Override
+    public Attribute[] getAttributes() {
+	return new Attribute[]{
+	    this.mediaKey,
+	    this.mediaType,
+	    this.mediaInfo,
+	    this.mediaColor,
+	    this.mediaPrePrinted,
+	    this.mediaHoleCount,
+	    this.mediaOrderCount,
+	    this.mediaSize != null ? this.mediaSize : this.mediaSizeName,
+	    this.mediaWeightMetric,
+	    this.mediaBackCoating,
+	    this.mediaFrontCoating,
+	    this.mediaRecycled,
+	    this.mediaBottomMargin,
+	    this.mediaLeftMargin,
+	    this.mediaRightMargin,
+	    this.mediaTopMargin,
+	    this.mediaSource,
+	    this.mediaSourceProp,};
+    }
+
 }

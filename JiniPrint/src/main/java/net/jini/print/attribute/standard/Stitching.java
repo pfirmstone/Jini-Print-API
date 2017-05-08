@@ -24,25 +24,22 @@ import net.jini.print.attribute.CollectionSyntax;
  * @author peter
  */
 public class Stitching extends CollectionSyntax implements Attribute {
-    private final TrimmingOffset offset;
-    private final TrimmingReferenceEdge referenceEdge;
-    private final TrimmingType type;
-    private final TrimmingWhen when;
+    private final StitchingLocations locations;
+    private final StitchingOffset offset;
+    private final StitchingReferenceEdge referenceEdge;
     
-    public Stitching(TrimmingOffset offset,
-	    TrimmingReferenceEdge referenceEdge,
-	    TrimmingType type,
-	    TrimmingWhen when
+    public Stitching(StitchingLocations locations,
+	    StitchingOffset offset,
+	    StitchingReferenceEdge referenceEdge
 	    ){
+	this.locations = locations;
 	this.offset = offset;
 	this.referenceEdge = referenceEdge;
-	this.type = type;
-	this.when = when;
     }
 
     @Override
-    protected Attribute[] getAttributes() {
-	return new Attribute[]{offset, referenceEdge, type, when};
+    public Attribute[] getAttributes() {
+	return new Attribute[]{locations, offset, referenceEdge};
     }
 
     @Override
@@ -58,29 +55,22 @@ public class Stitching extends CollectionSyntax implements Attribute {
     /**
      * @return the offset
      */
-    public TrimmingOffset getOffset() {
+    public StitchingOffset getOffset() {
 	return offset;
     }
 
     /**
      * @return the referenceEdge
      */
-    public TrimmingReferenceEdge getReferenceEdge() {
+    public StitchingReferenceEdge getReferenceEdge() {
 	return referenceEdge;
     }
 
     /**
-     * @return the type
+     * @return the locations
      */
-    public TrimmingType getType() {
-	return type;
-    }
-
-    /**
-     * @return the when
-     */
-    public TrimmingWhen getWhen() {
-	return when;
+    public StitchingLocations getLocations() {
+	return locations;
     }
     
 }

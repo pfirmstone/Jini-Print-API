@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
@@ -22,9 +21,12 @@ import net.jini.print.attribute.CollectionSyntax;
 
 /**
  * This class defines Job Template Attribute extensions for production printing.
+ *
  * @author peter
  */
-public class JobTemplateAttribute extends CollectionSyntax implements PrintJobAttribute {
+public class JobTemplateAttribute extends CollectionSyntax
+	implements PrintJobAttribute {
+
     private final CoverBack coverBack;
     private final CoverFront coverFront;
     private final FinishingsCollection finishingsCol;
@@ -41,6 +43,7 @@ public class JobTemplateAttribute extends CollectionSyntax implements PrintJobAt
     private final JobSheetMessage jobSheetsMessage;
     private final MediaCollection mediaCollection;
     private final MediaInputTrayCheck mediaInputTrayCheck;
+    private final OutputBin outputBin;
     private final PageDelivery pageDelivery;
     private final PageOrderReceived pageOrderReceived;
     private final PresentationDirectionNumberUp presentationDirectionNumberUp;
@@ -53,38 +56,38 @@ public class JobTemplateAttribute extends CollectionSyntax implements PrintJobAt
     private final YimageShift yImageShift;
     private final Yside1ImageShift ySide1ImageShift;
     private final Yside2ImageShift ySide2ImageShift;
-    
+
     public JobTemplateAttribute(
-		CoverBack coverBack, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		CoverFront coverFront, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		FinishingsCollection finishingsCol, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		ForceFrontSide forceFrontSide, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		ImpositionTemplate impositionTemplate, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		InsertSheet insertSheet, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		JobAccountID jobAccountID, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		JobAccountingUserID jobAccountingUserID, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		JobAccountingSheets jobAccountingSheets, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		JobErrorSheet jobErrorSheet, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		JobMessageToOperator jobMessageToOperator, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		JobPagesPerSet jobPagesPerSet, // PWG5100.1 - IPP Finishings 2.0
-		JobSheetsCollection jobSheetsCollection, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		JobSheetMessage jobSheetsMessage, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		MediaCollection mediaCollection, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		MediaInputTrayCheck mediaInputTrayCheck, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		PageDelivery pageDelivery, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		PageOrderReceived pageOrderReceived, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		PresentationDirectionNumberUp presentationDirectionNumberUp, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		SeparatorSheets separatorSheets, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		XimagePosition xImagePosition, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		XimageShift xImageShift, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		Xside1ImageShift xSide1ImageShift, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		Xside2ImageShift xSide2ImageShift, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		YimagePosition yImagePosition, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		YimageShift yImageShift, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		Yside1ImageShift ySide1ImageShift, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-		Yside2ImageShift ySide2ImageShift // PWG5100.3-2001 IPP Production Printing Attributes - Set 1		
-	    )
-    {
+	    CoverBack coverBack, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    CoverFront coverFront, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    FinishingsCollection finishingsCol, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    ForceFrontSide forceFrontSide, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    ImpositionTemplate impositionTemplate, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    InsertSheet insertSheet, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    JobAccountID jobAccountID, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    JobAccountingUserID jobAccountingUserID, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    JobAccountingSheets jobAccountingSheets, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    JobErrorSheet jobErrorSheet, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    JobMessageToOperator jobMessageToOperator, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    JobPagesPerSet jobPagesPerSet, // PWG5100.1 - IPP Finishings 2.0
+	    JobSheetsCollection jobSheetsCollection, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    JobSheetMessage jobSheetsMessage, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    MediaCollection mediaCollection, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    MediaInputTrayCheck mediaInputTrayCheck, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    OutputBin outputBin, //PWG 5100.2-2001 IPP: “output-bin” attribute extension
+	    PageDelivery pageDelivery, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    PageOrderReceived pageOrderReceived, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    PresentationDirectionNumberUp presentationDirectionNumberUp, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    SeparatorSheets separatorSheets, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    XimagePosition xImagePosition, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    XimageShift xImageShift, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    Xside1ImageShift xSide1ImageShift, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    Xside2ImageShift xSide2ImageShift, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    YimagePosition yImagePosition, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    YimageShift yImageShift, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    Yside1ImageShift ySide1ImageShift, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    Yside2ImageShift ySide2ImageShift // PWG5100.3-2001 IPP Production Printing Attributes - Set 1		
+    ) {
 	this.coverBack = coverBack;
 	this.coverFront = coverFront;
 	this.finishingsCol = finishingsCol;
@@ -101,6 +104,7 @@ public class JobTemplateAttribute extends CollectionSyntax implements PrintJobAt
 	this.jobSheetsMessage = jobSheetsMessage;
 	this.mediaCollection = mediaCollection;
 	this.mediaInputTrayCheck = mediaInputTrayCheck;
+	this.outputBin = outputBin;
 	this.pageDelivery = pageDelivery;
 	this.pageOrderReceived = pageOrderReceived;
 	this.presentationDirectionNumberUp = presentationDirectionNumberUp;
@@ -116,37 +120,37 @@ public class JobTemplateAttribute extends CollectionSyntax implements PrintJobAt
     }
 
     @Override
-    protected Attribute[] getAttributes() {
+    public Attribute[] getAttributes() {
 	return new Attribute[]{
 	    coverBack,
-	coverFront,
-	finishingsCol,
-	forceFrontSide,
-	impositionTemplate,
-	insertSheet,
-	jobAccountID,
-	jobAccountingUserID,
-	jobAccountingSheets,
-	jobErrorSheet,
-	jobMessageToOperator,
-	jobPagesPerSet,
-	jobSheetsCollection,
-	jobSheetsMessage,
-	mediaCollection,
-	mediaInputTrayCheck,
-	pageDelivery,
-	pageOrderReceived,
-	presentationDirectionNumberUp,
-	separatorSheets,
-	xImagePosition,
-	xImageShift,
-	xSide1ImageShift,
-	xSide2ImageShift,
-	yImagePosition,
-	yImageShift,
-	ySide1ImageShift,
-	ySide2ImageShift,
-	};
+	    coverFront,
+	    finishingsCol,
+	    forceFrontSide,
+	    impositionTemplate,
+	    insertSheet,
+	    jobAccountID,
+	    jobAccountingUserID,
+	    jobAccountingSheets,
+	    jobErrorSheet,
+	    jobMessageToOperator,
+	    jobPagesPerSet,
+	    jobSheetsCollection,
+	    jobSheetsMessage,
+	    mediaCollection,
+	    mediaInputTrayCheck,
+	    outputBin,
+	    pageDelivery,
+	    pageOrderReceived,
+	    presentationDirectionNumberUp,
+	    separatorSheets,
+	    xImagePosition,
+	    xImageShift,
+	    xSide1ImageShift,
+	    xSide2ImageShift,
+	    yImagePosition,
+	    yImageShift,
+	    ySide1ImageShift,
+	    ySide2ImageShift,};
     }
 
     @Override
@@ -354,5 +358,12 @@ public class JobTemplateAttribute extends CollectionSyntax implements PrintJobAt
     public Yside2ImageShift getySide2ImageShift() {
 	return ySide2ImageShift;
     }
-    
+
+    /**
+     * @return the outputBin
+     */
+    public OutputBin getOutputBin() {
+	return outputBin;
+    }
+
 }

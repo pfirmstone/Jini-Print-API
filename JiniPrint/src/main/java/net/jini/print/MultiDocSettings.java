@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.jini.print.service;
+package net.jini.print;
 
 import java.io.Serializable;
 import javax.print.attribute.AttributeSet;

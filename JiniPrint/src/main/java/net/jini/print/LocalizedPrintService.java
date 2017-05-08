@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.jini.print.service;
+package net.jini.print;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -94,7 +94,7 @@ import javax.print.attribute.Attribute;
  * There is no restriction on the number of client threads that may be
  * simultaneously accessing the same Print Service. Therefore, all
  * implementations of interface <A
- * HREF="../../../../net/jini/print/service/PrintService.html"><CODE>PrintService</CODE></A>
+ * HREF="../../../../net/jini/print/PrintService.html"><CODE>PrintService</CODE></A>
  * and its subinterfaces must be designed to be multiple thread safe.
  * <P>
  * Interface LocalizedPrintService's methods all throw <A

@@ -49,7 +49,7 @@ public class SeparatorSheets extends CollectionSyntax implements PrintJobAttribu
     }
     
     @Override
-    protected Attribute[] getAttributes() {
+    public Attribute[] getAttributes() {
 	return new Attribute[]{type, media};
     }
 

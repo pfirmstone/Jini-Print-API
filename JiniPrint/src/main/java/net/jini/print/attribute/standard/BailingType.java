@@ -20,7 +20,11 @@ import javax.print.attribute.EnumSyntax;
 import javax.print.attribute.PrintJobAttribute;
 
 /**
- *
+ * The "baling-type" member attribute specifies the type of baling to apply.
+ * 
+ * @see Bailing
+ * @see FinishingsCollection
+ * 
  * @author peter
  */
 public class BailingType extends EnumSyntax implements PrintJobAttribute {
@@ -34,11 +38,19 @@ public class BailingType extends EnumSyntax implements PrintJobAttribute {
 	super(i);
     }
 
+    /**
+     * 
+     * @return BailingType.class
+     */
     @Override
     public Class<? extends Attribute> getCategory() {
 	return BailingType.class;
     }
 
+    /**
+     * 
+     * @return "bailing-type"
+     */
     @Override
     public String getName() {
 	return "bailing-type";

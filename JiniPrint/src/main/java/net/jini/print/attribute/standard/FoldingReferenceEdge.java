@@ -20,13 +20,21 @@ import javax.print.attribute.EnumSyntax;
 import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "folding-reference-edge" member attribute specifies which edge is used as
+ * the basis of the fold instructions: 'bottom', 'left', 'right', or 'top'.
+ * Folds are placed parallel to the reference edge at the offset specified by
+ * the "folding-location" member attribute. The default value is generally
+ * derived from the "finishing-template" value and output media.
  *
+ * @see Folding
+ * @see FinishingsTemplate
+ * @see FinishingsCollection
+ * 
  * @author peter
  */
 public class FoldingReferenceEdge extends EnumSyntax implements PrintJobAttribute {
 
-    public static final FoldingReferenceEdge 
-	    BOTTOM = new FoldingReferenceEdge(0),//[PWG5100.1]
+    public static final FoldingReferenceEdge BOTTOM = new FoldingReferenceEdge(0),//[PWG5100.1]
 	    LEFT = new FoldingReferenceEdge(1),//[PWG5100.1]
 	    RIGHT = new FoldingReferenceEdge(2),//[PWG5100.1]
 	    TOP = new FoldingReferenceEdge(3);//[PWG5100.1]

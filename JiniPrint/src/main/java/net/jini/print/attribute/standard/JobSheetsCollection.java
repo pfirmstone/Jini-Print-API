@@ -59,7 +59,7 @@ public class JobSheetsCollection extends CollectionSyntax implements PrintJobAtt
 	return "job-sheets-col";
     }
     
-    protected Attribute[] getAttributes(){
+    public Attribute[] getAttributes(){
 	return new Attribute[]{sheet, media};
     }
 

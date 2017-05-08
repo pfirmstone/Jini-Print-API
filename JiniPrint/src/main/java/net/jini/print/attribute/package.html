@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<!--
+Copyright 2017 peter.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+    <head>
+        <title>Package net.jini.print.attribute</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <P>
+            Package javax.print.attribute 
+            contains classes and interfaces
+            that pertain to printing attributes in general.  
+            Package net.jini.print.attribute compliments the javax.print.attribute package.
+            The discussion below
+            describes the attribute classes as a whole
+            and explains why they are designed this way.
+            Further information may be found
+            in the individual attribute classes' documentation.
+        </P><P>
+            Package javax.print.attribute is used in two printing APIs,
+            the Jini Print Service API
+            and the Java Print Service API
+            (Java Specification Request
+            <A HREF="http://java.sun.com/aboutJava/communityprocess/jsr/jsr_006_print.html">JSR-000006</A>).
+            The description below refers to "the API"
+            meaning one or the other or both.
+
+        <P>
+        <H3>Background: The Need For Attributes</H3>
+        When setting up a print job,
+        a client specifies two things:
+        <B>print data</B> and <B>processing instructions.</B>
+        The print data is the actual content to be printed;
+        this may take the form of a text file,
+        a PostScript page description, an HTML page, a JPEG image,
+        and so on.
+        The processing instructions tell the printer
+        what media (paper) to use,
+        how many copies to print,
+        whether to print on one or both sides of a sheet,
+        whether to staple each copy,
+        and so on.
+        <P>
+            The print data and the processing instructions
+            are in fact separate entities.
+            You can print the same print data
+            at different times using different processing instructions.
+            For example, you could print a slide presentation
+            on US letter sized white paper,
+            two up (two slides per page),
+            double sided, stapled, 20 copies
+            to make handouts for a talk;
+            and you could print the same slide presentation
+            on US letter sized transparencies,
+            one up, single sided, one copy
+            to make the actual slides for the talk.
+            You can also use the same processing instructions
+            at different times to print different data.
+            For example, you could tell your computer
+            that your default processing instructions
+            are US letter sized paper, double sided, stapled;
+            then whenever you print a job,
+            the computer will use those settings
+            unless you explicitly override them.
+            The processing instructions
+            are also called a <B>job template</B>;
+            they describe how a job is to be processed
+            without telling what data to print.
+        <P>
+            Observe that each processing instruction
+            is a small, atomic data item,
+            such as an integer giving the number of copies
+            or an enumerated value stating "one-sided" or "two-sided."
+            In general, a print job
+            contains a <I>set</I> of these small, atomic processing instructions.
+            Representing processing instructions as data items
+            lets sets of them be easily stored and retrieved.
+        <P>
+            Observe also that each processing instruction
+            is not like a "method" performed on a print job,
+            it is rather a <I>description</I> of how the print job should turn out.
+            The print job can achieve its specified processing instructions
+            in whatever manner it wishes.
+            Representing processing instructions as descriptive items
+            provides more flexibility for implementing print jobs.
+        <P>
+            A print job a client submits to a printer, then,
+            consists of particular print data
+            combined with particular processing instructions:
+            job template + print data = print job.
+            The print data and the processing instructions
+            are associated with each other
+            in the context of that print job only.
+        <P>
+            However, once the printer starts processing the print job,
+            additional information about the job becomes available:
+            the job name,
+            the job state (sitting in a queue, printing, completed, . . .),
+            how many pages have been printed so far,
+            and so on.
+            This set of items constitutes the <B>job description.</B>
+        <P>
+            But observe that the job description items
+            are of the same nature
+            as the processing instructions:
+            each is a small, atomic data item;
+            a set of them is associated with the print job.
+            Therefore, it's reasonable to lump processing instructions
+            together with job description items
+            and refer to all of them as just <B>attributes</B>
+            of the print job.
+            Some of the attributes the client specified
+            when submitting the print job;
+            other attributes the print job created on its own.
+        <P>
+            Now that we have the general concept of an attribute,
+            we can use attributes for two additional purposes:
+            <B>print data attributes</B>
+            and <B>printer description attributes.</B>
+        <P>
+            Attributes can be associated with print data.
+            A print data attribute may describe an inherent characteristic of the data,
+            such as whether the data is compressed and which compression algorithm it uses.
+            A print data attribute may also specify
+            processing instructions to be applied
+            to that piece of data only,
+            and if a print job consists of multiple pieces of print data,
+            different pieces may have different processing instructions.
+            For example,
+            the first piece of print data in a job may need to print
+            on 8.5"x11" white paper media,
+            the next piece may need to print
+            on 11"x17" white paper media.
+        <P>
+            Printer description attributes include
+            the printer name,
+            the printer state (idle, busy, jammed, . . .),
+            the number of print jobs in its queue,
+            and so on.
+        <P>
+            To summarize,
+            a set of attributes is associated with each of the following:
+        <UL>
+            <LI>
+                A printer -- printer description attributes.
+            <LI>
+                A print job -- job description attributes, processing instructions.
+            <LI>
+                A piece of print data -- print data description attributes, processing instructions.
+        </UL>
+
+        <P>
+        <H3>Attribute Sets</H3>
+        The API needs an object for a collection of attributes.
+        Besides the obvious requirements
+        of being able to add an attribute to the collection
+        and remove an attribute from the collection,
+        the collection needs to fulfill
+        these two more peculiar requirements:
+        <OL TYPE=1>
+            <LI>
+                It must not be possible for two attributes in the same <B>category</B>
+                to exist in the collection of attributes.
+                For example, an attribute collection
+                must not contain both a "one-sided" attribute
+                and a "two-sided" attribute;
+                if it did, we would be telling the printer to print the job
+                in two incompatible ways at the same time,
+                and the printer wouldn't know what to do.
+                At most one attribute in the category of "sides"
+                can exist in an attribute collection,
+                and the same is true of every other attribute category.
+                However, it makes perfect sense
+                for an attribute collection
+                to contain both an attribute of "one-sided" in the "sides" category
+                and an attribute of "10" in the "copies" category;
+                attributes in different categories can coexist with no conflicts.
+                <P>
+            <LI>
+                There must be a way to retrieve from an attribute collection
+                the attribute in a given category, if any.
+                This is needed for print job implementations.
+                A print job needs a way to ask an attribute collection, for example,
+                "Give me your sides attribute,"
+                without needing to know which particular sides attribute value
+                may be stored in the collection.
+                The collection would respond with an actual sides attribute value,
+                such as "one-sided."
+        </OL>
+        <P>
+            It would be best if a collection class
+            from the standard Java Collections Framework
+            in package java.util
+            could be used for an attribute collection.
+            However, the Set abstraction doesn't go far enough;
+            it doesn't enforce the restriction of requirement (1),
+            and it provides no operation to fulfill requirement (2).
+            The Map abstraction
+            could fulfill both requirements (1) and (2)
+            by using the attribute category as the key
+            and the attribute itself as the value,
+            thus mapping categories to attributes.
+            Unfortunately, the Map abstraction goes too far;
+            it allows any arbitrary category to map to any arbitrary attribute,
+            it does not enforce the restriction
+            that a category must only map to attributes in that category.
+            What's needed is a collection somewhere between
+            a Set and a Map,
+            but the standard Java Collections Framework
+            has no such abstraction.
+        <P>
+            Lacking a standard abstraction that meets our needs
+            for an attribute collection,
+            the API defines its own attribute collection abstraction,
+            the <B>attribute set,</B>
+            defined by interface <A HREF="AttributeSet.html">AttributeSet</A>.
+            An attribute set contains a group of <B>attribute values,</B> where duplicate values 
+            are not allowed in the set. Furthermore, each value in an attribute set is a 
+            member of some <B>attribute category,</B> and at most one value in any particular 
+            category is allowed in the set. For an attribute set, the values are
+            <A HREF="Attribute.html">Attribute</A> objects, and the categories are 
+            Class objects. An attribute's category is the class at the 
+            root of the class hierarchy for that kind of attribute (more on this below).
+            An attribute object's 
+            category is determined by calling the
+            <A HREF="Attribute.html#getCategory()"><CODE>getCategory()</CODE></A> method
+            defined in interface <A HREF="Attribute.html">Attribute</A>.
+        <P>
+            Interface <A HREF="AttributeSet.html">AttributeSet</A>
+            extends interface java.util.Map,
+            so an attribute set is fundamentally a map,
+            and all map operations can be applied to an attribute set.
+            An attribute set maps 
+            attribute categories of type Class (keys) to 
+            attribute values of type <A HREF="Attribute.html">Attribute</A> (values).
+            However, interface <A HREF="AttributeSet.html">AttributeSet</A>
+            imposes semantic restrictions on the map
+            in order to fulfill requirements (1) and (2).
+            All values added to an attribute set must be instances of 
+            classes that implement interface <A HREF="Attribute.html">Attribute</A>;
+            null values are not permitted.
+            Furthermore, the key associated with a value added to an 
+            attribute set must be the value's attribute category, an instance of class 
+            Class. These invariants are guaranteed by the 
+            constructors and mutating operations in every implementation of interface 
+            <A HREF="AttributeSet.html">AttributeSet</A>.
+        <P>
+            For convenience, interface <A HREF="AttributeSet.html">AttributeSet</A>
+            defines several additional operations 
+            patterned after those in interface java.util.Set. These 
+            operations allow you to get, add, and remove <A HREF="Attribute.html">Attribute</A>
+            instances (instead of the generic Objects used in 
+            the methods inherited from interface Map). 
+        <P>
+            Package javax.print.attribute includes
+            one concrete implementation of the attribute set interface,
+            class <A HREF="HashAttributeSet.html">HashAttributeSet</A>
+            providing an attribute set based on a hash map.
+            You can use this implementation
+            or provide your own implementation
+            of interface <A HREF="AttributeSet.html">AttributeSet</A>.
+            There is also class <A HREF="AttributeSetViews.html">AttributeSetViews</A>,
+            which provides static methods
+            for creating an unmodifiable view
+            or a synchronized view
+            of an attribute set.
+        <P>
+            The UML class diagram below
+            depicts the relationships among the classes mentioned so far.
+        <P>
+    <CENTER>
+        <IMG SRC="../doc-files/JavaxPrintAttributeFig1.gif" WIDTH=424 HEIGHT=235>
+    </CENTER>
+
+    <P>
+    <H3>Attribute Usage</H3>
+    <P>
+        Attribute sets are used in several places in the API. In 
+        each context, only certain kinds of attributes are allowed to appear in the 
+        attribute set.
+        To help client programmers understand where various attributes
+        can be used in the API,
+        and to provide greater compile-time type safety,
+        the API defines five tagging subinterfaces
+        of interface <A HREF="Attribute.html">Attribute</A> --
+        <A HREF="DocAttribute.html">DocAttribute</A>,
+        <A HREF="PrintRequestAttribute.html">PrintRequestAttribute</A>,
+        <A HREF="PrintJobAttribute.html">PrintJobAttribute</A>,
+        <A HREF="PrintServiceAttribute.html">PrintServiceAttribute</A>, and
+        <A HREF="SupportedValuesAttribute.html">SupportedValuesAttribute</A>.
+        Each attribute class
+        implements one or more of these tagging subinterfaces
+        to indicate where the attribute can be used in the API.
+        If an attribute class implements multiple tagging subinterfaces,
+        the attribute can be used in multiple contexts.
+        Certain low-level attributes
+        are never used on their own
+        but are always aggregated into higher-level attributes.
+        These low-level attribute classes
+        implement just interface <A HREF="Attribute.html">Attribute</A>,
+        not any of the tagging subinterfaces.
+    <P>
+        The API also provides
+        four specializations of an attribute set that are restricted to 
+        contain just one of the four kinds of attribute: 
+    <UL>
+        <LI>
+            A <A HREF="DocAttributeSet.html">DocAttributeSet</A>,
+            containing <A HREF="DocAttribute.html">DocAttribute</A>s,
+            specifies the characteristics of an individual document and the 
+            print job settings to be applied to an individual document. 
+            <P>
+        <LI>
+            A <A HREF="PrintRequestAttributeSet.html">PrintRequestAttributeSet</A>,
+            containing <A HREF="PrintRequestAttribute.html">PrintRequestAttribute</A>s,
+            specifies the settings 
+            to be applied to a whole print job and to all the documents in the print job. 
+            <P>
+        <LI>
+            A <A HREF="PrintJobAttributeSet.html">PrintJobAttributeSet</A>,
+            containing <A HREF="PrintJobAttribute.html">PrintJobAttribute</A>s,
+            reports the status of a print job. 
+            <P>
+        <LI>
+            A <A HREF="PrintServiceAttributeSet.html">PrintServiceAttributeSet</A>,
+            containing <A HREF="PrintServiceAttribute.html">PrintServiceAttribute</A>s,
+            reports the status of a print service.
+    </UL>
+    <P>
+        Interface <A HREF="SupportedValuesAttribute.html">SupportedValuesAttribute</A>
+        denotes an attribute that gives the supported values for another attribute.
+        Supported-values attributes
+        are never aggregated into attribute sets,
+        so there is no attribute set subinterface defined for them.
+    <P>
+        In some contexts, the client is only allowed to examine an attribute set's 
+        contents but not change them (the set is read-only). In other places, the 
+        client is allowed both to examine and to change an attribute set's contents 
+        (the set is read-write). For a read-only attribute set, calling a mutating 
+        operation throws an UnsupportedOperationException. 
+    <P>
+        Package javax.print.attribute includes
+        one concrete implementation of each of the attribute set subinterfaces --
+        classes <A HREF="HashDocAttributeSet.html">HashDocAttributeSet</A>,
+        <A HREF="HashPrintRequestAttributeSet.html">HashPrintRequestAttributeSet</A>,
+        <A HREF="HashPrintJobAttributeSet.html">HashPrintJobAttributeSet</A>,
+        <A HREF="HashPrintServiceAttributeSet.html">HashPrintServiceAttributeSet</A>.
+        These all extend class <A HREF="HashAttributeSet.html">HashAttributeSet</A>
+        and enforce the restriction
+        that the attribute set is only allowed to contain
+        the corresponding kind of attribute.
+    <P>
+        The UML class diagram below
+        depicts the relationships among the classes mentioned above.
+    <P>
+    <CENTER>
+        <IMG SRC="../doc-files/JavaxPrintAttributeFig4.gif" WIDTH=478 HEIGHT=541>
+    </CENTER>
+
+    <P>
+    <H3>Attributes</H3>
+    Having designed the attribute set classes,
+    we turn our attention to the attributes themselves.
+    Attributes are used:
+    <UL>
+        <LI>
+            As printer description attributes.
+        <LI>
+            As job description attributes.
+        <LI>
+            As print data description attributes.
+        <LI>
+            As processing instructions.
+        <LI>
+            To represent a printer's capabilities.
+    </UL>
+    In the latter role,
+    a printer advertises its capabilities for printing jobs
+    by telling which attribute categories
+    the printer will let the client specify
+    as part of a print job
+    and which particular values of those attributes
+    the printer can support.
+    <P>
+        The attribute classes' design must address these requirements:
+    <OL TYPE=1>
+        <LI><!--1-->
+            An attribute value is a small, atomic data item,
+            such as an integer or an enumerated value.
+            (We need to decide how to represent these data items.)
+            <P>
+        <LI><!--2-->
+            Each attribute value must be a member of a category
+            so the value can be put into and retrieved out of an attribute set.
+            (We need to decide what to use for attribute categories.)
+            <P>
+        <LI><!--3-->
+            The API must define a broad set
+            of standard attribute categories and values,
+            so developers can write printer-neutral client applications
+            to do a broad range of printing tasks.
+            <P>
+        <LI><!--4-->
+            A vendor must be able to extend
+            any standard attribute defined in the API,
+            letting the vendor define new vendor-specific attribute values
+            representing the vendor's printers' proprietary capabilities.
+            Such extended attribute values
+            must be in the same category as the standard attribute values
+            and must be fully usable
+            wherever an attribute value in that category can be used.
+            <P>
+        <LI><!--5-->
+            A vendor must be able to define
+            wholly new vendor-specific attribute categories
+            representing the vendor's printers' proprietary capabilities
+            in areas not covered by the standard attribute categories.
+            <P>
+        <LI><!--6-->
+            Since attributes are used to represent a printer's capabilities
+            in the Jini Print Service API,
+            they must somehow be included
+            in the Jini Print Service's registration
+            in the Jini Lookup Service (JLUS),
+            and the JLUS must be able to search for printers
+            that match given capabilities.
+            <P>
+        <LI><!--7-->
+            The attribute classes must be useful
+            for printing applications in general.
+            In particular, the attribute classes must be applicable
+            both to Jini printing
+            and to core Java printing,
+            and they must be usable in future versions
+            of the JDK printing classes in package java.awt.print.
+            (This is to help address Java Specification Request JSR-000006,
+            <A HREF="http://java.sun.com/aboutJava/communityprocess/jsr/jsr_006_print.html">"Unified Printing API."</A>)
+    </OL>
+    <P>
+        Considering requirement (1),
+        we could use primitive data types like <CODE>int</CODE>
+        to represent attribute values.
+        However, this is not type-safe.
+        The compiler should not let us, for example,
+        use a "copies" attribute value as a "sides" attribute.
+        But if attributes were represented by primitive data types like <CODE>int</CODE>,
+        we could use a "copies" value of 2 (meaning two copies)
+        as a "sides" attribute value (meaning, perhaps, two-sided).
+        In addition, some attributes have to be represented
+        as a record of several values,
+        like a printer resolution which requires two numbers
+        (e.g., 600 x 300 dpi).
+        Therefore, for type safety
+        and to represent all attributes uniformly
+        including single-valued and record-valued attributes,
+        each attribute is defined as a class:
+        class Copies, class Sides, class PrinterResolution, and so on.
+        Each attribute class wraps one or more
+        primitive data items (fields)
+        containing the attribute's value.
+    <P>
+        The natural answer to requirement (2), then,
+        is to use the attribute classes as the categories
+        for an attribute set.
+        We can use either the name of the attribute class (a String object)
+        or the attribute class itself (a Class object)
+        as the category object.
+        Now, attribute set operations
+        have to do frequent comparisons
+        between attribute category objects:
+        when adding an attribute,
+        to find any existing attribute in the same category;
+        when looking up an attribute
+        given the category.
+        Therefore, comparisons between attribute category objects
+        (specifically, the <CODE>equals()</CODE> operation)
+        should be fast.
+        The <CODE>Class.equals()</CODE> operation
+        is just object identity comparison (<CODE>==</CODE>)
+        and is very fast.
+        The <CODE>String.equals()</CODE> operation, however,
+        requires examining the two strings character-by-character
+        until a match is proven or disproven,
+        which is much slower than <CODE>==</CODE>.
+        Therefore, for speed of attribute category comparisons
+        the attribute class is used as the category.
+    <P>
+        Returning to requirement (1),
+        note that even though there is a large number
+        of different attributes (categories),
+        there are only a few different <I>types</I> of attribute values.
+        Most attributes take on an enumerated value
+        (such as Sides: "one-sided", "two-sided," and so on)
+        or an integer value
+        (such as Copies).
+        A few attributes take on a more complicated value
+        (such as PrinterResolution).
+        The type of value an attribute takes on
+        is called the attribute's <B>abstract syntax.</B>
+        All the enumeration-valued attributes share the same abstract syntax,
+        all the integer-valued attributes share the same abstract syntax,
+        and so on;
+        what distinguishes particular attributes from one another
+        is the attribute class (category).
+        Therefore, the API
+        defines a small number of <B>abstract syntax classes</B>
+        in package javax.print.attribute:
+    <UL>
+        <LI>
+            Enumeration-valued attributes use an abstract syntax class of
+            <A HREF="EnumSyntax.html">EnumSyntax</A>,
+            which provides a type-safe enumeration
+            where enumerated values are represented as singleton objects.
+            Each enumeration singleton
+            is an instance of the enumeration class
+            that wraps a hidden <CODE>int</CODE> value
+            (a different value for each singleton).
+            <P>
+        <LI>
+            Integer-valued attributes use an abstract syntax class of
+            <A HREF="IntegerSyntax.html">IntegerSyntax</A>.
+            <P>
+        <LI>
+            Text-valued attributes use an abstract syntax class of
+            <A HREF="TextSyntax.html">TextSyntax</A>,
+            which includes a locale giving the text string's natural language.
+            <P>
+        <LI>
+            Attributes whose value is a range or set of integers
+            use an abstract syntax class of
+            <A HREF="SetOfIntegerSyntax.html">SetOfIntegerSyntax</A>.
+            <P>
+        <LI>
+            Attributes whose value is a resolution
+            (e.g., a printer resolution of 600 x 300 dpi)
+            use an abstract syntax class of
+            <A HREF="ResolutionSyntax.html">ResolutionSyntax</A>.
+            <P>
+        <LI>
+            Attributes whose value is a two-dimensional size
+            (e.g., a paper size of 8.5 x 11 inch)
+            use an abstract syntax class of
+            <A HREF="Size2DSyntax.html">Size2DSyntax</A>.
+            <P>
+        <LI>
+            Attributes whose value is a date and time
+            use an abstract syntax class of
+            <A HREF="DateTimeSyntax.html">DateTimeSyntax</A>.
+            <P>
+        <LI>
+            Attributes whose value is a Uniform Resource Locator (URL)
+            use an abstract syntax class of
+            <A HREF="URLSyntax.html">URLSyntax</A>.
+    </UL>
+    <P>
+        The abstract syntax classes are named <CODE>"...Syntax"</CODE>
+        to emphasize that they are just containers
+        for certain kinds of values,
+        they are not themselves printing attributes per se.
+        In fact, the abstract syntax classes,
+        especially <A HREF="EnumSyntax.html">EnumSyntax</A>,
+        could be used in applications having nothing to do with printing.
+        Since the abstract syntax classes
+        are not themselves printing attributes,
+        they do not implement interface <A HREF="Attribute.html">Attribute</A>.
+    <P>
+        Each attribute class, then,
+        implements interface <A HREF="Attribute.html">Attribute</A>,
+        either directly or indirectly,
+        to mark it as a printing attribute.
+        An attribute class that can appear in restricted attribute sets
+        in certain contexts
+        also implements one or more subinterfaces
+        of interface <A HREF="Attribute.html">Attribute</A>.
+        Each attribute class extends the appropriate abstract syntax class
+        to get its implementation.
+        For example:
+    <PRE>
+    public class Sides
+        extends EnumSyntax
+        implements DocAttribute, PrintRequestAttribute, PrintJobAttribute
+        {
+        public final Object getCategory()
+            {
+            return Sides.class;
+            }
+        . . .
+        }
+</PRE>
+<CENTER>
+<IMG SRC="../doc-files/JavaxPrintAttributeFig2.gif" WIDTH=631 HEIGHT=208>
+</CENTER>
+<P>
+Since every attribute class
+implements interface <A HREF="Attribute.html">Attribute</A>,
+every attribute class must provide an implementation for the
+<A HREF="Attribute.html#getCategory()"><CODE>getCategory()</CODE></A> method
+which returns the attribute category.
+In the case of Sides, this method returns
+the Class object for class Sides, namely <CODE>Sides.class</CODE>.
+To ensure that any vendor-defined subclasses
+of a standard attribute class
+appear in the same category (requirement (4)),
+the method is tagged as final
+to ensure the vendor cannot override it in a subclass.
+<P>
+One final word about the attribute classes:
+Each attribute object is designed to be immutable
+once constructed.
+This allows attribute object references
+to be freely passed around
+without worrying that someone
+will change the attribute's value.
+To get a different attribute value,
+construct a different attribute object.
+<P>
+To address requirement (3),
+the API defines a group of standard attribute classes
+modeled upon the attributes
+in the Internet Printing Protocol (IPP) version 1.1.
+The standard attribute classes
+are placed in the subpackage
+<A HREF="standard/package-summary.html">javax.print.attribute.standard</A>
+merely to keep the actual attribute classes
+conceptually separate
+from the generic apparatus
+defined in package javax.print.attribute.
+<P>
+To address requirement (4),
+there needs to be a way
+for a vendor to define
+new vendor-specific values
+for any standard printing attribute.
+This is no problem for any attribute
+that uses an abstract syntax class
+other than <A HREF="EnumSyntax.html">EnumSyntax</A>;
+at run time the client can
+construct instances of such attributes
+with arbitrary values,
+including vendor-specific values.
+However, an enumerated attribute
+using an abstract syntax class of <A HREF="EnumSyntax.html">EnumSyntax</A>
+specifies all the possible attribute values
+at compile time
+as singleton instances of the attribute class,
+and there is no way to construct new vendor-specific values
+at run time.
+Thus, to define new vendor-specific values
+for a standard enumerated attribute,
+the vendor must define a new attribute class
+specifying the new singleton instances.
+To ensure that the new attribute values
+fall in the same category as the standard attribute values,
+the new attribute class must be a subclass
+of the standard attribute class.
+<P>
+To address requirement (5),
+there needs to be a way
+for a vendor to define
+new vendor-specific printing attributes.
+This is easily accomplished
+by defining a new attribute class
+that implements interface <A HREF="Attribute.html">Attribute</A>
+(or subinterfaces thereof)
+and extends the appropriate abstract syntax class,
+either an existing one or a new one.
+In this way the vendor can create
+a whole new category of attribute
+that can be used wherever an <A HREF="Attribute.html">Attribute</A> is used,
+such as in an <A HREF="AttributeSet.html">AttributeSet</A>.
+<P>
+To address requirement (6) for the Jini Print Service API,
+we have to include printing attributes
+as service attributes in the service registration
+for a Jini Print Service instance.
+Service attributes must be objects
+that implement interface net.jini.core.entry.Entry.
+Furthermore, the only things the JLUS considers
+when searching for a service
+are the public non-primitive fields
+of the Entry objects in the service registration.
+Since we have decided an attribute class
+is a wrapper for primitive fields,
+this rules out using attribute objects directly as Entry objects,
+for then the JLUS would not look at the attribute's primitive fields.
+Also, making the attribute's fields public would break encapsulation,
+and making the attribute classes implement interface net.jini.core.entry.Entry
+is undesirable if the attribute classes are to be used
+outside the Jini Print Service API (requirement (7)).
+Therefore, attribute objects are not used directly
+as service attributes in the service registration.
+<P>
+If an Entry class for a Jini Print Service instance
+is not the attribute class itself,
+then the Entry class must be a wrapper of some sort
+for the attribute class.
+There could be a single, generic attribute Entry class
+that stored any kind of attribute in a public field,
+something like this:
+<PRE>
+    public class AttributeEntry
+        implements Entry
+        {
+        public Attribute attribute;
+        }
+</PRE>
+Or there could be a separate Entry class
+for every attribute class,
+so the Entry class hierarchy exactly mirrors
+the attribute class hierarchy,
+something like this:
+<PRE>
+    public class SidesEntry
+        implements Entry
+        {
+        public Sides sides;
+        }
+    public class CopiesEntry
+        implements Entry
+        {
+        public Copies copies;
+        }
+    . . .
+</PRE>
+The downside of a mirrored Entry hierarchy
+is the large number of extra classes needed --
+one Entry class for every attribute class.
+The upside of a single, generic attribute Entry class
+is we only have to define one additional class.
+However, the downside of a single, generic attribute Entry class
+is it loses the knowledge of the attribute class hierarchy.
+With the <CODE>AttributeEntry</CODE> class defined above,
+the JLUS would be able to search
+only for specific attribute values;
+the JLUS would not be able to search
+for any attribute value in a given attribute class (category).
+<P>
+However, we can fix that problem
+by including two more fields in the generic attribute Entry:
+<PRE>
+    public class AttributeEntry
+        implements Entry
+        {
+        public String category;
+        public String runtimeClass;
+        public Attribute value;
+        }
+</PRE>
+The fields are, respectively,
+the fully-qualified class name of the attribute's category;
+the fully-qualified class name of the attribute's runtime class
+(which may be the same as the category or a subclass thereof);
+and the attribute's value.
+The category and the class are declared as String objects
+rather than Class objects
+because Entry fields are stored in the JLUS
+in marshalled (serialized) form.
+The marshalled form of a Class object
+includes the fully-qualified class name string
+plus a bunch of other information --
+a serial version ID, some flags,
+and a list of descriptors for the class's fields.
+Since only the class name is relevant for JLUS searches,
+it reduces storage and search time
+to include just a String object with the class name in the Entry,
+omitting the extraneous information
+contained in a marshalled Class object.
+<P>
+To search the JLUS for a Jini Print Service instance
+that supports a given attribute <I>category</I>,
+the client sets up a service template
+with an <CODE>AttributeEntry</CODE>
+with the <CODE>category</CODE> field
+containing the category name
+and the <CODE>runtimeClass</CODE> and <CODE>value</CODE> fields
+wildcarded (null).
+To search the JLUS for a Jini Print Service instance
+that supports a given attribute <I>value</I>,
+the client sets up a service template
+with an <CODE>AttributeEntry</CODE>
+with the <CODE>category</CODE> field
+containing the category name,
+the <CODE>runtimeClass</CODE> field
+containing the attribute object's runtime class name
+(which may be a subclass of the category),
+and the <CODE>value</CODE> field
+containing the attribute value itself.
+The attribute's runtime class has to be included
+to distinguish a value in a subclass
+from a value in a superclass
+if the two values happen to have
+the same marshalled form in the Entry
+(which can happen with enumerated attributes).
+<P>
+The Entry class scheme just described
+allows the client to search the JLUS
+both for attribute categories
+and for attribute values
+while requiring only a single, generic Entry class
+rather than a whole mirrored hierarchy of Entry classes.
+Therefore, the Jini Print Service API
+uses the Entry class scheme just described.
+See package <A HREF="../../../net/jini/print/lookup/package-summary.html">net.jini.print.lookup</A>
+for further information.
+<P>
+Finally, requirement (7) is fulfilled
+by relegating all Jini-specific aspects of printing attributes
+to other parts of the Jini Print Service API
+in the net.jini.print namespace.
+In particular, as already mentioned,
+the attribute classes do not themselves
+implement interface net.jini.core.entry.Entry.
+Also, everything in package
+<A HREF="../../../net/jini/print/lookup/package-summary.html">net.jini.print.lookup</A>
+related to registering printing attributes in the JLUS
+and searching for printing attributes in the JLUS
+is layered on top of the attribute classes
+rather than integrated into the attribute classes.
+
+<P>
+Placement of this package under package javax.print
+is preliminary and not yet approved by the Java Community
+or the Jini Community.
+<P>
+    </body>
+</html>

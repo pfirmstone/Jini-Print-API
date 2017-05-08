@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.jini.print.service;
+package net.jini.print;
 
 import javax.print.PrintException;
 
@@ -25,7 +25,7 @@ import javax.print.PrintException;
  * providing additional information about which object encountered the error,
  * namely a Print Service object.
  */
-class PrintServiceException extends PrintException {
+public class PrintServiceException extends PrintException {
 
     /**
      * @serialField Print Service object that encountered the error.

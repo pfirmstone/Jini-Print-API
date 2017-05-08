@@ -18,7 +18,7 @@ package net.jini.print.job;
 import java.io.IOException;
 import net.jini.io.MarshalledInstance;
 import net.jini.print.event.PrintEvent;
-import net.jini.print.service.PrintService;
+import net.jini.print.PrintService;
 
 /**
  * <P>

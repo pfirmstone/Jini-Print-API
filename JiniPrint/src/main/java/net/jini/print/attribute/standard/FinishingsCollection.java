@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
@@ -24,10 +23,49 @@ import net.jini.print.attribute.CollectionSyntax;
 
 /**
  * Reference: PWG 5100.1 – IPP Finishings 2.0 (FIN) December 19, 2014
- * 
+ * <p>
+ * The "finishings" Job Template attribute [RFC2911] allows Clients to specify
+ * simple intent - staple, fold, trim, etc. This specification extends the
+ * original values to include positional characteristics, e.g., staple top-left,
+ * as well as common variations, e.g., Z fold.
+ * </p><p>
+ * The "finishings-col" Job Template attribute [PWG5100.3] allows Clients to
+ * specify detailed intent - staple at the following coordinates, fold at the
+ * following positions and directions, trim at the following positions and cut
+ * types, etc. This specification extends the original "finishing-template"
+ * member attribute to include standard names and adds member attributes for
+ * each type of finishing.
+ * </p><p>
+ * The coordinate system scheme used in this specification agrees with the
+ * Finisher MIB [RFC3806], which in turn follows the ISO DPA [ISO10175] approach
+ * of using a coordinate system as if the document were portrait. The approach
+ * for coordinate system being relative to the intended reading direction
+ * depends on the device being able to understand the orientation embedded in
+ * the PDL, which is too problematic for many PDLs. The approach for the
+ * coordinate system of being relative to the media feed direction is too
+ * dependent on the way the device is configured, i.e., pulling short edge first
+ * vs. long edge first, and can vary between different output bins in the same
+ * device.
+ * </p>
+ *
  * @author peter
  */
-public class FinishingsCollection extends CollectionSyntax implements DocAttribute, PrintRequestAttribute,  PrintJobAttribute {
+public class FinishingsCollection extends CollectionSyntax
+	implements DocAttribute, PrintRequestAttribute, PrintJobAttribute {
+
+    private final FinishingTemplate template;
+    private final Bailing bailing;
+    private final Binding binding;
+    private final Coating coating;
+    private final Covering covering;
+    private final FoldingSeq folding;
+    private final ImpositionTemplate impositionTemplate;
+    private final Laminating laminating;
+    private final MediaSize mediaSize;
+    private final MediaSizeName mediaSizeName;
+    private final Punching punching;
+    private final Stitching stitching;
+    private final Trimming trimming;
 
     public FinishingsCollection(
 	    FinishingTemplate template,
@@ -35,32 +73,176 @@ public class FinishingsCollection extends CollectionSyntax implements DocAttribu
 	    Binding binding,
 	    Coating coating,
 	    Covering covering,
-	    Folding folding,
+	    FoldingSeq folding,
 	    ImpositionTemplate impositionTemplate,
 	    Laminating laminating,
 	    MediaSize mediaSize,
+	    Punching punching,
+	    Stitching stitching,
+	    Trimming trimming
+    ) {
+	this.template = template;
+	this.bailing = bailing;
+	this.binding = binding;
+	this.coating = coating;
+	this.covering = covering;
+	this.folding = folding;
+	this.impositionTemplate = impositionTemplate;
+	this.laminating = laminating;
+	this.mediaSize = mediaSize;
+	this.mediaSizeName = null;
+	this.punching = punching;
+	this.stitching = stitching;
+	this.trimming = trimming;
+
+    }
+
+    public FinishingsCollection(
+	    FinishingTemplate template,
+	    Bailing bailing,
+	    Binding binding,
+	    Coating coating,
+	    Covering covering,
+	    FoldingSeq folding,
+	    ImpositionTemplate impositionTemplate,
+	    Laminating laminating,
 	    MediaSizeName mediaSizeName,
 	    Punching punching,
 	    Stitching stitching,
 	    Trimming trimming
-    )
-    {
-	
+    ) {
+	this.template = template;
+	this.bailing = bailing;
+	this.binding = binding;
+	this.coating = coating;
+	this.covering = covering;
+	this.folding = folding;
+	this.impositionTemplate = impositionTemplate;
+	this.laminating = laminating;
+	this.mediaSize = null;
+	this.mediaSizeName = mediaSizeName;
+	this.punching = punching;
+	this.stitching = stitching;
+	this.trimming = trimming;
+
     }
-    
+
     @Override
-    protected Attribute[] getAttributes() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Attribute[] getAttributes() {
+	return new Attribute[]{
+	    template,
+	    bailing,
+	    binding,
+	    coating,
+	    covering,
+	    folding,
+	    impositionTemplate,
+	    laminating,
+	    mediaSizeName != null ? mediaSizeName : mediaSize,
+	    punching,
+	    stitching,
+	    trimming,};
     }
 
     @Override
     public Class<? extends Attribute> getCategory() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	return javax.print.attribute.standard.Finishings.class;
     }
 
     @Override
     public String getName() {
 	return "finishings-col";
     }
-    
+
+    /**
+     * @return the template
+     */
+    public FinishingTemplate getTemplate() {
+	return template;
+    }
+
+    /**
+     * @return the bailing
+     */
+    public Bailing getBailing() {
+	return bailing;
+    }
+
+    /**
+     * @return the binding
+     */
+    public Binding getBinding() {
+	return binding;
+    }
+
+    /**
+     * @return the coating
+     */
+    public Coating getCoating() {
+	return coating;
+    }
+
+    /**
+     * @return the covering
+     */
+    public Covering getCovering() {
+	return covering;
+    }
+
+    /**
+     * @return the folding
+     */
+    public FoldingSeq getFolding() {
+	return folding;
+    }
+
+    /**
+     * @return the impositionTemplate
+     */
+    public ImpositionTemplate getImpositionTemplate() {
+	return impositionTemplate;
+    }
+
+    /**
+     * @return the laminating
+     */
+    public Laminating getLaminating() {
+	return laminating;
+    }
+
+    /**
+     * @return the mediaSize
+     */
+    public MediaSize getMediaSize() {
+	return mediaSize;
+    }
+
+    /**
+     * @return the mediaSizeName
+     */
+    public MediaSizeName getMediaSizeName() {
+	return mediaSizeName;
+    }
+
+    /**
+     * @return the punching
+     */
+    public Punching getPunching() {
+	return punching;
+    }
+
+    /**
+     * @return the stitching
+     */
+    public Stitching getStitching() {
+	return stitching;
+    }
+
+    /**
+     * @return the trimming
+     */
+    public Trimming getTrimming() {
+	return trimming;
+    }
+
 }

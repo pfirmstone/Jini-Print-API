@@ -16,22 +16,19 @@
 
 package net.jini.print.attribute.standard;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 import javax.print.attribute.Attribute;
 import net.jini.print.attribute.Dimension;
+import net.jini.print.attribute.OneSetOfSyntax;
 
 /**
  *
  * @author peter
  */
-public class PunchingLocations implements Attribute {
-    
-    private final Dimension[] locations;
+public class PunchingLocations extends OneSetOfSyntax implements Attribute {
 
-    public PunchingLocations(List<Dimension> locations) {
-	Collections.sort(locations); // Sort into ascending order as per spec.
-	this.locations = locations.toArray(new Dimension[locations.size()]);
+    public PunchingLocations(Set<Dimension> locations) {
+	super(locations);
     }
 
     @Override
@@ -42,16 +39,6 @@ public class PunchingLocations implements Attribute {
     @Override
     public String getName() {
 	return "punching-locations";
-    }
-    
-    @Override
-    public String toString(){
-	StringBuilder b = new StringBuilder(6* locations.length);
-	for (int i = 0, l = locations.length; i<l; i++){
-	    b.append(locations[i]);
-	    if (i < l-1) b.append(",");
-	}
-	return b.toString();
     }
     
 }

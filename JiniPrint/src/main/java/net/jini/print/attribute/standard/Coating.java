@@ -19,6 +19,14 @@ import javax.print.attribute.Attribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
+ * The "coating" member attribute specifies which coating to apply to the
+ * hardcopy output. Typically the coating is applied to the entire page,
+ * although some Printers MAY only coat those areas that have been marked on.
+ * Printers with a coating finisher MUST support this member attribute and all
+ * "coating-xxx" member attributes if they support the "finishings-col"
+ * attribute.
+ * 
+ * @see FinishingsCollection
  *
  * @author peter
  */
@@ -29,14 +37,13 @@ public class Coating extends CollectionSyntax implements Attribute {
 
     public Coating(
 	    CoatingSides sides,
-	    CoatingType type) 
-    {
+	    CoatingType type) {
 	this.sides = sides;
 	this.type = type;
     }
 
     @Override
-    protected Attribute[] getAttributes() {
+    public Attribute[] getAttributes() {
 	return new Attribute[]{sides, type};
     }
 

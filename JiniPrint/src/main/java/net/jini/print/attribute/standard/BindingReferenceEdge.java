@@ -20,13 +20,21 @@ import javax.print.attribute.EnumSyntax;
 import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "binding-reference-edge" member attribute specifies which edge ('bottom',
+ * 'left', 'right', or 'top') is bound. If not specified, the default value is
+ * either derived from the "finishing-template" keyword value ('bind-bottom',
+ * 'bind-left', 'bind-right', 'bind-top') or, if no edge is specified, is an
+ * implementation or site defined value.
  *
+ * @see Bindings
+ * @see FinishingsCollection
+ * @see FinishingTemplateIANA
+ * 
  * @author peter
  */
 public class BindingReferenceEdge extends EnumSyntax implements PrintJobAttribute {
 
-    public static final BindingReferenceEdge 
-	    BOTTOM = new BindingReferenceEdge(0),
+    public static final BindingReferenceEdge BOTTOM = new BindingReferenceEdge(0),
 	    LEFT = new BindingReferenceEdge(0),
 	    RIGHT = new BindingReferenceEdge(0),
 	    TOP = new BindingReferenceEdge(0);

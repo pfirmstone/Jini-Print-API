@@ -16,15 +16,20 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
-import javax.print.attribute.PrintJobAttribute;
+import javax.print.attribute.DocAttribute;
 import javax.print.attribute.standard.Media;
 
 /**
+ * The presence of the "cover-back" attribute indicates that a back cover is
+ * requested.
  * 
+ * @see CoverFront
+ * @see Cover
+ * @see DocAttribute
  *
  * @author peter
  */
-public class CoverBack extends Cover implements PrintJobAttribute {
+public class CoverBack extends Cover {
 
     public CoverBack(Media media, CoverType type) {
 	super(media, type);

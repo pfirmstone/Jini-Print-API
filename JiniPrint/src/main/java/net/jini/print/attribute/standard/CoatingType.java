@@ -20,31 +20,77 @@ import javax.print.attribute.EnumSyntax;
 import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "coating-type" member attribute specifies the type of coating to apply.
+ *
+ * @see Coating
+ * @see FinishingsCollection
  *
  * @author peter
  */
 public class CoatingType extends EnumSyntax implements PrintJobAttribute {
 
-    public static final CoatingType ARCHIVAL = new CoatingType(0),//[PWG5100.1]
-	    ARCHIVAL_GLOSSY = new CoatingType(1),//[PWG5100.1]
-	    ARCHIVAL_MATTE = new CoatingType(2),//[PWG5100.1]
-	    ARCHIVAL_SEMI_GLOSS = new CoatingType(3),//[PWG5100.1]
-	    GLOSSY = new CoatingType(4),//[PWG5100.1]
-	    HIGH_GLOSS = new CoatingType(5),//[PWG5100.1]
-	    MATTE = new CoatingType(6),//[PWG5100.1]
-	    SEMI_GLOSS = new CoatingType(7),//[PWG5100.1]
-	    SILICONE = new CoatingType(8),//[PWG5100.1]
-	    TRANSLUCENT = new CoatingType(9);//[PWG5100.1]
+    /**
+     * Each sheet is coated to preserve the output for an extended period of
+     * time, e.g., a UV protectant.
+     */
+    public static final CoatingType ARCHIVAL = new CoatingType(0);//[PWG5100.1]
+    /**
+     * Each sheet is coated to produce a glossy surface that preserves the
+     * output for an extended period of time, e.g., a UV protectant.
+     */
+    public static final CoatingType ARCHIVAL_GLOSSY = new CoatingType(1);//[PWG5100.1]
+    /**
+     * Each sheet is coated to produce a matte surface that preserves the output
+     * for an extended period of time, e.g., a UV protectant.
+     */
+    public static final CoatingType ARCHIVAL_MATTE = new CoatingType(2);//[PWG5100.1]
+    /**
+     * Each sheet is coated to produce a semi-gloss surface that preserves the
+     * output for an extended period of time, e.g., a UV protectant.
+     */
+    public static final CoatingType ARCHIVAL_SEMI_GLOSS = new CoatingType(3);//[PWG5100.1]
+    /**
+     * Each sheet is coated to produce a glossy surface.
+     */
+    public static final CoatingType GLOSSY = new CoatingType(4);//[PWG5100.1]
+    /**
+     * Each sheet is coated to produce a high-gloss surface.
+     */
+    public static final CoatingType HIGH_GLOSS = new CoatingType(5);//[PWG5100.1]
+    /**
+     * Each sheet is coated to produce a matte surface.
+     */
+    public static final CoatingType MATTE = new CoatingType(6);//[PWG5100.1]
+    /**
+     * Each sheet is coated to produce a semi-gloss surface.
+     */
+    public static final CoatingType SEMI_GLOSS = new CoatingType(7);//[PWG5100.1]
+    /**
+     * Each sheet is coated to produce a water resistent surface.
+     */
+    public static final CoatingType SILICONE = new CoatingType(8);//[PWG5100.1]
+    /**
+     * Each sheet is coated to produce a translucent surface.
+     */
+    public static final CoatingType TRANSLUCENT = new CoatingType(9);//[PWG5100.1]
 
     protected CoatingType(int i) {
 	super(i);
     }
 
+    /**
+     *
+     * @return CoatingType.class
+     */
     @Override
     public Class<? extends Attribute> getCategory() {
 	return CoatingType.class;
     }
 
+    /**
+     *
+     * @return "coating-type" string.
+     */
     @Override
     public String getName() {
 	return "coating-type";

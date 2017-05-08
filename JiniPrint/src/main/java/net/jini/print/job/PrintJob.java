@@ -20,7 +20,7 @@ import javax.print.attribute.PrintJobAttribute;
 import javax.print.attribute.PrintJobAttributeSet;
 import net.jini.core.event.EventRegistration;
 import net.jini.io.MarshalledInstance;
-import net.jini.print.service.PrintService;
+import net.jini.print.PrintService;
 
 /**
  * <P>

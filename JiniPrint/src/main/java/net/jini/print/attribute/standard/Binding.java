@@ -13,31 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
-import javax.print.attribute.DocAttribute;
-import javax.print.attribute.PrintJobAttribute;
-import javax.print.attribute.PrintRequestAttribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
  *
+ * The "binding" member attribute specifies the location and type of binding to
+ * apply to the hardcopy output. Printers with a binding finisher MUST support
+ * this member attribute and all "binding-xxx" member attributes if they support
+ * the "finishings-col" attribute.
+ * 
+ * @see FinishingsCollection
+ *
  * @author peter
  */
-public class Binding extends CollectionSyntax implements DocAttribute, PrintRequestAttribute, PrintJobAttribute {
-    
+public class Binding extends CollectionSyntax implements Attribute {
+
     private final BindingReferenceEdge refEdge;
     private final BindingType type;
-    
-    public Binding(BindingReferenceEdge refEdge, BindingType type){
+
+    public Binding(BindingReferenceEdge refEdge, BindingType type) {
 	this.refEdge = refEdge;
 	this.type = type;
     }
 
     @Override
-    protected Attribute[] getAttributes() {
+    public Attribute[] getAttributes() {
 	return new Attribute[]{refEdge, type};
     }
 
@@ -50,5 +53,5 @@ public class Binding extends CollectionSyntax implements DocAttribute, PrintRequ
     public String getName() {
 	return "binding";
     }
-    
+
 }

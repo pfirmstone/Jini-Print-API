@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
@@ -23,21 +22,27 @@ import javax.print.attribute.PrintRequestAttribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
- *
+ * The "baling" member attribute specifies which baling to apply to the hardcopy
+ * output. Printers with a baling finisher MUST support this member attribute
+ * and all "baling-xxx" member attributes if they support the "finishings-col"
+ * attribute.
+ * 
+ * @see FinishingsCollection
+ * 
  * @author peter
  */
 public class Bailing extends CollectionSyntax implements DocAttribute, PrintRequestAttribute, PrintJobAttribute {
-    
+
     private final BailingType type;
     private final BailingWhen when;
 
-    public Bailing(BailingType type, BailingWhen when ){
+    public Bailing(BailingType type, BailingWhen when) {
 	this.type = type;
 	this.when = when;
     }
-    
+
     @Override
-    protected Attribute[] getAttributes() {
+    public Attribute[] getAttributes() {
 	return new Attribute[]{type, when};
     }
 
@@ -64,5 +69,5 @@ public class Bailing extends CollectionSyntax implements DocAttribute, PrintRequ
     public BailingWhen getWhen() {
 	return when;
     }
-    
+
 }

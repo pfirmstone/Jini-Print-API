@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.jini.print.service;
+package net.jini.print;
 
 import java.io.IOException;
 import javax.print.DocFlavor;
@@ -38,17 +38,17 @@ import net.jini.print.job.DocPrintRequest;
  * Service proxy object. A Print Request can be created to print a single piece
  * of print data or multiple pieces of print data.
  * <P>
- * To print a doc, the client calls <A
- * HREF="../../../../net/jini/print/service/PrintService.html#createDocPrintRequest()"><CODE><CODE>createDocPrintRequest()</CODE></CODE></A>.
+ * To print a doc, the client calls {@link PrintService#createDocPrintRequest() } <A
+ * HREF="../../../../net/jini/print/PrintService.html#createDocPrintRequest()"><CODE><CODE>createDocPrintRequest()</CODE></CODE></A>.
  * ("Doc" is a short, easy-to-pronounce term that means "a piece of print
  * data.") Such a Print Request is termed a "doc print request." The returned
- * Print Request object implements both interface <A
+ * Print Request object implements both interface {@link net.jini.print.job.PrintRequest} <A
  * HREF="../../../../net/jini/print/job/PrintRequest.html"><CODE>PrintRequest</CODE></A>
- * and the subinterface <A
+ * and the subinterface {@link DocPrintRequest} <A
  * HREF="../../../../net/jini/print/job/DocPrintRequest.html"><CODE>DocPrintRequest</CODE></A>.
  * The client can supply the doc to be printed and a set of printing attributes
- * for the job as arguments of the <A
- * HREF="../../../../net/jini/print/service/PrintService.html#createDocPrintRequest()"><CODE><CODE>createDocPrintRequest()</CODE></CODE></A>
+ * for the job as arguments of the {@link PrintService#createDocPrintRequest() } <A
+ * HREF="../../../../net/jini/print/PrintService.html#createDocPrintRequest()"><CODE><CODE>createDocPrintRequest()</CODE></CODE></A>
  * method call. Alternatively, the client can supply the doc and the attribute
  * set by calling methods on the Print Request object. When it's all set up, a
  * doc print request consists of a set of job-level printing attributes and a
@@ -60,8 +60,8 @@ import net.jini.print.job.DocPrintRequest;
  * <IMG SRC="../doc-files/PrintRequestFig1.gif" WIDTH=532 HEIGHT=218>
  * </CENTER>
  * <P>
- * To print multiple pieces of print data, see interface <A
- * HREF="../../../../net/jini/print/service/MultiDocPrintService.html"><CODE>MultiDocPrintService</CODE></A>.
+ * To print multiple pieces of print data, see interface {@link MultiDocPrintService } <A
+ * HREF="../../../../net/jini/print/MultiDocPrintService.html"><CODE>MultiDocPrintService</CODE></A>.
  * <P>
  * Interface PrintService has a method to let the client examine the Print
  * Service's attribute set, which includes printer description attributes that
@@ -73,8 +73,8 @@ import net.jini.print.job.DocPrintRequest;
  * <P>
  * The client can register a remote event listener to receive event
  * notifications pertaining to a Print Service. The events that can be reported
- * are represented by class <A
- * HREF="../../../../net/jini/print/service/PrintServiceEvent.html"><CODE>PrintServiceEvent</CODE></A>;
+ * are represented by class  <A
+ * HREF="../../../../net/jini/print/PrintServiceEvent.html"><CODE>PrintServiceEvent</CODE></A>;
  * see that class for further information about the events' meanings and the
  * circumstances under which they are reported.
  * <P>
@@ -87,7 +87,7 @@ import net.jini.print.job.DocPrintRequest;
  * settings for a supposed job, these methods return information about
  * <I>all</I> the supported doc flavors, attribute categories, and attribute
  * values. However, these methods also take a <A
- * HREF="../../../../net/jini/print/service/Settings.html"><CODE>Settings</CODE></A>
+ * HREF="../../../../net/jini/print/Settings.html"><CODE>Settings</CODE></A>
  * argument which is the settings for a supposed job (the job's doc flavor and
  * attribute set, which may be a partially-filled-out attribute set, including
  * both job-level and doc-level attributes), in which case these methods return
@@ -471,7 +471,7 @@ public interface PrintService {
      * each job rather than use a fixed default job name.)
      * </OL>
      * These two cases may be distinguished by calling the <A
-     * HREF="../../../../net/jini/print/service/PrintService.html#isAttributeCategorySupported(java.lang.Class,
+     * HREF="../../../../net/jini/print/PrintService.html#isAttributeCategorySupported(java.lang.Class,
      * net.jini.print.service.Settings)"><CODE><CODE>isAttributeCategorySupported()</CODE></CODE></A>
      * method, which returns false in case (a) and true in case (b).
      * <P>
@@ -499,7 +499,7 @@ public interface PrintService {
      * Determine all of this Print Service's default printing attribute values.
      * The returned object is an attribute set containing the attribute objects
      * that would have been returned by calling <A
-     * HREF="../../../../net/jini/print/service/PrintService.html#getDefaultAttributeValue(java.lang.Class,
+     * HREF="../../../../net/jini/print/PrintService.html#getDefaultAttributeValue(java.lang.Class,
      * net.jini.print.service.Settings)"><CODE><CODE>getDefaultAttributeValue(<I>C</I>,theSettings)</CODE></CODE></A>
      * for every attribute category <I>C</I> this Print Service supports.
      *

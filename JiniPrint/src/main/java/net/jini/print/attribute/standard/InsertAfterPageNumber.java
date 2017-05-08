@@ -15,6 +15,8 @@
  */
 package net.jini.print.attribute.standard;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectStreamException;
 import javax.print.attribute.Attribute;
 import javax.print.attribute.IntegerSyntax;
 
@@ -28,12 +30,14 @@ import javax.print.attribute.IntegerSyntax;
  * "input-after-page-number" would be 2 and 3 respectively (not 2 and 4, as it
  * would be if the inserted sheet affected the Input-Document print-stream page
  * count). For a complete description of the enumeration of print-stream pages
- * see section 2.5. If the value of the "insert-after-page-number" m ember
+ * see section 2.5. If the value of the "insert-after-page-number" member
  * attribute is 0, then the sheet is inserted before the first page. If the
- * value is MAX, then the sheet is inserted after the last sheet in the document. If the "insert-after-page-num ber" m ember attribute is not a valid
+ * value is MAX, then the sheet is inserted after the last sheet in the
+ * document. If the "insert-after-page-number" member attribute is not a valid
  * input document page reference in the print-stream , then the IPP Printer
  * SHOULD ignore the request. For example, (1) the page number is beyond the
- * last page of the document AND is not MAX or (2) the "page-ranges" Job Template attribute does not include the specified page num ber (see section
+ * last page of the document AND is not MAX or (2) the "page-ranges" Job
+ * Template attribute does not include the specified page number (see section
  * 2.5). There is no way to validate the "insert-after-page-number" attribute
  * with the Validate-Job operation, since the validation cannot occur until the
  * pages of the documents have arrived at the printer. Since the
@@ -49,15 +53,17 @@ import javax.print.attribute.IntegerSyntax;
  * specification under "Common Behavior for Sheet Attributes". The
  * "insert-after-page-number-supported" (rangeOfInteger(0:MAX)) Printer
  * attribute indicates the range of page numbers supported in the
- * "insert-after-page-number" m ember attribute, i.e., the minimum (SHOULD be
- * 0) and the maximum (SHOULD be MAX) page numbers supported.
+ * "insert-after-page-number" m ember attribute, i.e., the minimum (SHOULD be 0)
+ * and the maximum (SHOULD be MAX) page numbers supported.
  *
  * @author peter
  */
 public class InsertAfterPageNumber extends IntegerSyntax implements Attribute {
 
+    private static final long serialVersionUID = 1L;
+
     public InsertAfterPageNumber(int i) {
-	super(i);
+	super(check(i));
     }
 
     @Override
@@ -68,6 +74,50 @@ public class InsertAfterPageNumber extends IntegerSyntax implements Attribute {
     @Override
     public String getName() {
 	return "insert-after-page-number";
+    }
+
+    private static int check(int i) {
+	if (i < 0) {
+	    throw new IllegalArgumentException("integer must be positive");
+	}
+	return i;
+    }
+
+    /**
+     * IntegerSyntax can be de-serialized by AtomicMarshalInputStream, since it
+     * only contains primitive fields, which are not seen as a threat for gadget
+     * attacks, however this object still has invariants which need to be
+     * checked. Implementing @AtomicSerial would make this class responsible for
+     * managing serial form, while implementing readObject() would prevent
+     * de-serialization with AtomicMarshalInputStream. As such readResolve is
+     * the only option to validate input in this case, it is protected so that
+     * all subclasses inherit it, to ensure it is also called for subclass
+     * instances. It is final to ensure the validation check cannot be bypassed.
+     *
+     *
+     * @serial Checks the value from the stream satisfies the same invariants as
+     * our constructor.
+     *
+     * @return this
+     * @throws ObjectStreamException
+     */
+    protected final Object readResolve() throws ObjectStreamException {
+	try {
+	    check(getValue());
+	    validateInvariants();
+	    return this;
+	} catch (IllegalArgumentException e) {
+	    throw new InvalidObjectException(e.getMessage());
+	}
+    }
+
+    /**
+     * Subclasses can override this method to have check their invariants during
+     * de-serialization.
+     *
+     * @throws ObjectStreamException
+     */
+    protected void validateInvariants() throws ObjectStreamException {
     }
 
 }

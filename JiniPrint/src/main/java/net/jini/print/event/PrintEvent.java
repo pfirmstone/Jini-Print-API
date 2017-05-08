@@ -15,7 +15,7 @@
  */
 package net.jini.print.event;
 
-import net.jini.print.service.PrintService;
+import net.jini.print.PrintService;
 import net.jini.core.event.RemoteEvent;
 import net.jini.io.MarshalledInstance;
 

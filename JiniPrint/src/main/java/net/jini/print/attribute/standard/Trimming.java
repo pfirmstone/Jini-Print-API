@@ -42,7 +42,7 @@ public class Trimming extends CollectionSyntax implements Attribute {
     }
 
     @Override
-    protected Attribute[] getAttributes() {
+    public Attribute[] getAttributes() {
 	return new Attribute[]{
 	    offset, referenceEdge, type, when,
 	};

@@ -33,7 +33,7 @@ public class ForceFrontSide implements Attribute {
 
     @Override
     public Class<? extends Attribute> getCategory() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	return ForceFrontSide.class;
     }
 
     @Override

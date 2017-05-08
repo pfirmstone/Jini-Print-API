@@ -71,7 +71,7 @@ public class InsertSheet extends CollectionSyntax implements Attribute {
     }
 
     @Override
-    protected Attribute[] getAttributes() {
+    public Attribute[] getAttributes() {
 	return new Attribute[]{afterPageNumber, count, media};
     }
 

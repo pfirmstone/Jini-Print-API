@@ -15,6 +15,8 @@
  */
 package net.jini.print.attribute.standard;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectStreamException;
 import javax.print.attribute.Attribute;
 import javax.print.attribute.IntegerSyntax;
 
@@ -31,7 +33,7 @@ import javax.print.attribute.IntegerSyntax;
 public class InsertCount extends IntegerSyntax implements Attribute {
 
     public InsertCount(int i) {
-	super(i);
+	super(check(i));
     }
 
     @Override
@@ -43,5 +45,52 @@ public class InsertCount extends IntegerSyntax implements Attribute {
     public String getName() {
 	return "insert-count";
     }
-
+    
+    @Override
+    public boolean equals(Object theObject) {
+	return super.equals(theObject) && this.getClass().isInstance(theObject);
+    }
+    
+    private static int check(int i){
+	if ( i < 0 ) 
+	    throw new IllegalArgumentException("integer must be positive");
+	return i;
+    }
+    
+    /**
+     * IntegerSyntax can be de-serialized by AtomicMarshalInputStream, since it
+     * only contains primitive fields, which are not seen as a threat for gadget
+     * attacks, however this object still has invariants which need to
+     * be checked. Implementing @AtomicSerial would make this class responsible
+     * for managing serial form, while implementing readObject() would prevent
+     * de-serialization with AtomicMarshalInputStream. As such readResolve is
+     * the only option to validate input in this case, it is protected so that
+     * all subclasses inherit it, to ensure it is also called for subclass
+     * instances. It is final to ensure the validation check cannot be bypassed.
+     *
+     *
+     * @serial Checks the value from the stream satisfies the same invariants as
+     * our constructor.
+     *
+     * @return this
+     * @throws ObjectStreamException
+     */
+    protected final Object readResolve() throws ObjectStreamException {
+	try {
+	    check(getValue());
+	    validateInvariants();
+	    return this;
+	} catch (IllegalArgumentException e) {
+	    throw new InvalidObjectException(e.getMessage());
+	}
+    }
+    
+    /**
+     * Subclasses can override this method to have check their invariants during
+     * de-serialization.
+     * 
+     * @throws ObjectStreamException 
+     */
+    protected void validateInvariants() throws ObjectStreamException {}
+    
 }

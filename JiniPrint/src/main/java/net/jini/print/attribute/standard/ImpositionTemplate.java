@@ -20,13 +20,20 @@ import javax.print.attribute.EnumSyntax;
 import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "imposition-template" member attribute specifies the default imposition
+ * template used for the specified finishing process and is only provided in
+ * "finishings-col-database" (section 6.9) and "finishings-col-ready" (section
+ * 6.11) Printer attribute values. For example, when applying a 'booklet-maker'
+ * finishing process a Printer could automatically apply a 'signature'
+ * imposition template when processing input pages.
  *
+ * @see FinishingsCollection
+ * 
  * @author peter
  */
 public class ImpositionTemplate extends EnumSyntax implements PrintJobAttribute {
 
-    public static final ImpositionTemplate 
-	    NONE = new ImpositionTemplate(0),//[PWG5100.3]
+    public static final ImpositionTemplate NONE = new ImpositionTemplate(0),//[PWG5100.3]
 	    SIGNATURE = new ImpositionTemplate(1);//[PWG5100.3]
 
     protected ImpositionTemplate(int i) {

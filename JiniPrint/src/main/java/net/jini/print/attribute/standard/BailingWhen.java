@@ -13,20 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "baling-when" member attribute specified when baling is performed. The
+ * default value may be derived from the "finishing-template" value or, if a
+ * default value cannot be determined from that value, using an implementation
+ * or site defined value.
+ *
+ * @see Bailing
+ * @see FinishingsCollection
+ * @see FinishingTemplate
  *
  * @author peter
  */
-public class BailingWhen extends EnumSyntax implements PrintJobAttribute {
-    public static final BailingWhen 
-	    AFTER_SETS = new BailingWhen(0),
+public class BailingWhen extends EnumSyntax implements Attribute {
+
+    public static final BailingWhen AFTER_SETS = new BailingWhen(0),
 	    AFTER_JOB = new BailingWhen(1);
 
     private BailingWhen(int i) {
@@ -42,21 +48,19 @@ public class BailingWhen extends EnumSyntax implements PrintJobAttribute {
     public String getName() {
 	return "bailing-when";
     }
-    
-     @Override
+
+    @Override
     protected String[] getStringTable() {
 	return new String[]{
 	    "after-sets",
-	    "after-job",
-	    };
+	    "after-job",};
     }
 
     @Override
     protected EnumSyntax[] getEnumValueTable() {
 	return new EnumSyntax[]{
 	    AFTER_SETS,
-	    AFTER_JOB,
-	};
+	    AFTER_JOB,};
     }
-    
+
 }

@@ -19,7 +19,7 @@ import java.io.IOException;
 import javax.print.attribute.PrintJobAttributeSet;
 import net.jini.io.MarshalledInstance;
 import net.jini.print.event.PrintEvent;
-import net.jini.print.service.PrintService;
+import net.jini.print.PrintService;
 
 /**
  * <P>

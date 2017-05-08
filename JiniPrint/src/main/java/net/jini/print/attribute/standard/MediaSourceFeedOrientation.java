@@ -34,7 +34,7 @@ public class MediaSourceFeedOrientation extends CollectionSyntax implements Attr
     }
     
     @Override
-    protected Attribute[] getAttributes() {
+    public Attribute[] getAttributes() {
 	return new Attribute[]{orientation};
     }
 

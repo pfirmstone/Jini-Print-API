@@ -1,5 +1,12 @@
-<!--
-/*
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+    <HEAD>
+        <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+        <TITLE></TITLE>
+        <META NAME="GENERATOR" CONTENT="LibreOffice 3.3  (Win32)">
+        <META NAME="CREATED" CONTENT="0;0">
+        <META NAME="CHANGED" CONTENT="20170507;17053960">
+        <!-- /*
  * Copyright (C) the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,291 +21,3901 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
--->
-<body>
-    <P>
-Package net.jini.print.attribute.standard
-contains classes for specific printing attributes.
-The parent package,
-<A HREF=http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/package-summary.html>javax.print.attribute</A>,
-contains classes and interfaces
-that pertain to all printing attributes in general.
-    </P><P>
-Package <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/package-summary.html"> javax.print.attribute.standard</A>
-is used in two printing APIs,
-the Jini Print Service API
-and the
-<A HREF="http://docs.oracle.com/javase/8/docs/technotes/guides/jps/index.html">Java Print Service API</A>
-which originated from the Draft Jini Print Service API version 1.0.
-The description below refers to "the API"
-meaning one or the other or both.
-</P><P>
-An attribute represents a printing feature
-that a print service may provide.
-For each attribute,
-a print service either does or does not support the attribute.
-For each possible value of a supported attribute,
-a print service either does or does not support the value.
-</P><P>
-The API requires every print service
-to support certain attributes;
-other attributes are optional
-and the service can choose whether or not to support them.
-The API also requires every print service
-to support certain values of certain attributes;
-other attribute values are optional
-and the service can choose whether or not to support them.
-These support requirements are recorded in the documentation
-for each attribute class.
-</P><P>
-Package javax.print.attribute.standard
-contains standard printing attributes
-and standard printing attribute values
-that are widely used in the printing domain.
-A print service vendor
-can provide new vendor-specific printing attributes
-in addition to the standard ones.
-A vendor can also provide
-vendor-specific extensions (subclasses)
-of the standard printing attributes --
-for example,
-to provide additional vendor-specific values
-for an existing standard attribute.
-Of course,
-if a vendor wants clients
-to be able to use any added or extended attributes,
-the vendor must publish the new attribute classes.
-</P><P>
-A printing client application
-will typically not need to use
-all the printing attribute classes
-in package javax.print.attribute.standard,
-just the ones that pertain to the application.
-</P><P>
-The attribute classes in package javax.print.attribute.standard
-are based on the Internet Printing Protocol (IPP) attributes
-as defined in the Internet Draft document,
-<I>Internet Printing Protocol/1.1: Model and Semantics</I>
-by R. deBry, T. Hastings, R. Herriot, S. Isaacson, and P. Powell
-dated 23-Jun-1999.
-The media attribute classes
-are based on a proposed production printing extension to IPP
-by K. Ocke and T. Hastings
-dated 07-Feb-2000.
-The descriptive text for each attribute class
-was taken largely from the above documents.
-The above authors' contribution to the API
-is gratefully acknowledged.
-</P>
-<H3>Attribute Organization</H3>
-There are five kinds of printing attributes:
-doc attributes,
-print request attributes,
-print job attributes,
-print service attributes,
-and supported-values attributes.
-
-<H4>Doc Attributes</H4>
-Doc attributes specify the characteristics of an individual doc
-and the print job settings to be applied to an individual doc.
-A doc attribute class implements interface
-<A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/DocAttribute.html">DocAttribute</A>.
-A doc attribute
-may appear in a <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/DocAttributeSet.html">DocAttributeSet</A>
-that is part of a <A HREF="../../../../../net/jini/print/data/Doc.html">Doc</A>.
-
-<H4>Print Request Attributes</H4>
-Print request attributes
-specify the settings to be applied to a whole print job
-and to all the docs in the print job. 
-A print request attribute class implements interface
-<A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintRequestAttribute.html">PrintRequestAttribute</A>.
-A print request attribute
-may appear in a <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintRequestAttributeSet.html">PrintRequestAttributeSet</A>
-that is part of a <A HREF="../../../../../net/jini/print/job/PrintRequest.html">PrintRequest</A>.
-<P>
-Some attributes are doc attributes
-but not print request attributes
-and may only be specified at the doc level.
-Some attributes are print request attributes
-but not doc attributes
-and may only be specified at the Print Request level.
-Some attributes are both doc attributes
-and print request attributes
-and may be specified either at the doc level
-or at the Print Request level.
-<P>
-When specified at the doc level,
-an attribute applies just to that one doc.
-When specified at the Print Request level,
-an attribute applies to the whole job,
-including all the docs in the job.
-However, an attribute specified at the doc level
-overrides an attribute in the same category
-specified at the Print Request level.
-
-<H4>Print Job Attributes</H4>
-Print job attributes report the status of a Print Job.
-A print job attribute class implements interface
-<A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintJobAttribute.html">PrintJobAttribute</A>.
-A print job attribute
-may appear in a <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintJobAttributeSet.html">PrintJobAttributeSet</A>
-obtained from a <A HREF="../../../../../net/jini/print/job/PrintJob.html">PrintJob</A>.
-<P>
-Some attributes are both print request attributes
-and print job attributes;
-a client may include such attributes in a Print Request
-to specify characteristics for the ensuing Print Job,
-and those attributes then also appear
-in the Print Job's attribute set.
-Some attributes are print job attributes
-but not print request attributes;
-the print service itself
-adds these attributes to the Print Job's attribute set.
-
-<H4>Print Service Attributes</H4>
-Print service attributes report the status
-of a print service.
-A print service attribute class implements interface
-<A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintServiceAttribute.html">PrintServiceAttribute</A>.
-A print service attribute
-may appear in a <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintServiceAttributeSet.html">PrintServiceAttributeSet</A>
-obtained from a <A HREF="../../../../../net/jini/print/service/PrintService.html">PrintService</A>.
-
-<H4>Supported-Values Attributes</H4>
-A supported-value attribute
-indicates the legal values for another attribute
-that a print service supports.
-A supported-values attribute class implements interface
-<A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/SupportedValuesAttribute.html">SupportedValuesAttribute</A>.
-However, supported-values attributes
-never appear in attribute sets,
-so there is no restricted <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/AttributeSet.html">AttributeSet</A>
-subinterface for them.
-<P>
-In the Jini Print Service API,
-a print service 
-advertises the doc attribute and print request attribute
-categories and values it supports
-via its service registration
-in the Jini Lookup Service (JLUS)
-and via the capability methods
-in interface <A HREF="../../../../../net/jini/print/service/PrintService.html">PrintService</A>.
-Typically, the supported values for an attribute category
-are indicated using instances of the attribute category itself.
-In some cases, the supported values for an attribute category
-are indicated using an instance of a separate supported-values attribute.
-<P>
-A Jini Print Service instance
-does not advertise the attribute categories and values it supports
-for attributes that are only print job attributes
-or only print service attributes.
-These attributes are not included
-in the service registration in the JLUS,
-and the capability methods
-in interface <A HREF="../../../../../net/jini/print/service/PrintService.html">PrintService</A>
-do not report anything about these attributes.
-
-<H4>Attribute Table</H4>
-<P>
-The table below lists all the printing attributes.
-The table shows the tagging interfaces
-each attribute class implements
-in addition to interface <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/Attribute.html">Attribute</A>,
-thus indicating how each attribute is used in the API.
-For each doc attribute and print request attribute,
-the column marked "SupportedValuesAttribute"
-lists the supported-values attribute class, if any,
-with which a print service 
-indicates the supported values for that attribute category.
-</P>
-<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=1>
-<TR BGCOLOR="#E5E5E5">
-<TH VALIGN="bottom">Attribute Class</TH>
-<TH VALIGN="bottom">Doc<BR>Attribute</TH>
-<TH VALIGN="bottom">Print<BR>Request<BR>Attribute</TH>
-<TH VALIGN="bottom">Print<BR>Job<BR>Attribute</TH>
-<TH VALIGN="bottom">Print<BR>Service<BR>Attribute</TH>
-<TH VALIGN="bottom">SupportedValuesAttribute</TH>
-</TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Compression.html">Compression</A></TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/DocumentName.html">DocumentName</A></TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Chromaticity.html">Chromaticity</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Copies.html">Copies</A></TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD><A HREF="CopiesSupported.html">CopiesSupported</A></TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/FinishingsBinding.html">FinishingsBinding</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/FinishingsCover.html">FinishingsCover</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobHoldUntil.html">JobHoldUntil</A></TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobImpressions.html">JobImpressions</A></TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD><A HREF="JobImpressionsSupported.html">JobImpressionsSupported</A></TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobKOctets.html">JobKOctets</A></TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD><A HREF="JobKOctetsSupported.html">JobKOctetsSupported</A></TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobMediaSheets.html">JobMediaSheets</A></TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD><A HREF="JobMediaSheetsSupported.html">JobMediaSheetsSupported</A></TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobName.html">JobName</A></TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobPriority.html">JobPriority</A></TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD><A HREF="JobPrioritySupported.html">JobPrioritySupported</A></TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobSheets.html">JobSheets</A></TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Media.html">Media</A><BR>A record consisting of --</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/MediaSize.html">MediaSize</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/MediaSizeName.html">MediaSizeName</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/MediaName.html">MediaName</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/MediaTray.html">MediaTray</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="MediaCollection.html">MediaCollection</A><BR>A record consisting of --</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaBackCoating.html">MediaBackCoating</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaColor.html">MediaColor</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaHoleCount.html">MediaHoleCount</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaKey.html">MediaKey</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaWeightMetric.html">MediaWeightMetric</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaStock.html">MediaStock</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaRecycled.html">MediaRecycled</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaPrePrinted.html">MediaPrePrinted</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaType.html">MediaType</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaOrderCount.html">MediaOrderCount</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaBackCoating.html">MediaBackCoating</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="MediaFrontCoating.html">MediaFrontCoating</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="MinimumPrinterResolution.html">MinimumPrinterResolution</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/MultipleDocumentHandling.html">MultipleDocumentHandling</A></TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/NumberUp.html">NumberUp</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD><A HREF="NumberUpSupported.html">NumberUpSupported</A></TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/OrientationRequested.html">OrientationRequested</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PageRanges.html">PageRanges</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterResolution.html">PrinterResolution</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrintQuality.html">PrintQuality</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/RequestingUserName.html">RequestingUserName</A></TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/SheetCollate.html">SheetCollate</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Sides.html">Sides</A></TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/DateTimeAtCompleted.html">DateTimeAtCompleted</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/DateTimeAtCreation.html">DateTimeAtCreation</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/DateTimeAtProcessing.html">DateTimeAtProcessing</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobImpressionsCompleted.html">JobImpressionsCompleted</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobKOctetsProcessed.html">JobKOctetsProcessed</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobMediaSheetsCompleted.html">JobMediaSheetsCompleted</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobMessageFromOperator.html">JobMessageFromOperator</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobOriginatingUserName.html">JobOriginatingUserName</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobState.html">JobState</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobStateReasons.html">JobStateReasons</A><BR>Contains zero or more --</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobStateReason.html">JobStateReason</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/NumberOfDocuments.html">NumberOfDocuments</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/NumberOfInterveningJobs.html">NumberOfInterveningJobs</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/OutputDeviceAssigned.html">OutputDeviceAssigned</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/ColorSupported.html">ColorSupported</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PagesPerMinute.html">PagesPerMinute</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PagesPerMinuteColor.html">PagesPerMinuteColor</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PDLOverrideSupported.html">PDLOverrideSupported</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterIsAcceptingJobs.html">PrinterIsAcceptingJobs</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterInfo.html">PrinterInfo</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterLocation.html">PrinterLocation</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterMessageFromOperator.html">PrinterMessageFromOperator</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterMakeAndModel.html">PrinterMakeAndModel</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterMoreInfo.html">PrinterMoreInfo</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterMoreInfoManufacturer.html">PrinterMoreInfoManufacturer</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterName.html">PrinterName</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterState.html">PrinterState</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterStateReasons.html">PrinterStateReasons</A><BR>Contains zero or more --</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterStateReason.html">PrinterStateReason</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Severity.html">Severity</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/QueuedJobCount.html">QueuedJobCount</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD ALIGN="center">X</TD><TD>&nbsp;</TD></TR>
-<TR><TD><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/ReferenceUriSchemesSupported.html">ReferenceUriSchemesSupported</A></TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD><TD>&nbsp;</TD></TR>
-</TABLE>
-
-<P>
-Placement of this package under package net.jini.print.attribute.standard
-is preliminary and not yet approved by the Jini Community.
-<P>
-<B>DRAFT STANDARD VERSION 1.1 (25-APRIL-2017)</B>
-</body>
+        -->
+        <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+    </HEAD>
+    <BODY LANG="en-AU" DIR="LTR">
+        <P>Package net.jini.print.attribute.standard contains classes for
+            specific printing attributes. The parent package,
+            <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/package-summary.html">javax.print.attribute</A>,
+            contains classes and interfaces that pertain to all printing
+            attributes in general. 
+        </P>
+        <P>Package <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/package-summary.html">javax.print.attribute.standard</A>
+            is used in two printing APIs, the Jini Print Service API and the <A HREF="http://docs.oracle.com/javase/8/docs/technotes/guides/jps/index.html">Java
+                Print Service API</A> which originated from the Draft Jini Print
+            Service API version 1.0. The description below refers to &quot;the
+            API&quot; meaning one or the other or both. 
+        </P>
+        <P>An attribute represents a printing feature that a print service
+            may provide. For each attribute, a print service either does or does
+            not support the attribute. For each possible value of a supported
+            attribute, a print service either does or does not support the value.
+        </P>
+        <P>The API requires every print service to support certain
+            attributes; other attributes are optional and the service can choose
+            whether or not to support them. The API also requires every print
+            service to support certain values of certain attributes; other
+            attribute values are optional and the service can choose whether or
+            not to support them. These support requirements are recorded in the
+            documentation for each attribute class. 
+        </P>
+        <P>Package javax.print.attribute.standard contains standard printing
+            attributes and standard printing attribute values that are widely
+            used in the printing domain. A print service vendor can provide new
+            vendor-specific printing attributes in addition to the standard ones.
+            A vendor can also provide vendor-specific extensions (subclasses) of
+            the standard printing attributes -- for example, to provide
+            additional vendor-specific values for an existing standard attribute.
+            Of course, if a vendor wants clients to be able to use any added or
+            extended attributes, the vendor must publish the new attribute
+            classes. 
+        </P>
+        <P>A printing client application will typically not need to use all
+            the printing attribute classes in package
+            javax.print.attribute.standard, just the ones that pertain to the
+            application. 
+        </P>
+        <P>The attribute classes in package javax.print.attribute.standard
+            are based on the Internet Printing Protocol (IPP) attributes as
+            defined in the Internet Draft document, <I>Internet Printing
+                Protocol/1.1: Model and Semantics</I> by R. deBry, T. Hastings, R.
+            Herriot, S. Isaacson, and P. Powell dated 23-Jun-1999. The media
+            attribute classes are based on a proposed production printing
+            extension to IPP by K. Ocke and T. Hastings dated 07-Feb-2000. The
+            descriptive text for each attribute class was taken largely from the
+            above documents. The above authors' contribution to the API is
+            gratefully acknowledged. 
+        </P>
+        <H3 CLASS="western">Attribute Organization</H3>
+        <P>There are five kinds of printing attributes: doc attributes, print
+            request attributes, print job attributes, print service attributes,
+            and supported-values attributes. 
+        </P>
+        <H4 CLASS="western">Doc Attributes</H4>
+        <P>Doc attributes specify the characteristics of an individual doc
+            and the print job settings to be applied to an individual doc. A doc
+            attribute class implements interface <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/DocAttribute.html">DocAttribute</A>.
+            A doc attribute may appear in a <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/DocAttributeSet.html">DocAttributeSet</A>
+            that is part of a <A HREF="../../data/Doc.html">Doc</A>. 
+        </P>
+        <H4 CLASS="western">Print Request Attributes</H4>
+        <P>Print request attributes specify the settings to be applied to a
+            whole print job and to all the docs in the print job. A print request
+            attribute class implements interface <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintRequestAttribute.html">PrintRequestAttribute</A>.
+            A print request attribute may appear in a <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintRequestAttributeSet.html">PrintRequestAttributeSet</A>
+            that is part of a <A HREF="../../job/PrintRequest.html">PrintRequest</A>.
+        </P>
+        <P>Some attributes are doc attributes but not print request
+            attributes and may only be specified at the doc level. Some
+            attributes are print request attributes but not doc attributes and
+            may only be specified at the Print Request level. Some attributes are
+            both doc attributes and print request attributes and may be specified
+            either at the doc level or at the Print Request level. 
+        </P>
+        <P>When specified at the doc level, an attribute applies just to that
+            one doc. When specified at the Print Request level, an attribute
+            applies to the whole job, including all the docs in the job. However,
+            an attribute specified at the doc level overrides an attribute in the
+            same category specified at the Print Request level. 
+        </P>
+        <H4 CLASS="western">Print Job Attributes</H4>
+        <P>Print job attributes report the status of a Print Job. A print job
+            attribute class implements interface <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintJobAttribute.html">PrintJobAttribute</A>.
+            A print job attribute may appear in a <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintJobAttributeSet.html">PrintJobAttributeSet</A>
+            obtained from a <A HREF="../../job/PrintJob.html">PrintJob</A>. 
+        </P>
+        <P>Some attributes are both print request attributes and print job
+            attributes; a client may include such attributes in a Print Request
+            to specify characteristics for the ensuing Print Job, and those
+            attributes then also appear in the Print Job's attribute set. Some
+            attributes are print job attributes but not print request attributes;
+            the print service itself adds these attributes to the Print Job's
+            attribute set. 
+        </P>
+        <H4 CLASS="western">Print Service Attributes</H4>
+        <P>Print service attributes report the status of a print service. A
+            print service attribute class implements interface
+            <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintServiceAttribute.html">PrintServiceAttribute</A>.
+            A print service attribute may appear in a <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/PrintServiceAttributeSet.html">PrintServiceAttributeSet</A>
+            obtained from a <A HREF="../../service/PrintService.html">PrintService</A>.
+        </P>
+        <H4 CLASS="western">Supported-Values Attributes</H4>
+        <P>A supported-value attribute indicates the legal values for another
+            attribute that a print service supports. A supported-values attribute
+            class implements interface <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/SupportedValuesAttribute.html">SupportedValuesAttribute</A>.
+            However, supported-values attributes never appear in attribute sets,
+            so there is no restricted <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/AttributeSet.html">AttributeSet</A>
+            subinterface for them. 
+        </P>
+        <P>In the Jini Print Service API, a print service advertises the doc
+            attribute and print request attribute categories and values it
+            supports via its service registration in the Jini Lookup Service
+            (JLUS) and via the capability methods in interface <A HREF="../../service/PrintService.html">PrintService</A>.
+            Typically, the supported values for an attribute category are
+            indicated using instances of the attribute category itself. In some
+            cases, the supported values for an attribute category are indicated
+            using an instance of a separate supported-values attribute. 
+        </P>
+        <P>A Jini Print Service instance does not advertise the attribute
+            categories and values it supports for attributes that are only print
+            job attributes or only print service attributes. These attributes are
+            not included in the service registration in the JLUS, and the
+            capability methods in interface <A HREF="../../service/PrintService.html">PrintService</A>
+            do not report anything about these attributes. 
+        </P>
+        <H4 CLASS="western">Attribute Table</H4>
+        <P>The table below lists all the printing attributes. The table shows
+            the tagging interfaces each attribute class implements in addition to
+            interface <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/Attribute.html">Attribute</A>,
+            thus indicating how each attribute is used in the API. For each doc
+            attribute and print request attribute, the column marked
+            &quot;SupportedValuesAttribute&quot; lists the supported-values
+            attribute class, if any, with which a print service indicates the
+            supported values for that attribute category. 
+        </P>
+        <TABLE WIDTH=100% CELLPADDING=2 CELLSPACING=0 border="1">
+            <COL WIDTH=20%>
+            <COL WIDTH=10%>
+            <COL WIDTH=5%>
+            <COL WIDTH=5%>
+            <COL WIDTH=5%>
+            <COL WIDTH=5%>
+            <COL WIDTH=8%>
+            <COL WIDTH=8%>
+            <COL WIDTH=8%>
+            <COL WIDTH=8%>
+            <COL WIDTH=18%>
+            <TR BGCOLOR="#e5e5e5">
+                <TH ROWSPAN=2 WIDTH=20%>
+                    <P>Attribute Class</P>
+                </TH>
+                <TH ROWSPAN=2 WIDTH=10%>
+                    <P>Standard</P>
+                </TH>
+                <TH COLSPAN=4 WIDTH=20%>
+                    <P>X - Required By</P>
+                    <P>D - Deprecated</P>
+                </TH>
+                <TH  ROWSPAN=2 WIDTH=8% VALIGN=BOTTOM>
+                    <P>Doc Attribute</P>
+                </TH>
+                <TH ROWSPAN=2 WIDTH=8% VALIGN=BOTTOM>
+                    <P>Print Request Attribute</P>
+                </TH>
+                <TH ROWSPAN=2 WIDTH=8% VALIGN=BOTTOM>
+                    <P>Print Job Attribute</P>
+                </TH>
+                <TH ROWSPAN=2 WIDTH=8% VALIGN=BOTTOM>
+                    <P>Print Service Attribute</P>
+                </TH>
+                <TH ROWSPAN=2 WIDTH=18%>
+                    <P>Supported Values Attribute</P>
+                </TH>
+            </TR>
+            <TR BGCOLOR="#e5e5e5">
+                <TH WIDTH=5% VALIGN=BOTTOM>
+                    <P>IPP1.1</P>
+                </TH>
+                <TH WIDTH=5% VALIGN=BOTTOM>
+                    <P>IPP2.0 
+                    </P>
+                </TH>
+                <TH WIDTH=5% VALIGN=BOTTOM>
+                    <P>IPP2.1 
+                    </P>
+                </TH>
+                <TH WIDTH=5% VALIGN=BOTTOM>
+                    <P>IPP2.2</P>
+                </TH>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Compression.html">Compression</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/DocumentName.html">DocumentName</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Chromaticity.html">Chromaticity</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Copies.html">Copies</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><A HREF="CopiesSupported.html">CopiesSupported</A></P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="FinishingsSet.html">FinishingsSet</A>s</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A><BR>
+                        <A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="FinishingsCollection.html">FinishingsCollection</A>
+                        <BR>Alternative to Finishings, that allows the Client to specify
+                        finishing intent in greater detail  
+                        <BR>A collection consisting of --</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="ftp://ftp.pwg.org/pub/pwg/candidates/cs-ippprodprint10-20010212-5100.3.pdf">[PWG5100.3]</A><BR>
+                        <A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="FinishingsTemplate.html">-- FinishingsTemplate</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="ftp://ftp.pwg.org/pub/pwg/candidates/cs-ippprodprint10-20010212-5100.3.pdf">[PWG5100.3]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="Bailing.html">-- Bailing</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="Binding.html">-- Binding</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="Coating.html">-- Coating</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="Covering.html">-- Covering</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="FoldingSeq.html">-- FoldingSeq</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="ImpositionTemplate.html">-- ImpositionTemplate</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="Laminating.html">-- Laminating</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="MediaSize.html">-- MediaSize</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippprodprint10-20010212-5100.3.pdf">[PWG5100.3]</A><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="MediaSizeName.html">-- MediaSizeName</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-pwgmsn20-20130328-5101.1.pdf">[PWG5101.1]</A>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR><TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="Punching.html">-- Punching</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR><TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="Stitching.html">-- Stitching</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="ftp://ftp.pwg.org/pub/pwg/candidates/cs-ippprodprint10-20010212-5100.3.pdf">[PWG5100.3]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR><TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="Trimming.html">-- Trimming</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="http://ftp.pwg.org/pub/pwg/candidates/cs-ippfinishings21-20170217-5100.1.pdf">[PWG5100.1]</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobHoldUntil.html">JobHoldUntil</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobImpressions.html">JobImpressions</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><A HREF="JobImpressionsSupported.html">JobImpressionsSupported</A></P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobKOctets.html">JobKOctets</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><A HREF="JobKOctetsSupported.html">JobKOctetsSupported</A></P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobMediaSheets.html">JobMediaSheets</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><A HREF="JobMediaSheetsSupported.html">JobMediaSheetsSupported</A></P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobName.html">JobName</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobPriority.html">JobPriority</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><A HREF="JobPrioritySupported.html">JobPrioritySupported</A></P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobSheets.html">JobSheets</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Media.html">Media</A><BR>A
+                        record consisting of --</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><A HREF="https://tools.ietf.org/html/rfc8011">RFC8011</A></P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/MediaSize.html">MediaSize</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>D</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>D</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>D</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/MediaSizeName.html">MediaSizeName</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/MediaName.html">MediaName</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/MediaTray.html">MediaTray</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="MediaCollection.html">MediaCollection</A> (Alternative
+                        to Media)<BR>A record consisting of --</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="MediaBackCoating.html">M</A>ediaKey</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="MediaColor.html">M</A>ediaType</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="MediaHoleCount.html">M</A>ediaInfo</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaColor</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="MediaWeightMetric.html">M</A>ediaPrePrinted</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaHoleCount</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaOrderCount</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="MediaPrePrinted.html">M</A>ediaSize 
+                    </P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaSizeName</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaWeightMetric</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaBackCoating</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaFrontCoating</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaRecycled</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaBottomMargin</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaLeftMargin</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaRightMargin</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaTopMargin</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaSource</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- MediaSourceProperties</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><BR>
+                    </P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="MinimumPrinterResolution.html">MinimumPrinterResolution</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/MultipleDocumentHandling.html">MultipleDocumentHandling</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/NumberUp.html">NumberUp</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P><A HREF="NumberUpSupported.html">NumberUpSupported</A></P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/OrientationRequested.html">OrientationRequested</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PageRanges.html">PageRanges</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterResolution.html">PrinterResolution</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrintQuality.html">PrintQuality</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/RequestingUserName.html">RequestingUserName</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/SheetCollate.html">SheetCollate</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>D
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>D
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>D
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>D
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Sides.html">Sides</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/DateTimeAtCompleted.html">DateTimeAtCompleted</A>
+                    </P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/DateTimeAtCreation.html">DateTimeAtCreation</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/DateTimeAtProcessing.html">DateTimeAtProcessing</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobImpressionsCompleted.html">JobImpressionsCompleted</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobKOctetsProcessed.html">JobKOctetsProcessed</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobMediaSheetsCompleted.html">JobMediaSheetsCompleted</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobMessageFromOperator.html">JobMessageFromOperator</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobOriginatingUserName.html">JobOriginatingUserName</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobState.html">JobState</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobStateReasons.html">JobStateReasons</A><BR>Contains
+                        zero or more --</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/JobStateReason.html">JobStateReason</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/NumberOfDocuments.html">NumberOfDocuments</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/NumberOfInterveningJobs.html">NumberOfInterveningJobs</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/OutputDeviceAssigned.html">OutputDeviceAssigned</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/ColorSupported.html">ColorSupported</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PagesPerMinute.html">PagesPerMinute</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PagesPerMinuteColor.html">PagesPerMinuteColor</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PDLOverrideSupported.html">PDLOverrideSupported</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterIsAcceptingJobs.html">PrinterIsAcceptingJobs</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterInfo.html">PrinterInfo</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterLocation.html">PrinterLocation</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterMessageFromOperator.html">PrinterMessageFromOperator</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterMakeAndModel.html">PrinterMakeAndModel</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterMoreInfo.html">PrinterMoreInfo</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterMoreInfoManufacturer.html">PrinterMoreInfoManufacturer</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterName.html">PrinterName</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterState.html">PrinterState</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterStateReasons.html">PrinterStateReasons</A><BR>Contains
+                        zero or more --</P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/PrinterStateReason.html">PrinterStateReason</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P>-- <A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/Severity.html">Severity</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/QueuedJobCount.html">QueuedJobCount</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>X</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+            <TR>
+                <TD WIDTH=20%>
+                    <P><A HREF="http://docs.oracle.com/javase/8/docs/api/javax/print/attribute/standard/ReferenceUriSchemesSupported.html">ReferenceUriSchemesSupported</A></P>
+                </TD>
+                <TD WIDTH=10%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=5%>
+                    <P><BR>
+                    </P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=8%>
+                    <P>&nbsp;</P>
+                </TD>
+                <TD WIDTH=18%>
+                    <P>&nbsp;</P>
+                </TD>
+            </TR>
+        </TABLE>
+        <P>Placement of this package under package
+            net.jini.print.attribute.standard is preliminary and not yet approved
+            by the Jini Community. 
+        </P>
+        <P><B>DRAFT STANDARD VERSION 1.1 (25-APRIL-2017)</B> 
+        </P>
+    </BODY>
+</HTML>

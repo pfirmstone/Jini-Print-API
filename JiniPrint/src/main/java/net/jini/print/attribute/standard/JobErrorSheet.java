@@ -65,7 +65,7 @@ public class JobErrorSheet extends CollectionSyntax implements PrintJobAttribute
 	return "job-error-sheet";
     }
     
-    protected Attribute[] getAttributes(){
+    public Attribute[] getAttributes(){
 	return new Attribute[]{type, when, media};
     }
     

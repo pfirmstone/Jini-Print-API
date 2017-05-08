@@ -20,18 +20,37 @@ import javax.print.attribute.EnumSyntax;
 import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "laminating-type" member attribute specifies the type of material to
+ * laminate with.
  *
  * @author peter
  */
 public class LaminatingType extends EnumSyntax implements PrintJobAttribute {
 
-    public static final LaminatingType 
-	    ARCHIVAL = new LaminatingType(0),//[PWG5100.1]
-	    GLOSSY = new LaminatingType(1),//[PWG5100.1]
-	    HIGH_GLOSS = new LaminatingType(2),//[PWG5100.1]
-	    MATTE = new LaminatingType(3),//[PWG5100.1]
-	    SEMI_GLOSS = new LaminatingType(4),//[PWG5100.1]
-	    TRANSLUCENT = new LaminatingType(5);//[PWG5100.1]
+    /**
+     * Each sheet is laminated to preserve the output for an extended period of time, e.g., a UV protectant.
+     */
+    public static final LaminatingType ARCHIVAL = new LaminatingType(0);//[PWG5100.1]
+    /**
+     * Each sheet is laminated to produce a glossy surface.
+     */
+    public static final LaminatingType GLOSSY = new LaminatingType(1);//[PWG5100.1]
+    /**
+     * Each sheet is laminated to produce a high-gloss surface.
+     */
+    public static final LaminatingType HIGH_GLOSS = new LaminatingType(2);//[PWG5100.1]
+    /**
+     * Each sheet is laminated to produce a matte surface.
+     */
+    public static final LaminatingType MATTE = new LaminatingType(3);//[PWG5100.1]
+    /**
+     * Each sheet is laminated to produce a semi-gloss surface.
+     */
+    public static final LaminatingType SEMI_GLOSS = new LaminatingType(4);//[PWG5100.1]
+    /**
+     * Each sheet is laminated to produce a translucent surface.
+     */
+    public static final LaminatingType TRANSLUCENT = new LaminatingType(5);//[PWG5100.1]
 
     protected LaminatingType(int i) {
 	super(i);
