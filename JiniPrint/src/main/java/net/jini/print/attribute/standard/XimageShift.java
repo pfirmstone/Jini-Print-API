@@ -17,14 +17,14 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
-import javax.print.attribute.PrintJobAttribute;
+import javax.print.attribute.DocAttribute;
 import net.jini.print.attribute.Dimension;
 
 /**
  *
  * @author peter
  */
-public class XimageShift extends Dimension implements PrintJobAttribute {
+public class XimageShift extends Dimension implements DocAttribute {
 
     public XimageShift(int i, UNIT unit) {
 	super(i, unit);

@@ -15,8 +15,11 @@
  */
 package net.jini.print.attribute.standard;
 
+import java.io.Serializable;
 import java.util.Locale;
 import javax.print.attribute.Attribute;
+import javax.print.attribute.PrintJobAttribute;
+import javax.print.attribute.PrintRequestAttribute;
 import javax.print.attribute.TextSyntax;
 
 /**
@@ -28,7 +31,8 @@ import javax.print.attribute.TextSyntax;
  *
  * @author peter
  */
-public class JobSheetMessage extends TextSyntax implements Attribute {
+public class JobSheetMessage extends TextSyntax
+	implements PrintJobAttribute, PrintRequestAttribute, Serializable {
 
     public JobSheetMessage(String message, Locale locale) {
 	super(message, locale);

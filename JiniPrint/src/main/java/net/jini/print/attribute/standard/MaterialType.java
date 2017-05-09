@@ -30,27 +30,46 @@ import javax.print.attribute.EnumSyntax;
  */
 public class MaterialType extends EnumSyntax implements Attribute {
 
-    public static final MaterialType 
-	    ABS = new MaterialType(0),//[PWG5100.21]
-	    ABS_CARBON_FIBER = new MaterialType(1),//[PWG5100.21]
-	    ABS_CARBON_NANOTUBE = new MaterialType(2),//[PWG5100.21]
-	    CHOCOLATE = new MaterialType(3),//[PWG5100.21]
-	    GOLD = new MaterialType(4),//[PWG5100.21]
-	    NYLON = new MaterialType(5),//[PWG5100.21]
-	    PET = new MaterialType(6),//[PWG5100.21]
-	    PHOTOPOLYMER = new MaterialType(7),//[PWG5100.21]
-	    PLA = new MaterialType(8),//[PWG5100.21]
-	    PLA_CONDUCTIVE = new MaterialType(9),//[PWG5100.21]
-	    PLA_DISSOLVABLE = new MaterialType(10),//[PWG5100.21]
-	    PLA_FLEXIBLE = new MaterialType(11),//[PWG5100.21]
-	    PLA_MAGNETIC = new MaterialType(12),//[PWG5100.21]
-	    PLA_STEEL = new MaterialType(13),//[PWG5100.21]
-	    PLA_STONE = new MaterialType(14),//[PWG5100.21]
-	    PLA_WOOD = new MaterialType(15),//[PWG5100.21]
-	    POLYCARBONATE = new MaterialType(16),//[PWG5100.21]
-	    SILVER = new MaterialType(17),//[PWG5100.21]
-	    TITANIUM = new MaterialType(18),//[PWG5100.21]
-	    WAX = new MaterialType(19);//[PWG5100.21]
+    /** Acrylonitrile Butadiene Styrene (ABS). */
+    public static final MaterialType ABS = new MaterialType(0);//[PWG5100.21]
+    /** ABS reinforced with carbon fibers. */
+    public static final MaterialType ABS_CARBON_FIBER = new MaterialType(1);//[PWG5100.21]
+    /** ABS reinforced with carbon nanotubes. */
+    public static final MaterialType ABS_CARBON_NANOTUBE = new MaterialType(2);//[PWG5100.21]
+    /** Chocolate. */
+    public static final MaterialType CHOCOLATE = new MaterialType(3);//[PWG5100.21]
+    /** Gold (metal). */
+    public static final MaterialType GOLD = new MaterialType(4);//[PWG5100.21]
+    /** Nylon. */
+    public static final MaterialType NYLON = new MaterialType(5);//[PWG5100.21]
+    /** Polyethylene terephthalate (PET). */
+    public static final MaterialType PET = new MaterialType(6);//[PWG5100.21]
+    /** Photopolymer (liquid) resin. */
+    public static final MaterialType PHOTOPOLYMER = new MaterialType(7);//[PWG5100.21]
+    /** Polylactic Acid (PLA). */
+    public static final MaterialType PLA = new MaterialType(8);//[PWG5100.21]
+    /** Conductive PLA. */
+    public static final MaterialType PLA_CONDUCTIVE = new MaterialType(9);//[PWG5100.21]
+    /** Dissolvable PLA. */
+    public static final MaterialType PLA_DISSOLVABLE = new MaterialType(10);//[PWG5100.21]
+    /** Flexible PLA. */
+    public static final MaterialType PLA_FLEXIBLE = new MaterialType(11);//[PWG5100.21]
+    /** PLA with embedded iron particles. */
+    public static final MaterialType PLA_MAGNETIC = new MaterialType(12);//[PWG5100.21]
+    /** PLA with embedded steel particles. */
+    public static final MaterialType PLA_STEEL = new MaterialType(13);//[PWG5100.21]
+    /** PLA with embedded stone chips. */
+    public static final MaterialType PLA_STONE = new MaterialType(14);//[PWG5100.21]
+    /** PLA with embedded wood fibers. */
+    public static final MaterialType PLA_WOOD = new MaterialType(15);//[PWG5100.21]
+    /** Polycarbonate. */
+    public static final MaterialType POLYCARBONATE = new MaterialType(16);//[PWG5100.21]
+    /** Silver (metal). */
+    public static final MaterialType SILVER = new MaterialType(17);//[PWG5100.21]
+    /** Titanium (metal). */
+    public static final MaterialType TITANIUM = new MaterialType(18);//[PWG5100.21]
+    /** Wax. */
+    public static final MaterialType WAX = new MaterialType(19);//[PWG5100.21]
 
     private MaterialType(int i) {
 	super(i);

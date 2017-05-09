@@ -17,13 +17,17 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "job-accounting-output-bin" member attribute specifies the output bin in
+ * which the accounting sheets are to be placed (see [pwg-output-bin]). If this
+ * member attribute is not supplied by the client or not supported by the
+ * Printer, then the Printer places the accounting sheets in the same output-bin
+ * as the rest of the job.
  *
  * @author peter
  */
-public class JobAccountingOutputBin extends EnumSyntax implements PrintJobAttribute {
+public class JobAccountingOutputBin extends EnumSyntax implements Attribute {
 
     /**
      * Specifies that a Printer automatically chooses the correct output tray

@@ -16,9 +16,6 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
-import javax.print.attribute.DocAttribute;
-import javax.print.attribute.PrintJobAttribute;
-import javax.print.attribute.PrintRequestAttribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
@@ -50,8 +47,7 @@ import net.jini.print.attribute.CollectionSyntax;
  *
  * @author peter
  */
-public class FinishingsCollection extends CollectionSyntax
-	implements DocAttribute, PrintRequestAttribute, PrintJobAttribute {
+public class FinishingsCollection extends CollectionSyntax {
 
     private final FinishingTemplate template;
     private final Bailing bailing;
@@ -67,6 +63,27 @@ public class FinishingsCollection extends CollectionSyntax
     private final Stitching stitching;
     private final Trimming trimming;
 
+    /**
+     * Constructs a new instance.
+     * 
+     * Older printers may not recognise the full range of media size names,
+     * media size may be a better option for compatibility.
+     * 
+     * @param template finishings template
+     * @param bailing bailing or null
+     * @param binding binding or null
+     * @param coating coating or null
+     * @param covering covering or null
+     * @param folding folding or null
+     * @param impositionTemplate imposition template or null
+     * @param laminating laminating or null
+     * @param mediaSize media size or null
+     * @param punching punching or null
+     * @param stitching stitching or null
+     * @param trimming trimming or null
+     * 
+     * @throws NullPointerException if finishing template is null.
+     */
     public FinishingsCollection(
 	    FinishingTemplate template,
 	    Bailing bailing,
@@ -81,22 +98,28 @@ public class FinishingsCollection extends CollectionSyntax
 	    Stitching stitching,
 	    Trimming trimming
     ) {
-	this.template = template;
-	this.bailing = bailing;
-	this.binding = binding;
-	this.coating = coating;
-	this.covering = covering;
-	this.folding = folding;
-	this.impositionTemplate = impositionTemplate;
-	this.laminating = laminating;
-	this.mediaSize = mediaSize;
-	this.mediaSizeName = null;
-	this.punching = punching;
-	this.stitching = stitching;
-	this.trimming = trimming;
-
+	this(notNull(template), bailing, binding, coating, covering, folding,
+		impositionTemplate, laminating, mediaSize, null, punching,
+		stitching, trimming);
     }
 
+    /**
+     * Constructs a new instance.  MediaSizeName is preferred.
+     * 
+     * @param template finishing template
+     * @param bailing bailing or null
+     * @param binding binding or null
+     * @param coating coating or null
+     * @param covering covering or null
+     * @param folding folding or null
+     * @param impositionTemplate imposition template or null
+     * @param laminating laminating or null
+     * @param mediaSizeName media size name or null
+     * @param punching punching or null
+     * @param stitching stitching or null
+     * @param trimming trimming or null
+     * @throws NullPointerException if finishing template is null.
+     */
     public FinishingsCollection(
 	    FinishingTemplate template,
 	    Bailing bailing,
@@ -111,6 +134,26 @@ public class FinishingsCollection extends CollectionSyntax
 	    Stitching stitching,
 	    Trimming trimming
     ) {
+	this(notNull(template), bailing, binding, coating, covering, folding,
+		impositionTemplate, laminating, null, mediaSizeName, punching,
+		stitching, trimming);
+    }
+    
+    private FinishingsCollection(
+	    FinishingTemplate template,
+	    Bailing bailing,
+	    Binding binding,
+	    Coating coating,
+	    Covering covering,
+	    FoldingSeq folding,
+	    ImpositionTemplate impositionTemplate,
+	    Laminating laminating,
+	    MediaSize mediaSize,
+	    MediaSizeName mediaSizeName,
+	    Punching punching,
+	    Stitching stitching,
+	    Trimming trimming
+    ) {
 	this.template = template;
 	this.bailing = bailing;
 	this.binding = binding;
@@ -119,12 +162,22 @@ public class FinishingsCollection extends CollectionSyntax
 	this.folding = folding;
 	this.impositionTemplate = impositionTemplate;
 	this.laminating = laminating;
-	this.mediaSize = null;
+	this.mediaSize = mediaSize;
 	this.mediaSizeName = mediaSizeName;
 	this.punching = punching;
 	this.stitching = stitching;
 	this.trimming = trimming;
-
+    }
+    
+    /**
+     * Invariant check
+     * @param template
+     * @return 
+     * @throws NullPointerException
+     */
+    private static FinishingTemplate notNull(FinishingTemplate template){
+	if (template != null) return template;
+	throw new NullPointerException("template cannot be null");
     }
 
     @Override
@@ -142,16 +195,6 @@ public class FinishingsCollection extends CollectionSyntax
 	    punching,
 	    stitching,
 	    trimming,};
-    }
-
-    @Override
-    public Class<? extends Attribute> getCategory() {
-	return javax.print.attribute.standard.Finishings.class;
-    }
-
-    @Override
-    public String getName() {
-	return "finishings-col";
     }
 
     /**

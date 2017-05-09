@@ -13,28 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
+import javax.print.attribute.DocAttribute;
+import javax.print.attribute.PrintRequestAttribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
+ * This REQUIRED Job Template attribute specifies the requested general
+ * positioning and feature accuracy for the Job. When enforcing attribute
+ * fidelity ("ipp-attribute-fidelity" with a value of 'true'), Printers only
+ * reject "print-accuracy" values that are smaller than the
+ * "print-accuracy-supported" (section 8.3.21) value.
+ * 
+ * @see PrintAccuracy
+ * @see IPPAttributeFidelity
  *
  * @author peter
  */
-public class PrintAccuracy extends CollectionSyntax implements Attribute {
+public class PrintAccuracy extends CollectionSyntax
+	implements DocAttribute, PrintRequestAttribute {
+
     private final AccuracyUnits units;
     private final Xaccuracy xacc;
     private final Yaccuracy yacc;
     private final Zaccuracy zacc;
-    
+
+    /**
+     * 
+     * @param units
+     * @param xacc
+     * @param yacc
+     * @param zacc 
+     */
     public PrintAccuracy(
 	    AccuracyUnits units,
 	    Xaccuracy xacc,
 	    Yaccuracy yacc,
 	    Zaccuracy zacc
-    ){
+    ) {
 	this.units = units;
 	this.xacc = xacc;
 	this.yacc = yacc;
@@ -55,5 +73,5 @@ public class PrintAccuracy extends CollectionSyntax implements Attribute {
     public String getName() {
 	return "print-accuracy";
     }
-    
+
 }

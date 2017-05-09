@@ -13,38 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
+import java.io.Serializable;
 import javax.print.attribute.Attribute;
 import javax.print.attribute.PrintJobAttribute;
+import javax.print.attribute.PrintRequestAttribute;
 import javax.print.attribute.standard.JobSheets;
 import javax.print.attribute.standard.Media;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
+ * This attribute augments the {@link JobSheets}
+ * attribute. The 'collection' attribute syntax allows a client to specify media
+ * for job sheets that is different than the current media being used for the
+ * print stream images. An example of where this is useful is for separator
+ * sheets, which may allow easier distinction of document copies.
  *
  * @author peter
  */
-public class JobSheetsCollection extends CollectionSyntax implements PrintJobAttribute {
+public class JobSheetsCollection extends CollectionSyntax
+	implements PrintJobAttribute, PrintRequestAttribute, Serializable {
+    
+    private static final long serialVersionUID = 1L;
 
     private final JobSheets sheet;
     private final Attribute media;
-    
-    JobSheetsCollection(
+
+    public JobSheetsCollection(
 	    JobSheets sheet,
 	    Media media
-	)
-    {
-	this.sheet = sheet;
-	this.media = media;
+    ) {
+	this(notNull(sheet), (Attribute) media);
     }
-    
-    JobSheetsCollection(
+
+    public JobSheetsCollection(
 	    JobSheets sheet,
 	    MediaCollection media
-	)
-    {
+    ) {
+	this(notNull(sheet), (Attribute) media);
+    }
+    
+    private static JobSheets notNull(JobSheets sheet){
+	if (sheet != null) return sheet;
+	throw new NullPointerException("job sheets cannot be null");
+    }
+    
+    private JobSheetsCollection(
+	    JobSheets sheet,
+	    Attribute media
+    ) {
 	this.sheet = sheet;
 	this.media = media;
     }
@@ -58,8 +76,9 @@ public class JobSheetsCollection extends CollectionSyntax implements PrintJobAtt
     public String getName() {
 	return "job-sheets-col";
     }
-    
-    public Attribute[] getAttributes(){
+
+    @Override
+    public Attribute[] getAttributes() {
 	return new Attribute[]{sheet, media};
     }
 

@@ -16,7 +16,9 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
+import javax.print.attribute.DocAttribute;
 import javax.print.attribute.EnumSyntax;
+import javax.print.attribute.PrintRequestAttribute;
 
 /**
  *
@@ -27,14 +29,19 @@ import javax.print.attribute.EnumSyntax;
  *
  * @author peter
  */
-public class MultipleObjectHandling extends EnumSyntax implements Attribute {
+public class MultipleObjectHandling extends EnumSyntax
+	implements DocAttribute, PrintRequestAttribute {
 
-    public static final MultipleObjectHandling 
-	    AUTO = new MultipleObjectHandling(0),//[PWG5100.21]
-	    BEST_FIT = new MultipleObjectHandling(1),//[PWG5100.21]
-	    BEST_QUALITY = new MultipleObjectHandling(2),//[PWG5100.21]
-	    BEST_SPEED = new MultipleObjectHandling(3),//[PWG5100.21]
-	    ONE_AT_A_TIME = new MultipleObjectHandling(4);//[PWG5100.21]
+    /** Automatically determine the best way to print multiple objects in a Job. */
+    public static final MultipleObjectHandling AUTO = new MultipleObjectHandling(0);//[PWG5100.21]
+    /** Fit as many objects as possible within the build volume. */
+    public static final MultipleObjectHandling BEST_FIT = new MultipleObjectHandling(1);//[PWG5100.21]
+    /** Optimize the number of objects for print quality. */
+    public static final MultipleObjectHandling BEST_QUALITY = new MultipleObjectHandling(2);//[PWG5100.21]
+    /** Optimize the number of objects for print speed. */
+    public static final MultipleObjectHandling BEST_SPEED = new MultipleObjectHandling(3);//[PWG5100.21]
+    /** Print one object at a time. */
+    public static final MultipleObjectHandling ONE_AT_A_TIME = new MultipleObjectHandling(4);//[PWG5100.21]
 
     private MultipleObjectHandling(int i) {
 	super(i);

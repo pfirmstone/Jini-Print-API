@@ -29,10 +29,10 @@ public class JobTemplateAttribute extends CollectionSyntax
 
     private final CoverBack coverBack;
     private final CoverFront coverFront;
-    private final FinishingsCollection finishingsCol;
+    private final FinishingsCol finishingsCol;
     private final ForceFrontSide forceFrontSide;
     private final ImpositionTemplate impositionTemplate;
-    private final InsertSheet insertSheet;
+    private final InsertSheets insertSheet;
     private final JobAccountID jobAccountID;
     private final JobAccountingUserID jobAccountingUserID;
     private final JobAccountingSheets jobAccountingSheets;
@@ -60,10 +60,10 @@ public class JobTemplateAttribute extends CollectionSyntax
     public JobTemplateAttribute(
 	    CoverBack coverBack, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
 	    CoverFront coverFront, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-	    FinishingsCollection finishingsCol, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    FinishingsCol finishingsCol, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
 	    ForceFrontSide forceFrontSide, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
 	    ImpositionTemplate impositionTemplate, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
-	    InsertSheet insertSheet, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
+	    InsertSheets insertSheet, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
 	    JobAccountID jobAccountID, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
 	    JobAccountingUserID jobAccountingUserID, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
 	    JobAccountingSheets jobAccountingSheets, // PWG5100.3-2001 IPP Production Printing Attributes - Set 1
@@ -180,7 +180,7 @@ public class JobTemplateAttribute extends CollectionSyntax
     /**
      * @return the finishingsCol
      */
-    public FinishingsCollection getFinishingsCol() {
+    public FinishingsCol getFinishingsCol() {
 	return finishingsCol;
     }
 
@@ -199,9 +199,9 @@ public class JobTemplateAttribute extends CollectionSyntax
     }
 
     /**
-     * @return the insertSheet
+     * @return the insertSheets
      */
-    public InsertSheet getInsertSheet() {
+    public InsertSheets getInsertSheets() {
 	return insertSheet;
     }
 

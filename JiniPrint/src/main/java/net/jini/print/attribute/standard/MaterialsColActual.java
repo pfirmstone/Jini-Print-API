@@ -15,42 +15,32 @@
  */
 package net.jini.print.attribute.standard;
 
+import java.util.Set;
 import javax.print.attribute.Attribute;
-import javax.print.attribute.EnumSyntax;
+import javax.print.attribute.PrintJobAttribute;
+import net.jini.print.attribute.OneSetOfSyntax;
 
 /**
- * The "job-error-sheet-when" member attribute specifies the conditions under
- * which the error sheet information is to be produced.
+ * This REQUIRED Job Status attribute contains the material(s) that were used
+ * when processing the Job.
  *
  * @author peter
  */
-public class JobErrorSheetWhen extends EnumSyntax implements Attribute {
+public class MaterialsColActual extends OneSetOfSyntax implements PrintJobAttribute {
 
-    public final static EnumSyntax ON_ERROR = new JobErrorSheetWhen(0);
-    public final static EnumSyntax ALWAYS = new JobErrorSheetWhen(1);
-
-    JobErrorSheetWhen(int i) {
-	super(i);
+    public MaterialsColActual(Set<MaterialsCollection> materialsCol) {
+	super(materialsCol);
     }
 
     @Override
     public Class<? extends Attribute> getCategory() {
-	return JobErrorSheetWhen.class;
+
+	return MaterialsColActual.class;
     }
 
     @Override
     public String getName() {
-	return "job-error-sheet-when";
-    }
-
-    @Override
-    protected String[] getStringTable() {
-	return new String[]{"on-error", "always"};
-    }
-
-    @Override
-    protected EnumSyntax[] getEnumValueTable() {
-	return new EnumSyntax[]{ON_ERROR, ALWAYS};
+	return "materials-col-actual";
     }
 
 }

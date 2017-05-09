@@ -16,6 +16,8 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
+import javax.print.attribute.DocAttribute;
+import javax.print.attribute.PrintRequestAttribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
@@ -27,20 +29,21 @@ import net.jini.print.attribute.CollectionSyntax;
  * 'processing-stopped' state. The Printer advertises which "materials-col"
  * member attributes are supported in the "materials-col-supported" (section
  * 8.3.13) Printer Description attribute. The Printer lists only those member
- * attributes that are applicable to the technology being used for printing.  The
+ * attributes that are applicable to the technology being used for printing. The
  * Client typically supplies "materials-col" values matching those returned in
  * the "materials-col-database" (section 8.3.1) or "materials-col-ready"
  * (section 8.3.12) Printer Description attributes, although specifying the
  * "material-name" or "material-key" member attribute from either of these
  * Printer Description attributes is enough to specify the default values for
  * the named material. Table 11 lists the member attributes.
- * 
+ *
  * PWG 5100.21 – IPP 3D Printing Extensions (3D) February 10, 2017 Page 31
  * Copyright © 2015-2017 The Printer Working Group. All rights reserved.
  *
  * @author peter
  */
-public class MaterialsCollection extends CollectionSyntax implements Attribute {
+public class MaterialsCollection extends CollectionSyntax
+	implements DocAttribute, PrintRequestAttribute {
 
     private final MaterialAmount amount;
     private final MaterialAmountUnits amountUnits;

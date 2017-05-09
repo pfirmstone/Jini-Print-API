@@ -13,20 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import java.util.Locale;
 import javax.print.attribute.Attribute;
+import javax.print.attribute.PrintJobAttribute;
+import javax.print.attribute.PrintRequestAttribute;
 import javax.print.attribute.TextSyntax;
 
 /**
+ * The "job-accounting-user-id" attribute specifies the user ID associated with
+ * the account specified by the "job-account-id" attribute (see section 3.6)
+ * used for this job. These two attributes are used for authentication and
+ * account tracking either by a mechanism internal to the printer, or by
+ * tracking software external to the printer such as Equitrac. Account tracking
+ * systems will usually support a job account ID as having multiple job
+ * accounting user IDs, as well as, a job accounting user ID to be used with
+ * multiple job account IDs. It is allowable for value of the
+ * "job-originating-user-name" (see RFC 2911 section 4.3.6) to be the same as
+ * the "job-accounting-user-id". A zero-length value indicates that there is no
+ * user accounting ID.
  *
  * @author peter
  */
-public class JobAccountingUserID extends TextSyntax implements Attribute {
-    
-    public JobAccountingUserID(String name, Locale locale){
+public class JobAccountingUserID extends TextSyntax
+	implements PrintRequestAttribute, PrintJobAttribute {
+
+    public JobAccountingUserID(String name, Locale locale) {
 	super(name, locale);
     }
 
@@ -39,5 +52,5 @@ public class JobAccountingUserID extends TextSyntax implements Attribute {
     public String getName() {
 	return "job-accounting-user-id";
     }
-    
+
 }

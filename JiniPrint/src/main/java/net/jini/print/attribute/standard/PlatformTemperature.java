@@ -13,23 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectStreamException;
 import javax.print.attribute.Attribute;
+import javax.print.attribute.DocAttribute;
 import javax.print.attribute.IntegerSyntax;
+import javax.print.attribute.PrintRequestAttribute;
 
 /**
+ * <h1>8.1.3 platform-temperature (integer(-273:MAX))</h1>
+ *
+ * This CONDITIONALLY REQUIRED Job Template attribute specifies the desired
+ * temperature of the Build Platform in degrees Celsius. Printers that have a
+ * temperature controlled Build Platform MUST support this attribute.
  *
  * @author peter
  */
-public class PlatformTemperature extends IntegerSyntax implements Attribute {
-    
+public class PlatformTemperature extends IntegerSyntax implements DocAttribute, PrintRequestAttribute {
+
     private static final long serialVersionUID = 1L;
-    
-    public PlatformTemperature(int i){
+
+    public PlatformTemperature(int i) {
 	super(check(i));
     }
 
@@ -42,19 +48,20 @@ public class PlatformTemperature extends IntegerSyntax implements Attribute {
     public String getName() {
 	return "platform-temperature";
     }
-    
-     private static int check(int i){
-	if ( i < -273 ) 
+
+    private static int check(int i) {
+	if (i < -273) {
 	    throw new IllegalArgumentException("integer must be greater than -273 deg C");
+	}
 	return i;
     }
-    
+
     /**
      * IntegerSyntax can be de-serialized by AtomicMarshalInputStream, since it
      * only contains primitive fields, which are not seen as a threat for gadget
-     * attacks, however this object still has invariants which need to
-     * be checked. Implementing @AtomicSerial would make this class responsible
-     * for managing serial form, while implementing readObject() would prevent
+     * attacks, however this object still has invariants which need to be
+     * checked. Implementing @AtomicSerial would make this class responsible for
+     * managing serial form, while implementing readObject() would prevent
      * de-serialization with AtomicMarshalInputStream. As such readResolve is
      * the only option to validate input in this case, it is protected so that
      * all subclasses inherit it, to ensure it is also called for subclass
@@ -76,14 +83,14 @@ public class PlatformTemperature extends IntegerSyntax implements Attribute {
 	    throw new InvalidObjectException(e.getMessage());
 	}
     }
-    
+
     /**
      * Subclasses can override this method to have check their invariants during
      * de-serialization.
-     * 
-     * @throws ObjectStreamException 
+     *
+     * @throws ObjectStreamException
      */
-    protected void validateInvariants() throws ObjectStreamException {}
+    protected void validateInvariants() throws ObjectStreamException {
+    }
 
-    
 }

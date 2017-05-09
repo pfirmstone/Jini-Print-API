@@ -13,31 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import java.util.Locale;
 import javax.print.attribute.Attribute;
+import javax.print.attribute.PrintJobAttribute;
+import javax.print.attribute.PrintRequestAttribute;
 import javax.print.attribute.TextSyntax;
 
 /**
+ * The "job-account-id" attribute is a character string representing the account
+ * associated with the job. The "job-account-id" attribute could be a customer
+ * name, a sequence of digits referencing an internal billing number, or even a
+ * credit card number. How the printer uses the "job-account-id" attribute is
+ * implementation dependent. A zero-length value indicates that there is no
+ * account name.z
+ * 
+ * //TODO should this be encrypted?
  *
  * @author peter
  */
-public class JobAccountID extends TextSyntax implements Attribute {
-    
-    JobAccountID(String name, Locale locale){
+public class JobAccountID extends TextSyntax implements PrintRequestAttribute, PrintJobAttribute {
+
+    JobAccountID(String name, Locale locale) {
 	super(name, locale);
     }
 
+    /**
+     * 
+     * @return JobAccountID.class
+     */
     @Override
     public Class<? extends Attribute> getCategory() {
 	return JobAccountID.class;
     }
 
+    /**
+     * 
+     * @return "job-account-id"
+     */
     @Override
     public String getName() {
 	return "job-account-id";
     }
-    
+
 }

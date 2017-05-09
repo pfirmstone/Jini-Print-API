@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "job-error-sheet-type" member attribute specifies which job error sheets
+ * format that the Printer SHOULD to print error information.
  *
  * @author peter
  */
-class JobErrorSheetType extends EnumSyntax implements PrintJobAttribute {
-    
+public class JobErrorSheetType extends EnumSyntax implements Attribute {
+
     public static final JobErrorSheetType NONE = new JobErrorSheetType(0);
     public static final JobErrorSheetType STANDARD = new JobErrorSheetType(1);
-    
-    JobErrorSheetType(int i){
+
+    protected JobErrorSheetType(int i) {
 	super(i);
     }
 
@@ -42,7 +42,7 @@ class JobErrorSheetType extends EnumSyntax implements PrintJobAttribute {
     public String getName() {
 	return "job-error-sheet-type";
     }
-    
+
     @Override
     protected String[] getStringTable() {
 	return new String[]{"none", "standard"};
@@ -52,5 +52,5 @@ class JobErrorSheetType extends EnumSyntax implements PrintJobAttribute {
     protected EnumSyntax[] getEnumValueTable() {
 	return new EnumSyntax[]{NONE, STANDARD};
     }
-    
+
 }

@@ -17,16 +17,17 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
- * The "job-accounting-sheets-type" m ember attribute specifies which job
+ * The "job-accounting-sheets-type" member attribute specifies which job
  * accounting sheets form at the Printer MUST use to print on the specified
  * media.
+ * 
+ * @see JobAccountingSheets
  *
  * @author peter
  */
-public class JobAccountingSheetsType extends EnumSyntax implements PrintJobAttribute {
+public class JobAccountingSheetsType extends EnumSyntax implements Attribute {
 
     public static final JobAccountingSheetsType 
 	    NONE = new JobAccountingSheetsType(0),//[PWG5100.3]

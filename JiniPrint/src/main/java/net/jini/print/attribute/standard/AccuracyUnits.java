@@ -31,6 +31,7 @@ import javax.print.attribute.EnumSyntax;
  * @see Xaccuracy
  * @see Yaccuracy
  * @see Zaccuracy
+ * @see PrintAccuracy
  *
  * @author peter
  */
