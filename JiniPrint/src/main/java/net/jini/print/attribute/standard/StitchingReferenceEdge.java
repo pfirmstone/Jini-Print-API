@@ -17,16 +17,27 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * <p>
+ * The "stitching-reference-edge" member attribute specifies the Finishing
+ * Reference Edge of the output media relative to which the stapling or
+ * stitching MUST be applied. The individual staples or stitches are situated
+ * along a line or axis parallel to the Finishing Reference Edge.
+ * </p><p>
+ * A Printer MUST support this member attribute and at least the 'left' value.
+ * </p><p>
+ * Note: The 'left' value works with 'portrait' and 'landscape' Documents since
+ * 'landscape' Documents are rotated anti-clock-wise 90 degrees, i.e., plus 90
+ * degrees, with respect to 'portrait' Documents. The left edge becomes the top
+ * edge when the human reader orients the landscape Document for reading.
+ * </p>
  *
- * @author peter
+ * @see Stitching
  */
-public class StitchingReferenceEdge extends EnumSyntax implements PrintJobAttribute {
+public class StitchingReferenceEdge extends EnumSyntax implements Attribute {
 
-    public static final StitchingReferenceEdge 
-	    BOTTOM = new StitchingReferenceEdge(0),//[PWG5100.1]
+    public static final StitchingReferenceEdge BOTTOM = new StitchingReferenceEdge(0),//[PWG5100.1]
 	    LEFT = new StitchingReferenceEdge(1),//[PWG5100.1]
 	    RIGHT = new StitchingReferenceEdge(2),//[PWG5100.1]
 	    TOP = new StitchingReferenceEdge(3);//[PWG5100.1]

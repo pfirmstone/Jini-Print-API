@@ -17,15 +17,14 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
  * The "laminating-type" member attribute specifies the type of material to
  * laminate with.
  *
- * @author peter
+ * @see Laminating
  */
-public class LaminatingType extends EnumSyntax implements PrintJobAttribute {
+public class LaminatingType extends EnumSyntax implements Attribute {
 
     /**
      * Each sheet is laminated to preserve the output for an extended period of time, e.g., a UV protectant.

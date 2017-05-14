@@ -16,8 +16,10 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
+import javax.print.attribute.DocAttribute;
 import javax.print.attribute.EnumSyntax;
 import javax.print.attribute.PrintJobAttribute;
+import javax.print.attribute.PrintRequestAttribute;
 
 /**
  * This Job Template attribute identifies the device output bin to which the job
@@ -53,7 +55,7 @@ import javax.print.attribute.PrintJobAttribute;
  *
  * @author peter
  */
-public class OutputBin extends EnumSyntax implements PrintJobAttribute {
+public class OutputBin extends EnumSyntax implements PrintJobAttribute, PrintRequestAttribute, DocAttribute {
 
     /**
      * Specifies that a Printer automatically chooses the correct output tray

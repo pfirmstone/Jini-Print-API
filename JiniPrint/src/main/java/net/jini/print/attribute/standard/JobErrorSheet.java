@@ -117,7 +117,7 @@ public class JobErrorSheet extends CollectionSyntax
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{type, when, media};
     }
 

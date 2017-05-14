@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.jini.print.data;
+package net.jini.print;
 
 import net.jini.core.lease.Lease;
 

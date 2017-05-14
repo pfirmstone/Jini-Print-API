@@ -15,10 +15,7 @@
  */
 package net.jini.print;
 
-import net.jini.print.PrintService;
-import net.jini.print.PrintServiceException;
 import java.io.IOException;
-import javax.print.MultiDoc;
 import javax.print.attribute.PrintRequestAttributeSet;
 import net.jini.print.job.MultiDocPrintRequest;
 
@@ -26,60 +23,50 @@ import net.jini.print.job.MultiDocPrintRequest;
  * <P>
  * Interface MultiDocPrintService specifies the capability for creating a Print
  * Job that prints multiple pieces of print data.
- * <P>
- * To print multiple pieces of print data, the client calls <A
- * HREF="../../../../net/jini/print/MultiDocPrintService.html#createMultiDocPrintRequest()"><CODE><CODE>createMultiDocPrintRequest()</CODE></CODE></A>.
+ * </P><P>
+ * To print multiple pieces of print data, the client calls
+ * {@link net.jini.print.MultiDocPrintService#createMultiDocPrintRequest}.
  * ("Doc" is a short, easy-to-pronounce term that means "a piece of print data."
  * A "multidoc" is a group of one or more docs.) Such a Print Request is termed
  * a "multidoc print request." The returned Print Request object implements both
- * interface <A
- * HREF="../../../../net/jini/print/job/PrintRequest.html"><CODE>PrintRequest</CODE></A>
- * and the subinterface <A
- * HREF="../../../../net/jini/print/job/MultiDocPrintRequest.html"><CODE>MultiDocPrintRequest</CODE></A>.
- * The client can supply the multidoc to be printed and a set of printing
- * attributes for the job as arguments of the <A
- * HREF="../../../../net/jini/print/MultiDocPrintService.html#createMultiDocPrintRequest()"><CODE><CODE>createMultiDocPrintRequest()</CODE></CODE></A>
- * method call. Alternatively, the client can supply the multidoc and the
- * attribute set by calling methods on the Print Request object. When it's all
- * set up, a multidoc print request consists of a set of job-level printing
- * attributes and a multidoc to be printed; the multidoc consists of one or more
- * docs; each doc consists of a doc flavor, print data representation object,
- * and a set of document-level printing attributes, as shown in this UML class
- * diagram:
- * <P>
+ * interface {@link net.jini.print.job.PrintRequest} and the subinterface
+ * {@link net.jini.print.job.MultiDocPrintRequest}. The client can supply the
+ * multidoc to be printed and a set of printing attributes for the job as
+ * arguments of the
+ * {@link net.jini.print.MultiDocPrintService#createMultiDocPrintRequest} method
+ * call. Alternatively, the client can supply the multidoc and the attribute set
+ * by calling methods on the Print Request object. When it's all set up, a
+ * multidoc print request consists of a set of job-level printing attributes and
+ * a multidoc to be printed; the multidoc consists of one or more docs; each doc
+ * consists of a doc flavor, print data representation object, and a set of
+ * document-level printing attributes, as shown in this UML class diagram:
+ * </P>
  * <CENTER>
- * <IMG SRC="../doc-files/PrintRequestFig2.gif" WIDTH=676 HEIGHT=218>
+ * <IMG SRC="doc-files/PrintRequestFig2.gif" WIDTH=676 HEIGHT=218>
  * </CENTER>
  * <P>
  * Interface MultiDocPrintService represents an optional capability that a Jini
  * Print Service instance need not provide. If this capability is provided, the
  * Jini Print Service proxy object will implement interface
  * MultiDocPrintService.
- * <P>
+ * </P><P>
  * A Jini Print Service instance that supports multidoc print jobs must also
  * support doc print jobs. Therefore, interface MultiDocPrintService is an
- * extension of interface <A
- * HREF="../../../../net/jini/print/PrintService.html"><CODE>PrintService</CODE></A>,
- * and a Jini Print Service proxy object that implements MultiDocPrintService
- * must also implement
- * <A
- * HREF="../../../../net/jini/print/PrintService.html"><CODE>PrintService</CODE></A>.
- * <P>
- * Like interface <A
- * HREF="../../../../net/jini/print/PrintService.html"><CODE>PrintService</CODE></A>,
- * interface MultiDocPrintService provides one <B>capability method</B>, <A
- * HREF="../../../../net/jini/print/MultiDocPrintService.html#getUnsupportedSettings(net.jini.print.service.MultiDocSettings)"><CODE><CODE>getUnsupportedSettings()</CODE></CODE></A>,
- * to determine whether the Print Service can perform a multidoc print job with
+ * extension of interface {@link PrintService}, and a Jini Print Service proxy
+ * object that implements MultiDocPrintService must also implement {@link PrintService}.
+ * </P><P>
+ * Like interface {@link PrintService}, interface MultiDocPrintService provides
+ * one <B>capability method</B>,
+ * {@link net.jini.print.MultiDocPrintService#getUnsupportedSettings}, to
+ * determine whether the Print Service can perform a multidoc print job with
  * given doc flavors, document-level attributes, and job-level attributes.
- * Unlike the <A
- * HREF="../../../../net/jini/print/PrintService.html"><CODE>PrintService</CODE></A>
- * capability methods which let you query about settings for one document at a
- * time, the MultiDocPrintService capability method lets you query about
- * settings for all the documents together. A Print Service that can support
- * printing each document with its own settings in separate print jobs may not
- * be able to support printing all the documents with their own settings in the
- * same print job.
- * <P>
+ * Unlike the {@link PrintService} capability methods which let you query about
+ * settings for one document at a time, the MultiDocPrintService capability
+ * method lets you query about settings for all the documents together. A Print
+ * Service that can support printing each document with its own settings in
+ * separate print jobs may not be able to support printing all the documents
+ * with their own settings in the same print job.
+ * </P><P>
  * For example, suppose we want to print 10 copies of two plain text documents,
  * document A in portrait orientation and document B in landscape orientation.
  * If done as separate print jobs, the respective settings would be:
@@ -89,8 +76,7 @@ import net.jini.print.job.MultiDocPrintRequest;
  * attributes: (orientation: landscape, copies: 10))
  * <BR>
  * Let's say the Print Service can support each job individually. So when the
- * <A
- * HREF="../../../../net/jini/print/PrintService.html#getUnsupportedSettings(net.jini.print.service.Settings)"><CODE><CODE>PrintService.getUnsupportedSettings()</CODE></CODE></A>
+ * {@link PrintService#getUnsupportedSettings(net.jini.print.Settings) }
  * method is called with either of the above settings objects, the method will
  * report that there are no unsupported settings. But if done as a single
  * multidoc print job, the multidoc settings would be:
@@ -104,11 +90,11 @@ import net.jini.print.job.MultiDocPrintRequest;
  * Although the Print Service may be able to print documents in different
  * orientations in different print jobs, let's say the Print Service is not able
  * to print documents in different orientations in the same multidoc print job.
- * So when the <A
- * HREF="../../../../net/jini/print/MultiDocPrintService.html#getUnsupportedSettings(net.jini.print.service.MultiDocSettings)"><CODE><CODE>MultiDocPrintService.getUnsupportedSettings()</CODE></CODE></A>
- * method is called with the above multidoc settings object, it returns the
- * following multidoc settings object to report that the two different
- * orientation attributes conflict with each other:
+ * So when the
+ * {@link net.jini.print.MultiDocPrintService#getUnsupportedSettings} method is
+ * called with the above multidoc settings object, it returns the following
+ * multidoc settings object to report that the two different orientation
+ * attributes conflict with each other:
  * <BR>&nbsp;&nbsp;&nbsp;&nbsp;(docSettings: Settings[ ]
  * <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{Settings (flavor: null,
  * attributes: (orientation: portrait)),
@@ -125,19 +111,18 @@ import net.jini.print.job.MultiDocPrintRequest;
  * <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Settings
  * (flavor: text/plain, attributes: (orientation: portrait))},
  * <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attributes: (copies: 10))
- * <P>
+ * </P><P>
  * There is no restriction on the number of client threads that may be
  * simultaneously accessing the same Print Service. Therefore, all
- * implementations of interface <A
- * HREF="../../../../net/jini/print/PrintService.html"><CODE>PrintService</CODE></A>
- * and its subinterfaces must be designed to be multiple thread safe.
- * <P>
- * Interface MultiDocPrintService's methods all throw <A
- * HREF="file:///C:/jdk1.2.2/docs/api/java/rmi/RemoteException.html"><CODE>RemoteException</CODE></A>
- * to provide for the possibility that the Print Service object's implementation
- * performs remote method calls. The Print Service object's implementation in
- * fact may or may not perform remote method calls.
- * <P>
+ * implementations of interface {@link PrintService} and its subinterfaces must
+ * be designed to be multiple thread safe.
+ * </P><P>
+ * Interface MultiDocPrintService's methods all throw
+ * {@link java.rmi.RemoteException} to provide for the possibility that the
+ * Print Service object's implementation performs remote method calls. The Print
+ * Service object's implementation in fact may or may not perform remote method
+ * calls.
+ * </P>
  */
 public interface MultiDocPrintService extends PrintService {
 

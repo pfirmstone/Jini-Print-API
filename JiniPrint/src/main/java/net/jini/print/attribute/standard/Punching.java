@@ -13,32 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
+ * The "punching" member attribute specifies the locations of holes to make in
+ * the hardcopy output. Printers with a hole punching/drilling finisher MUST
+ * support this member attribute and all "punching-xxx" member attributes if
+ * they support the "finishings-col" attribute.
  *
- * @author peter
+ * @see FinishingsCollection
  */
 public class Punching extends CollectionSyntax implements Attribute {
+
     private final PunchingLocations locations;
     private final PunchingOffset offset;
     private final PunchingReferenceEdge edge;
-    
+
     public Punching(PunchingLocations locations,
 	    PunchingOffset offset,
-	    PunchingReferenceEdge edge){
+	    PunchingReferenceEdge edge) {
 	this.locations = locations;
 	this.offset = offset;
 	this.edge = edge;
     }
 
     @Override
-    public Attribute[] getAttributes() {
-	return new Attribute []{locations, offset, edge};
+    protected Attribute[] getAttributes() {
+	return new Attribute[]{locations, offset, edge};
     }
 
     @Override
@@ -71,5 +75,5 @@ public class Punching extends CollectionSyntax implements Attribute {
     public PunchingReferenceEdge getEdge() {
 	return edge;
     }
-    
+
 }

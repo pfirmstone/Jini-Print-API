@@ -17,7 +17,6 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
  * The "folding-reference-edge" member attribute specifies which edge is used as
@@ -32,7 +31,7 @@ import javax.print.attribute.PrintJobAttribute;
  * 
  * @author peter
  */
-public class FoldingReferenceEdge extends EnumSyntax implements PrintJobAttribute {
+public class FoldingReferenceEdge extends EnumSyntax implements Attribute {
 
     public static final FoldingReferenceEdge BOTTOM = new FoldingReferenceEdge(0),//[PWG5100.1]
 	    LEFT = new FoldingReferenceEdge(1),//[PWG5100.1]

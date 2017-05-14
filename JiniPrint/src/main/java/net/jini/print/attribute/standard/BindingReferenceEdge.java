@@ -17,7 +17,6 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
  * The "binding-reference-edge" member attribute specifies which edge ('bottom',
@@ -32,7 +31,7 @@ import javax.print.attribute.PrintJobAttribute;
  * 
  * @author peter
  */
-public class BindingReferenceEdge extends EnumSyntax implements PrintJobAttribute {
+public class BindingReferenceEdge extends EnumSyntax implements Attribute {
 
     public static final BindingReferenceEdge BOTTOM = new BindingReferenceEdge(0),
 	    LEFT = new BindingReferenceEdge(0),

@@ -71,7 +71,7 @@ abstract class Cover extends CollectionSyntax implements DocAttribute, PrintRequ
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{media, type};
     }
 

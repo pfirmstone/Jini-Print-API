@@ -19,15 +19,23 @@ import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
 
 /**
- *
+ * <p>
+ * The "media-type" member attribute identifies the type of media, i.e., the
+ * media instance's predominate characteristic. Depending on implementation, the
+ * Printer MAY need to behave differently or perform different validation,
+ * depending on the type of the media. For example, prohibiting stapling
+ * transparencies or selecting a different paper path for an envelope.
+ * </p>
+ * @see MediaCollection
+ * @see MediaTypeSupported
+ * 
  */
 public class MediaType extends EnumSyntax
 	implements Attribute {
 
     private static final long serialVersionUID = 1L;
 
-    public static final MediaType 
-	    ALUMINUM = new MediaType(0),//[PWG5100.11]
+    public static final MediaType ALUMINUM = new MediaType(0),//[PWG5100.11]
 	    AUTO = new MediaType(1),//[PWG5101.1]
 	    BACK_PRINT_FILM = new MediaType(2),//[PWG5101.1]
 	    CARDBOARD = new MediaType(3),//[PWG5100.11]

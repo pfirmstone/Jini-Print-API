@@ -17,7 +17,6 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
-import javax.print.attribute.PrintJobAttribute;
 import javax.print.attribute.standard.OrientationRequested;
 import net.jini.print.attribute.CollectionSyntax;
 
@@ -34,7 +33,7 @@ public class MediaSourceFeedOrientation extends CollectionSyntax implements Attr
     }
     
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{orientation};
     }
 

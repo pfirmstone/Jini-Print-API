@@ -21,271 +21,359 @@ limitations under the License.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-            <P>
-                Package net.jini.print
-                contains interfaces
-                for a Jini Print Service instance's
-                service proxy object.
-            </P>
-            <H3>Single Doc Print Jobs</H3>
-            <CENTER>
-                <IMG SRC="doc-files/NetJiniPrintServiceFig1.gif" WIDTH=549 HEIGHT=315>
-            </CENTER>
-            <P>
-                The above interaction diagram
-                shows the interfaces involved
-                in printing a job
-                consisting of just one doc.
-                ("Doc" is a short, easy-to-pronounce term
-                that means "a piece of print data.")
-                Interfaces declared in package net.jini.print.job
-                are highlighted.
-                The Jini Print Service instance
-                supplies the Print Service, Print Request, and Print Job objects,
-                and the client supplies the Doc object.
-            </P>
-            <OL TYPE=1>
-                <LI>
-                    The client searches the Jini Lookup Service (JLUS)
-                    for a Jini Print Service instance,
-                    and the JLUS returns a Print Service object
-                    which implements the base interface
-                    <A HREF="PrintService.html">PrintService</A>.
-                    (See package <A HREF="lookup/package-summary.html">net.jini.print.lookup</A>.)
-                    
-                <LI>
-                    The client calls a method in interface
-                    <A HREF="PrintService.html">PrintService</A>
-                    telling the printer
-                    to create a Print Request to print a single Doc.
-                    The printer then returns
-                    a Print Request object
-                    which implements interface
-                    <A HREF="job/DocPrintRequest.html">DocPrintRequest</A>
-                    as well as the base interface
-                    <A HREF="job/PrintRequest.html">PrintRequest</A>.
-                    <!-- (See package <A HREF="package-summary.html">net.jini.print</A>.) -->
-                    
-                <LI>
-                    The client calls methods in interfaces
-                    <A HREF="job/PrintRequest.html">PrintRequest</A> and
-                    <A HREF="job/DocPrintRequest.html">DocPrintRequest</A>
-                    to specify the doc object to be printed
-                    and a set of job-level printing attributes to use for the job.
-                    The client can also register event listeners
-                    to receive event notifications for the job.
-                    Finally, the client calls a method to submit the Print Request
-                    to be printed,
-                    and the printer returns a Print Job object
-                    which implements interface
-                    <A HREF="job/PrintJob.html">PrintJob</A>.
-                    (See package <A HREF="job/package-summary.html">net.jini.print.job</A>.)
-                    
-                <LI>
-                    The printer calls methods in interface <A HREF="data/Doc.html">Doc</A>
-                    to obtain the print data format,
-                    the document-level printing attributes,
-                    and the actual print data,
-                    then proceeds to print the job.
-                    (See package <A HREF="data/package-summary.html">net.jini.print.data</A>.)
-                    
-                <LI>
-                    The client calls methods in interface
-                    <A HREF="job/PrintJob.html">PrintJob</A>
-                    to monitor the Print Job's progress
-                    and control the Print Job as the printer processes it.
-                    The client can also register event listeners
-                    to receive event notifications for the job.
-                    Alternatively,
-                    if the client doesn't need to monitor or control the job,
-                    the client can simply disregard the returned Print Job object.
-                    (See package <A HREF="job/package-summary.html">net.jini.print.job</A>.)
-            </OL>
-            
-            <H3>Multiple Doc Print Jobs</H3>
-            <CENTER>
-                <IMG SRC="doc-files/NetJiniPrintServiceFig2.gif" WIDTH=657 HEIGHT=405>
-            </CENTER>
-            <P>
-                The above interaction diagram
-                shows the interfaces involved
-                in printing a job
-                consisting of more than one doc -- a "multidoc."
-                It is much the same as the previous scenario,
-                except a few different interfaces are involved.
-                </P>
-            <OL TYPE=1>
-                <LI>
-                    The client searches the Jini Lookup Service (JLUS)
-                    for a Jini Print Service instance,
-                    and the JLUS returns a Print Service object
-                    which implements interface
-                    <A HREF="MultiDocPrintService.html">MultiDocPrintService</A>
-                    as well as the base interface
-                    <A HREF="PrintService.html">PrintService</A>.
-                    (See package <A HREF="lookup/package-summary.html">net.jini.print.lookup</A>.)
-                    
-                <LI>
-                    The client calls a method in interface
-                    <A HREF="MultiDocPrintService.html">MultiDocPrintService</A>
-                    telling the Print Service
-                    to create a Print Request to print a MultiDoc.
-                    The printer then returns
-                    a Print Request object
-                    which implements interface
-                    <A HREF="job/MultiDocPrintRequest.html">MultiDocPrintRequest</A>
-                    as well as the base interface
-                    <A HREF="job/PrintRequest.html">PrintRequest</A>.
-                    <!-- (See package <A HREF="package-summary.html">net.jini.print</A>.) -->
-                    
-                <LI>
-                    The client calls methods in interfaces
-                    <A HREF="job/PrintRequest.html">PrintRequest</A> and
-                    <A HREF="job/MultiDocPrintRequest.html">MultiDocPrintRequest</A>
-                    to specify the multidoc object to be printed
-                    and a set of job-level printing attributes to use for the job.
-                    The client can also register event listeners
-                    to receive event notifications for the job.
-                    Finally, the client calls a method to submit the Print Request
-                    to be printed,
-                    and the printer returns a Print Job object
-                    which implements interface
-                    <A HREF="job/PrintJob.html">PrintJob</A>.
-                    (See package <A HREF="job/package-summary.html">net.jini.print.job</A>.)
-                    
-                <LI>
-                    The multidoc provides a "linked list view"
-                    of the docs to be printed.
-                    The printer calls a method in interface
-                    <A HREF="data/MultiDoc.html">MultiDoc</A> on the current multidoc object
-                    to get the current doc to be printed.
-                    (See package <A HREF="data/package-summary.html">net.jini.print.data</A>.)
-                    
-                <LI>
-                    The printer calls methods in interface <A HREF="data/Doc.html">Doc</A>
-                    on the current doc object
-                    to obtain the print data format,
-                    the document-level printing attributes,
-                    and the actual print data.
-                    (See package <A HREF="data/package-summary.html">net.jini.print.data</A>.)
-                    
-                <LI>
-                    The printer calls a method in interface
-                    <A HREF="data/MultiDoc.html">MultiDoc</A> on the current multidoc object
-                    to get the next multidoc object,
-                    and repeats from Step 4 until it has gotten all the docs.
-                    The printer then proceeds to print the job consisting of all the docs.
-                    (See package <A HREF="data/package-summary.html">net.jini.print.data</A>.)
-                    
-                <LI>
-                    The client calls methods in interface
-                    <A HREF="job/PrintJob.html">PrintJob</A>
-                    to monitor the Print Job's progress
-                    and control the Print Job as the printer processes it.
-                    The client can also register event listeners
-                    to receive event notifications for the job.
-                    Alternatively,
-                    if the client doesn't need to monitor or control the job,
-                    the client can simply disregard the returned Print Job object.
-                    (See package <A HREF="job/package-summary.html">net.jini.print.job</A>.)
-            </OL>
-            
-            <H3>Package net.jini.print's Role</H3>
-            Package net.jini.print's role in the Jini Print Service API is to:
-            <UL>
-                <LI>
-                    Declare the <A HREF="PrintService.html">PrintService</A> interface,
-                    which is the base interface
-                    all Jini Print Service instances' service proxy objects implement,
-                    whereby the client uses the print service
-                    to create a Print Request object to print a single doc --
-                    a "doc print request."
-                    Interface <A HREF="PrintService.html">PrintService</A>
-                    also contains methods to monitor the Print Service's status
-                    and to discover the Print Service's capabilities.
-                    
-                <LI>
-                    Declare the <A HREF="MultiDocPrintService.html">MultiDocPrintService</A> interface
-                    whereby the client creates
-                    a Print Request object to print multiple docs --
-                    a "multidoc print request."
-                    
-                <LI>
-                    Declare the <A HREF="LocalizedPrintService.html">LocalizedPrintService</A> interface
-                    whereby the client can obtain localized strings
-                    for print data formats, printing attribute categories,
-                    and printing attribute values.
-            </UL>
-            <P>
-                The following UML class diagram
-                shows the relationships among the interfaces and classes
-                described above.
-            </P>
-            <CENTER>
-                <IMG SRC="doc-files/NetJiniPrintServiceFig3.gif" WIDTH=406 HEIGHT=334>
-            </CENTER>
-            <P>
-                Package net.jini.print also includes
-                these supporting classes:
-                </P>
-            <UL>
-                <LI>
-                    Remote event object
-                    for reporting events pertaining to a Print Service --
-                    class <A HREF="PrintServiceEvent.html">PrintServiceEvent</A>.
-                    
-                <LI>
-                    Exception class thrown by methods
-                    in package net.jini.print --
-                    class <A HREF="PrintServiceException.html">PrintServiceException</A>.
-            </UL>
-            <P>
-                All Jini Print Service instances must be capable
-                of creating doc print requests.
-                Thus, all Jini Print Service proxy objects
-                mandatorily implement interface
-                <A HREF="PrintService.html">PrintService</A>.
-                However, creating multidoc print requests
-                is an optional capability
-                that not all Jini Print Service instances
-                are required to provide.
-                If a Jini Print Service instance
-                can create multidoc print requests,
-                its service proxy object implements interface
-                <A HREF="MultiDocPrintService.html">MultiDocPrintService</A>
-                as well as
-                <A HREF="PrintService.html">PrintService</A>.
-            </P><P>
-                A Jini Print Service instance
-                advertises the kinds of Print Requests it supports
-                by the interfaces its service proxy object implements.
-                To get a Jini Print Service instance
-                that can print your kind of job,
-                make sure to search the JLUS
-                for the proper service interface.
-                To print a job with a single doc,
-                search for a service that implements interface
-                <A HREF="PrintService.html">PrintService</A>.
-                To print a job with multiple docs,
-                search for a service that implements interface
-                <A HREF="MultiDocPrintService.html">MultiDocPrintService</A>.
-                See the print service lookup scheme in package
-                <A HREF="lookup/package-summary.html">net.jini.print.lookup</A>
-                for further information.
-            </P>
-            <H3>Future Capabilities</H3>
-            The following Print Service capabilities
-            will be added
-            in future versions of the Jini Print Service API:
-            <UL>
-                <LI>
-                    Examine print job queue.
-                <LI>
-                    Dynamic printer control (pause, resume, purge jobs, etc.).
-            </UL>
-            <P>
-                Placement of this package under package net.jini.print
-                is preliminary and not yet approved by the Jini Community.
-            </P>
-    </body>
+        <P>
+            Package net.jini.print contains interfaces for a Jini Print Service
+            instance's service proxy object and interfaces that let a Jini 
+            Print Service instance obtain from the client the data to be printed
+        </P>
+        <H3>Single Doc Print Jobs</H3>
+    <CENTER>
+        <IMG SRC="doc-files/NetJiniPrintServiceFig1.gif" WIDTH=549 HEIGHT=315>
+    </CENTER>
+    <P>
+        The above interaction diagram
+        shows the interfaces involved
+        in printing a job
+        consisting of just one doc.
+        ("Doc" is a short, easy-to-pronounce term
+        that means "a piece of print data.")
+        Interfaces declared in package net.jini.print.job
+        are highlighted.
+        The Jini Print Service instance
+        supplies the Print Service, Print Request, and Print Job objects,
+        and the client supplies the Doc object.
+    </P>
+    <OL TYPE=1>
+        <LI>
+            The client searches the Jini Lookup Service (JLUS)
+            for a Jini Print Service instance,
+            and the JLUS returns a Print Service object
+            which implements the base interface
+            {@link net.jini.print.PrintService}.
+            (See package {@link net.jini.print.lookup}.)
+
+        <LI>
+            The client calls a method in interface
+            {@link net.jini.print.PrintService}
+            telling the printer
+            to create a Print Request to print a single Doc.
+            The printer then returns
+            a Print Request object
+            which implements interface
+            {@link net.jini.print.job.DocPrintRequest}
+            as well as the base interface
+            {@link net.jini.print.job.PrintRequest}.
+
+        <LI>
+            The client calls methods in interfaces
+            {@link net.jini.print.job.PrintRequest} and
+            {@link net.jini.print.job.DocPrintRequest}
+            to specify the doc object to be printed
+            and a set of job-level printing attributes to use for the job.
+            The client can also register event listeners
+            to receive event notifications for the job.
+            Finally, the client calls a method to submit the Print Request
+            to be printed,
+            and the printer returns a Print Job object
+            which implements interface
+            {@link net.jini.print.job.PrintJob}.
+            (See package {@link net.jini.print.job}.)
+
+        <LI>
+            The printer calls methods in interface {@link Doc}
+            to obtain the print data format,
+            the document-level printing attributes,
+            and the actual print data,
+            then proceeds to print the job.
+
+        <LI>
+            The client calls methods in interface
+            {@link net.jini.print.job.PrintJob}
+            to monitor the Print Job's progress
+            and control the Print Job as the printer processes it.
+            The client can also register event listeners
+            to receive event notifications for the job.
+            Alternatively,
+            if the client doesn't need to monitor or control the job,
+            the client can simply disregard the returned Print Job object.
+            (See package {@link net.jini.print.job}.)
+    </OL>
+
+    <H3>Multiple Doc Print Jobs</H3>
+    <CENTER>
+        <IMG SRC="doc-files/NetJiniPrintServiceFig2.gif" WIDTH=657 HEIGHT=405>
+    </CENTER>
+    <P>
+        The above interaction diagram
+        shows the interfaces involved
+        in printing a job
+        consisting of more than one doc -- a "multidoc."
+        It is much the same as the previous scenario,
+        except a few different interfaces are involved.
+    </P>
+    <OL TYPE=1>
+        <LI>
+            The client searches the Jini Lookup Service (JLUS)
+            for a Jini Print Service instance,
+            and the JLUS returns a Print Service object
+            which implements interface
+            {@link net.jini.print.MultiDocPrintService}
+            as well as the base interface
+            {@link net.jini.print.PrintService}.
+            (See package {@link net.jini.print.lookup}.)
+
+        <LI>
+            The client calls a method in interface
+            {@link net.jini.print.MultiDocPrintService}
+            telling the Print Service
+            to create a Print Request to print a MultiDoc.
+            The printer then returns
+            a Print Request object
+            which implements interface
+            {@link net.jini.print.job.MultiDocPrintRequest}
+            as well as the base interface
+            {@link net.jini.print.job.PrintRequest}.
+
+        <LI>
+            The client calls methods in interfaces
+            {@link net.jini.print.job.PrintRequest} and
+            {@link net.jini.print.job.MultiDocPrintRequest}
+            to specify the multidoc object to be printed
+            and a set of job-level printing attributes to use for the job.
+            The client can also register event listeners
+            to receive event notifications for the job.
+            Finally, the client calls a method to submit the Print Request
+            to be printed,
+            and the printer returns a Print Job object
+            which implements interface
+            {@link net.jini.print.job.PrintJob}.
+            (See package {@link net.jini.print.job}.)
+
+        <LI>
+            The multidoc provides a "linked list view"
+            of the docs to be printed.
+            The printer calls a method in interface
+            {@link net.jini.print.MultiDoc} on the current multidoc object
+            to get the current doc to be printed.
+
+        <LI>
+            The printer calls methods in interface {@link Doc}
+            on the current doc object
+            to obtain the print data format,
+            the document-level printing attributes,
+            and the actual print data.
+
+        <LI>
+            The printer calls a method in interface
+            {@link net.jini.print.MultiDoc} on the current multidoc object
+            to get the next multidoc object,
+            and repeats from Step 4 until it has gotten all the docs.
+            The printer then proceeds to print the job consisting of all the docs.
+
+        <LI>
+            The client calls methods in interface
+            {@link net.jini.print.job.PrintJob}
+            to monitor the Print Job's progress
+            and control the Print Job as the printer processes it.
+            The client can also register event listeners
+            to receive event notifications for the job.
+            Alternatively,
+            if the client doesn't need to monitor or control the job,
+            the client can simply disregard the returned Print Job object.
+            (See package {@link net.jini.print.job}.)
+    </OL>
+
+    <H3>Package net.jini.print's Role</H3>
+    Package net.jini.print's role in the Jini Print Service API is to:
+    <UL>
+        <LI>
+            Declare the {@link net.jini.print.PrintService} interface,
+            which is the base interface
+            all Jini Print Service instances' service proxy objects implement,
+            whereby the client uses the print service
+            to create a Print Request object to print a single doc --
+            a "doc print request."
+            Interface {@link net.jini.print.PrintService}
+            also contains methods to monitor the Print Service's status
+            and to discover the Print Service's capabilities.
+
+        <LI>
+            Declare the {@link net.jini.print.MultiDocPrintService} interface
+            whereby the client creates
+            a Print Request object to print multiple docs --
+            a "multidoc print request."
+
+        <LI>
+            Declare the {@link net.jini.print.LocalizedPrintService} interface
+            whereby the client can obtain localized strings
+            for print data formats, printing attribute categories,
+            and printing attribute values.
+        <LI>
+            Declare the {@link net.jini.print.Doc} interface
+            whereby the printer
+            obtains a doc to be printed.
+            A doc consists of
+            the print data format,
+            printing attributes, and
+            a print data representation object
+            containing the print data itself.
+            Interface {@link net.jini.print.Doc}
+            in package net.jini.print.data
+            extends interface {@link javax.print.Doc}
+            in package {@link javax.print}
+            but specifies restricted semantics
+            for use with a Jini Print Service instance.
+
+        <LI>
+            Declare the {@link net.jini.print.LeasedDoc} interface
+            whereby the print data source
+            can optionally convey a lease on the print data
+            to the printer.
+
+        <LI>
+            Declare the {@link net.jini.print.MultiDoc} interface
+            for providing a group of docs to a single Print Job.
+            A multidoc object provides access to the current doc in the group
+            and the next multidoc object in the group;
+            this "linked list view" allows the printer
+            to scan the group of docs in an idempotent fashion,
+            which is crucial in a distributed system.
+            Interface {@link net.jini.print.MultiDoc}
+            in package net.jini.print.data
+            extends interface {@link javax.print.MultiDoc}
+            in package {@link javax.print}
+            but specifies restricted semantics
+            for use with a Jini Print Service instance.
+    </UL>
+    <P>
+        The following UML class diagram
+        shows the relationships among the interfaces and classes
+        described above.
+    </P>
+    <CENTER>
+        <IMG SRC="doc-files/NetJiniPrintServiceFig3.gif" WIDTH=406 HEIGHT=334>
+    </CENTER>
+    <P>
+        Package net.jini.print also includes
+        these supporting classes:
+    </P>
+    <UL>
+        <LI>
+            Exception class thrown by methods
+            in package net.jini.print --
+            class {@link net.jini.print.PrintServiceException}.
+    </UL>
+    <P>
+        All Jini Print Service instances must be capable
+        of creating doc print requests.
+        Thus, all Jini Print Service proxy objects
+        mandatorily implement interface
+        {@link net.jini.print.PrintService}.
+        However, creating multidoc print requests
+        is an optional capability
+        that not all Jini Print Service instances
+        are required to provide.
+        If a Jini Print Service instance
+        can create multidoc print requests,
+        its service proxy object implements interface
+        {@link net.jini.print.MultiDocPrintService}
+        as well as
+        {@link net.jini.print.PrintService}.
+    </P><P>
+        A Jini Print Service instance
+        advertises the kinds of Print Requests it supports
+        by the interfaces its service proxy object implements.
+        To get a Jini Print Service instance
+        that can print your kind of job,
+        make sure to search the JLUS
+        for the proper service interface.
+        To print a job with a single doc,
+        search for a service that implements interface
+        {@link net.jini.print.PrintService}.
+        To print a job with multiple docs,
+        search for a service that implements interface
+        {@link net.jini.print.MultiDocPrintService}.
+        See the print service lookup scheme in package
+        {@link net.jini.print.lookup}
+        for further information.
+    </P>
+    <P>
+        A Jini Print Service instance
+        advertises the doc flavors it supports
+        by including supported doc flavor entries
+        in its service registration in the JLUS.
+        To get a Jini Print Service instance
+        that can print your job's data,
+        make sure to include the proper doc flavor
+        as a criterion when you search the JLUS.
+    </P><P>
+        Printing attributes are specified by objects
+        that implement interface
+        {@link javax.print.attribute.Attribute}
+        in package {@link javax.print.attribute}.
+        A Jini Print Service instance
+        advertises the printing attribute values it supports
+        by including supported attribute entries
+        in its service registration in the JLUS.
+        To get a Jini Print Service instance
+        that can support your print job's attributes,
+        make sure to include the attributes
+        as criteria when you search the JLUS.
+        See the print service lookup scheme in package
+        {@link net.jini.print.lookup}
+        for further information.
+    </P><P>
+        Some print data sources
+        may allocate resources
+        that need to be deallocated
+        if there is a distributed failure
+        of the printer.
+        In that case the print data source
+        can provide a doc object
+        that implements interface {@link net.jini.print.LeasedDoc}
+        as well as interface {@link Doc},
+        thereby conveying a lease on the print data.
+        The printer must renew the lease
+        until the printer has finished obtaining the print data.
+        When the lease expires or is canceled,
+        the print data source can deallocate resources.
+    </P><P>
+        Package net.jini.print.data
+        also provides two "tagging base classes,"
+        {@link net.jini.print.RemoteInputStream}
+        and {@link net.jini.print.RemoteReader}.
+        These extend the standard InputStream and Reader base classes
+        in package java.io,
+        but impose additional requirements
+        that let the consumer recover from transient remote errors
+        when reading a byte stream or character stream
+        in a distributed system.
+        A doc whose print data representation object
+        is an input stream or a reader
+        can actually supply an instance of class
+        {@link net.jini.print.RemoteInputStream}
+        or {@link net.jini.print.RemoteReader}.
+        The Jini Print Service instance
+        can test whether the print data representation object
+        is actually a
+        {@link net.jini.print.RemoteInputStream}
+        or {@link net.jini.print.RemoteReader} and, if so,
+        perform additional remote error recovery actions
+        that are not possible with a plain old InputStream or Reader.
+    </P>
+    <H3>Future Capabilities</H3>
+    The following Print Service capabilities
+    will be added
+    in future versions of the Jini Print Service API:
+    <UL>
+        <LI>
+            Examine print job queue.
+        <LI>
+            Dynamic printer control (pause, resume, purge jobs, etc.).
+    </UL>
+    <P>
+        Placement of this package under package net.jini.print
+        is preliminary and not yet approved by the Jini Community.
+    </P>
+</body>
 </html>

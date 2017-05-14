@@ -54,7 +54,7 @@ public class Folding extends CollectionSyntax {
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{direction, offset, referenceEdge};
     }
 

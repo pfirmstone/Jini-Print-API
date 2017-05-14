@@ -15,7 +15,8 @@
  */
 package net.jini.print.job;
 
-import net.jini.print.data.Doc;
+import net.jini.print.Doc;
+
 
 /**
  * Interface DocPrintRequest specifies the interface for conveying to a Jini

@@ -26,12 +26,12 @@ import javax.print.attribute.Attribute;
  * medium has some imaged information already associated with it.
  * <P>
  * An instance of class MediaPrePrinted is not placed directly into an attribute
- * set; rather, it is always stored in a field of a {@link Media Media}
- * attribute, and the {@link Media Media} attribute is placed into the attribute
+ * set; rather, it is always stored in a field of a {@link MediaCollection}
+ * attribute, and the {@link MediaCollection} attribute is placed into the attribute
  * set.
  * <P>
  * <B>Support Requirements:</B> Support for media pre-printed is indicated along
- * with support for media as a whole. See class {@link Media Media} for further
+ * with support for media as a whole. See class {@link MediaCollection} for further
  * information. For the MediaPrePrinted category, the
  * <CODE>getSupportedAttributeValues()</CODE> capability method in interface
  * {@link net.jini.print.service.PrintService PrintService} returns an array of
@@ -48,6 +48,9 @@ import javax.print.attribute.Attribute;
  * be localized to give the IPP name and natural language values. The category
  * name returned by <CODE>getName()</CODE> gives the IPP attribute name.
  * <P>
+ * 
+ * @see MediaCollection
+ * @see MediaPrePrintedSupported
  *
  */
 public class MediaPrePrinted

@@ -40,7 +40,7 @@ public class Laminating extends CollectionSyntax implements Attribute {
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{sides, type};
     }
 

@@ -117,6 +117,13 @@ public abstract class OneSetOfSyntax<X> implements Serializable {
     public final X[] getValues() {
 	return values.clone();
     }
+    
+    public boolean contains(Object value){
+	for (int i = 0, l = values.length; i < l; i++){
+	    if (values[i].equals(value)) return true;
+	}
+	return false;
+    }
 
     @Override
     public final String toString() {

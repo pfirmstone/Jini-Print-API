@@ -13,28 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
- * //TODO.
- * @author peter
+ * The "trimming" member attribute specifies the locations of cuts to make in
+ * the hardcopy output. Printers with a trimming/cutting/perforation/scoring
+ * finisher MUST support this member attribute and all "trimming-xxx" member
+ * attributes if they support the "finishings-col" attribute.
+ *
+ * @see FinishingsCollection
  */
 public class Trimming extends CollectionSyntax implements Attribute {
+
     private final TrimmingOffset offset;
     private final TrimmingReferenceEdge referenceEdge;
     private final TrimmingType type;
     private final TrimmingWhen when;
-    
+
     public Trimming(
 	    TrimmingOffset offset,
 	    TrimmingReferenceEdge referenceEdge,
 	    TrimmingType type,
 	    TrimmingWhen when
-    ){
+    ) {
 	this.offset = offset;
 	this.referenceEdge = referenceEdge;
 	this.type = type;
@@ -42,10 +46,9 @@ public class Trimming extends CollectionSyntax implements Attribute {
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{
-	    offset, referenceEdge, type, when,
-	};
+	    offset, referenceEdge, type, when,};
     }
 
     @Override
@@ -85,5 +88,5 @@ public class Trimming extends CollectionSyntax implements Attribute {
     public TrimmingWhen getWhen() {
 	return when;
     }
-    
+
 }

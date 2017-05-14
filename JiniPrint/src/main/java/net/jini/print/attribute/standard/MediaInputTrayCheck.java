@@ -16,8 +16,10 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
+import javax.print.attribute.DocAttribute;
 import javax.print.attribute.EnumSyntax;
 import javax.print.attribute.PrintJobAttribute;
+import javax.print.attribute.PrintRequestAttribute;
 
 /**
  * The “media-input-tray-check” Job Template attribute indicates that the
@@ -30,14 +32,15 @@ import javax.print.attribute.PrintJobAttribute;
  * (see section 6.1) to the job's "job-state-reasons" attribute and MAY either
  * (1) put the job into the ‘pending-held’ state or (2) start to process the job
  * norm ally, but im mediately stop the job (“job-state” = ‘processing-stopped’)
- * and the Printer (“printer-state” = ‘stopped’). In either implementation,
- * the operator can change the media in the input tray to agree with the job or
- * can modify the job’s “media” or “media-col ” attributes to agree with the
- * input tray, depending on policy.
+ * and the Printer (“printer-state” = ‘stopped’). In either implementation, the
+ * operator can change the media in the input tray to agree with the job or can
+ * modify the job’s “media” or “media-col ” attributes to agree with the input
+ * tray, depending on policy.
  *
  * @author peter
  */
-public class MediaInputTrayCheck extends EnumSyntax implements PrintJobAttribute {
+public class MediaInputTrayCheck extends EnumSyntax
+	implements PrintRequestAttribute, PrintJobAttribute, DocAttribute { 
 
     public static final MediaInputTrayCheck BOTTOM = new MediaInputTrayCheck(0),//[RFC8011]
 	    BY_PASS_TRAY = new MediaInputTrayCheck(1),//[PWG5100.3]

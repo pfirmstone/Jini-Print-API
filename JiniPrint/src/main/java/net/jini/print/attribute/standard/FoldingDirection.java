@@ -17,7 +17,6 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
  * The "folding-direction" member attribute specifies whether the sheets are
@@ -32,7 +31,7 @@ import javax.print.attribute.PrintJobAttribute;
  *
  * @author peter
  */
-public class FoldingDirection extends EnumSyntax implements PrintJobAttribute {
+public class FoldingDirection extends EnumSyntax implements Attribute {
 
     public static final FoldingDirection INWARD = new FoldingDirection(0),//[PWG5100.1]
 	    OUTWARD = new FoldingDirection(1);//[PWG5100.1]

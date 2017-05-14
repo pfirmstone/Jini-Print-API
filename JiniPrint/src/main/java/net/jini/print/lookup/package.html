@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<!--
+Copyright 2017 peter.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <P>
+            Package net.jini.print.lookup
+            contains classes used
+            for registering and finding Jini Print Service instances
+            in the Jini Lookup Service (JLUS).
+            Specifically, package net.jini.print.lookup
+            contains classes
+            (that implement interface net.jini.core.entry.Entry)
+            for the service attributes
+            that are associated with a Jini Print Service instance's
+            service registration in the JLUS.
+        </P><P>
+            The sections below
+            describe the lookup scheme
+            used to find Jini Print Service instances
+            in the JLUS.
+            The lookup scheme consists of service interfaces
+            and service attributes.
+        </P>
+        <HR>
+        <H2>Service Interfaces</H2>
+        <P>
+            A Jini Print Service instance's service proxy object
+            implements interfaces from package
+            {@link net.jini.print}
+            as listed below.
+            These then constitute the service interfaces
+            the JLUS uses to categorize the service proxy object
+            when it is registered into the JLUS.
+            A client can search the JLUS
+            for a Jini Print Service instance with the desired capabilities
+            by including the corresponding service interfaces
+            in the service template.
+        </P><P>
+            Some service interfaces are mandatorily implemented
+            by all Jini Print Service instances.
+            Other service interfaces are optional
+            and implemented only if the Jini Print Service instance
+            supports that capability.
+        </P>
+        <UL>
+            <LI>
+                {@link net.jini.print.PrintService} -- mandatory
+            <LI>
+                {@link net.jini.print.MultiDocPrintService} -- optional
+            <LI>
+                {@link net.jini.print.LocalizedPrintService} -- optional
+        </UL>
+
+        <HR>
+        <H2>Service Attributes</H2>
+        <P>
+            Much of Jini's power comes from being able to search the JLUS
+            for services with desired characteristics.
+            So that Jini Print Service clients
+            will be able to rely on the presence
+            of a standard set of service attributes,
+            every Jini Print Service instance
+            must include service attributes in its service registration
+            according to the scheme described below.
+        </P><P>
+            The service attributes fall into four categories:
+            general attributes,
+            supported print data formats,
+            supported printing attributes,
+            and supported locales.
+        </P>
+        <H3>General Attributes</H3>
+        <P>
+            Each Jini Print Service instance must register
+            the following service attribute,
+            filling in the fields listed below
+            with the proper values for the printer.
+        </P>
+        <UL>
+            <LI>
+                <B>{@link PrinterDescriptionEntry}</B>
+                <UL>
+                    <LI> {@link javax.print.attribute.standard.PrinterName} -- mandatory
+                    <LI> {@link javax.print.attribute.standard.PrinterLocation}
+                    <LI> {@link javax.print.attribute.standard.PrinterInfo}
+                    <LI> {@link javax.print.attribute.standard.PrinterMoreInfo}
+                    <LI> {@link javax.print.attribute.standard.PrinterMakeAndModel}
+                    <LI> {@link javax.print.attribute.standard.PrinterMoreInfoManufacturer}
+                    <LI> {@link javax.print.attribute.standard.ColorSupported}
+                    <LI> {@link javax.print.attribute.standard.PDLOverrideSupported} -- mandatory
+                    <LI> {@link javax.print.attribute.standard.PagesPerMinute}
+                    <LI> {@link javax.print.attribute.standard.PagesPerMinuteColor}
+                </UL> 
+
+                The {@link javax.print.attribute.standard.PrinterName} and
+                {@link javax.print.attribute.standard.PDLOverrideSupported}
+                fields are mandatory and must always be set to non-null values.
+                The remaining fields are optional
+                and may be set to null to indicate "not specified."
+                However, if the
+                {@link javax.print.attribute.standard.PagesPerMinuteColor}
+                field is set to a non-null value,
+                the {@link javax.print.attribute.standard.ColorSupported}
+                field must be set to a value of SUPPORTED. 
+
+        </UL>
+        <P>
+            Each Jini Print Service instance
+            may optionally register the following standard Jini service attributes,
+            filling in all fields with the proper values for the printer.
+            If present, the standard Jini service attributes
+            should include the same information as the
+            {@link PrinterDescriptionEntry}.
+        </P>
+        <UL>
+            <LI>
+                <B>net.jini.lookup.entry.Address</B> --
+                street, organization, organizational unit,
+                locality, state or province, postal code, country.
+            <LI>
+                <B>net.jini.lookup.entry.Comment</B> --
+                comment string.
+                A print service may register more than one Comment attribute.
+            <LI>
+                <B>net.jini.lookup.entry.Location</B> --
+                floor, room, building.
+            <LI>
+                <B>net.jini.lookup.entry.Name</B> --
+                print service name.
+                A print service may register more than one Name attribute.
+            <LI>
+                <B>net.jini.lookup.entry.ServiceInfo</B> --
+                product name, manufacturer, vendor,
+                version, model, serial number.
+            <LI>
+                <B>net.jini.lookup.entry.ServiceType</B> --
+                localized icons, localized name, and localized short description.
+        </UL>
+        <P>
+            The {@link PrinterDescriptionEntry}
+            is included so printing client applications
+            can use the printing attribute classes
+            to search for Jini Print Service instances.
+            The service attributes from package net.jini.lookup.entry are included
+            so generic Jini service browsing applications
+            (which may know about the standard Jini service attributes
+            but may not know about the
+            {@link PrinterDescriptionEntry})
+            can search for Jini Print Service instances.
+        </P>
+        <H3>Supported Print Data Formats</H3>
+        <P>
+            A print data format,
+            known as a "doc flavor,"
+            is designated by an instance of class
+            {@link javax.print.DocFlavor}
+            from package
+            {@link javax.print}.
+            To indicate which print data formats it supports,
+            a Jini Print Service instance must register
+            a separate service attribute
+            of class {@link FlavorEntry}
+            for each supported doc flavor.
+        </P>
+        <H3>Supported Printing Attributes</H3>
+        <P>
+            Certain printing attributes from package
+            {@link javax.print.attribute.standard}
+            represent features a client can request for a print job.
+            A Jini Print Service instance's service registration
+            advertises whether the printer supports these features (attributes)
+            and which attribute values it supports.
+            This lets the client search the JLUS
+            to find printers with the features the client needs.
+            (Other printing attributes from package
+            {@link javax.print.attribute.standard}
+            are used to indicate printer status or job status;
+            such attributes are not included in the service registration.)
+        </P><P>
+            To indicate which standard or vendor-supplied printing attributes
+            and printing attribute values it supports,
+            a Jini Print Service instance must register
+            a separate service attribute
+            of class {@link AttributeEntry}
+            for each supported printing attribute value.
+        </P><P>
+            For each printing attribute a client can request for a print job,
+            the table below indicates
+            the printing attribute class;
+            whether supporting the printing attribute is mandatory or optional;
+            and the requirements for registering an
+            {@link AttributeEntry} 
+            instance or instances
+            for the printing attribute values.
+            See the printing attribute class's documentation
+            for further information
+            on whether the attribute is mandatory or optional
+            and which attribute values are mandatory or optional.
+        </P><P>
+            A suitable print service can be found solely by the  
+            JLUS, or by combination of JLUS and SDM lookup
+            ({@link net.jini.lookup.ServiceDiscoveryManager}), where the JLUS
+            matches suitable print services and the SDM
+            will perform local filtering.  Note that attributes that 
+            implement {@link javax.print.attribute.SupportedValuesAttribute} 
+            require local filtering.  Subclasses of 
+            {@link javax.print.attribute.EnumSyntax}, {@link javax.print.attribute.IntegerSyntax}
+            and {@link javax.print.attribute.TextSyntax} are suitable for 
+            JLUS lookup, while OneSetOf and Collection syntax attributes
+            must be filtered by SDM.
+        </P>
+        <TABLE BORDER CELLPADDING=4 CELLSPACING=1 WIDTH=100%>
+            <TR BGCOLOR="#E6E6E6">
+                <TH>Printing Attribute Class</TH>
+                <TH>Mandatory or Optional Support</TH>
+                <TH>Entry Requirements</TH>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.Chromaticity}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, one AttributeEntry registered 
+                    for each supported chromaticity value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.Compression}</TD>
+                <TD>Mandatory</TD>
+                <TD>One AttributeEntry registered
+                    for each supported compression value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.Copies}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, a single AttributeEntry registered containing a
+                    {@link javax.print.attribute.standard.CopiesSupported}
+                    attribute with the supported copies values</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.DocumentName}</TD>
+                <TD>Mandatory</TD>
+                <TD>Not registered in the JLUS; all values supported</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.FinishingsBinding}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, one AttributeEntry registered
+                    for each supported finishings binding value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.FinishingsCover}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, one AttributeEntry registered
+                    for each supported finishings cover value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.JobHoldUntil}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, a single AttributeEntry registered containing
+                    the JobHoldUntil category and a wildcarded value
+                    to indicate all values supported</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.JobImpressions}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, a single AttributeEntry registered containing a
+                    {@link javax.print.attribute.standard.JobImpressionsSupported}
+                    attribute with the supported job impressions values</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.JobKOctets}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, a single AttributeEntry registered containing a
+                    {@link javax.print.attribute.standard.JobKOctetsSupported}
+                    attribute with the supported job K octets values</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.JobMediaSheets}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, a single AttributeEntry registered containing a
+                    {@link javax.print.attribute.standard.JobMediaSheetsSupported}
+                    attribute with the supported job media sheets values</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.JobName}</TD>
+                <TD>Mandatory</TD>
+                <TD>Not registered in the JLUS; all values supported</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.JobPriority}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, a single AttributeEntry registered containing a
+                    {@link javax.print.attribute.standard.JobPrioritySupported}
+                    attribute with the number of supported priority levels</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.JobSheets}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, one AttributeEntry registered
+                    for each supported job sheets value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.Media}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, one AttributeEntry registered
+                    for each supported media value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.MinimumPrinterResolution}</TD>
+                <TD>Optional <A HREF="#note1">[1]</A></TD>
+                <TD>Not registered in the JLUS; see PrinterResolution</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.MultipleDocumentHandling}</TD>
+                <TD>Optional <A HREF="#note2">[2]</A></TD>
+                <TD>If supported, one AttributeEntry registered
+                    for each supported multiple document handling value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.NumberUp}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, a single AttributeEntry registered containing a
+                    {@link javax.print.attribute.standard.NumberUpSupported}
+                    attribute with the supported number up values</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.OrientationRequested}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, one AttributeEntry registered
+                    for each supported orientation requested value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.PageRanges}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, a single AttributeEntry registered containing
+                    the PageRanges category and a wildcarded value
+                    to indicate all values supported</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.PrinterResolution}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, one AttributeEntry registered
+                    for each supported printer resolution value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.PrintQuality}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, one AttributeEntry registered
+                    for each supported print quality value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.ReferenceUriScheme}</TD>
+                <TD>Optional</TD>
+                <TD>If doc flavors with a print data representation class
+                    of <CODE>"java.net.URL"</CODE> are supported,
+                    one AttributeEntry registered for each acceptable URI scheme</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.RequestingUserName}</TD>
+                <TD>Mandatory</TD>
+                <TD>Not registered in the JLUS; all values supported</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.SheetCollate}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, one AttributeEntry registered
+                    for each supported sheet collation value</TD>
+            </TR>
+            <TR ALIGN="left" VALIGN="top">
+                <TD>{@link javax.print.attribute.standard.Sides}</TD>
+                <TD>Optional</TD>
+                <TD>If supported, one AttributeEntry registered
+                    for each supported sides value</TD>
+            </TR>
+        </TABLE>
+
+        <I>Notes:</I>
+        <OL TYPE=1>
+            <LI>
+                <A NAME="note1">If</A> the Jini Print Service instance
+                supports the PrinterResolution attribute,
+                it must also support the MinimumPrinterResolution attribute.
+
+            <LI>
+                <A NAME="note2">If</A> the Jini Print Service instance
+                supports multidoc print jobs
+                (see interface {@link net.jini.print.MultiDocPrintService}),
+                it must support the MultipleDocumentHandling attribute.
+        </OL>
+        <H3>Supported Locales</H3>
+        <P>
+            A Jini Print Service instance
+            may support the optional capability
+            of generating localized strings
+            for doc flavors, attribute categories, and attribute values,
+            as specified in interface
+            {@link net.jini.print.LocalizedPrintService}.
+            To advertise that it supports this capability,
+            the service proxy object registered into the JLUS
+            implements interface
+            {@link net.jini.print.LocalizedPrintService},
+            and to find a printer that supports localization
+            a client can search the JLUS for that service interface.
+            However, this only tells whether the printer
+            can do localization at all.
+            It doesn't tell which specific locales
+            the printer supports,
+            that is, the locales for which
+            the printer can provided localized strings.
+        </P><P>
+            If a Jini Print Service instance supports 
+            the optional capability of generating localized strings,
+            then the Jini Print Service instance
+            must register a separate service attribute
+            of class {@link LocaleEntry}
+            for each supported locale.
+            This lets a client search for a printer
+            that can generate localized strings
+            for a specific locale.
+        </P><P>
+            If a Jini Print Service instance does not support
+            the optional capability of generating localized strings,
+            then the Jini Print Service instance
+            must not register any service attributes
+            of class {@link LocaleEntry}.
+        </P><P>
+        <HR>
+        Placement of this package under package net.jini.print
+        is preliminary and not yet approved by the Jini Community.
+    </body>
+</html>

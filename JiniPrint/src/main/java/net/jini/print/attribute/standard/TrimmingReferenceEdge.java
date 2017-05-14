@@ -17,16 +17,20 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "trimming-reference-edge" member attribute specifies which edge is used
+ * as the basis of the cut, perforation, or score: 'bottom', 'left', 'right', or
+ * 'top'. Cuts, perforations, and scores are placed parallel to the reference
+ * edge at the offset specified by the "trimming-offset" member attribute. The
+ * default value is generally derived from the "finishing-template" value and
+ * output media.
  *
- * @author peter
+ * @see Trimming
  */
-public class TrimmingReferenceEdge extends EnumSyntax implements PrintJobAttribute {
+public class TrimmingReferenceEdge extends EnumSyntax implements Attribute {
 
-    public static final TrimmingReferenceEdge 
-	    BOTTOM = new TrimmingReferenceEdge(0),//[PWG5100.1]
+    public static final TrimmingReferenceEdge BOTTOM = new TrimmingReferenceEdge(0),//[PWG5100.1]
 	    LEFT = new TrimmingReferenceEdge(1),//[PWG5100.1]
 	    RIGHT = new TrimmingReferenceEdge(2),//[PWG5100.1]
 	    TOP = new TrimmingReferenceEdge(3);//[PWG5100.1]

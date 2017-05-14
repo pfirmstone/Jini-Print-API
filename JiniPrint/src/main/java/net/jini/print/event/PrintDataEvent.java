@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.jini.print.job;
+package net.jini.print.event;
 
 import java.io.IOException;
 import net.jini.io.MarshalledInstance;
 import net.jini.print.event.PrintEvent;
 import net.jini.print.PrintService;
+import net.jini.print.job.PrintJob;
 
 /**
  * <P>

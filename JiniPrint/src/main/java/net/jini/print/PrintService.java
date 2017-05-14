@@ -24,7 +24,6 @@ import javax.print.attribute.PrintServiceAttribute;
 import javax.print.attribute.PrintServiceAttributeSet;
 import net.jini.core.event.EventRegistration;
 import net.jini.io.MarshalledInstance;
-import net.jini.print.data.Doc;
 import net.jini.print.job.DocPrintRequest;
 
 /**
@@ -38,17 +37,13 @@ import net.jini.print.job.DocPrintRequest;
  * Service proxy object. A Print Request can be created to print a single piece
  * of print data or multiple pieces of print data.
  * <P>
- * To print a doc, the client calls {@link PrintService#createDocPrintRequest() } <A
- * HREF="../../../../net/jini/print/PrintService.html#createDocPrintRequest()"><CODE><CODE>createDocPrintRequest()</CODE></CODE></A>.
+ * To print a doc, the client calls {@link PrintService#createDocPrintRequest() }.
  * ("Doc" is a short, easy-to-pronounce term that means "a piece of print
  * data.") Such a Print Request is termed a "doc print request." The returned
- * Print Request object implements both interface {@link net.jini.print.job.PrintRequest} <A
- * HREF="../../../../net/jini/print/job/PrintRequest.html"><CODE>PrintRequest</CODE></A>
- * and the subinterface {@link DocPrintRequest} <A
- * HREF="../../../../net/jini/print/job/DocPrintRequest.html"><CODE>DocPrintRequest</CODE></A>.
+ * Print Request object implements both interface {@link net.jini.print.job.PrintRequest}
+ * and the subinterface {@link DocPrintRequest}.
  * The client can supply the doc to be printed and a set of printing attributes
- * for the job as arguments of the {@link PrintService#createDocPrintRequest() } <A
- * HREF="../../../../net/jini/print/PrintService.html#createDocPrintRequest()"><CODE><CODE>createDocPrintRequest()</CODE></CODE></A>
+ * for the job as arguments of the {@link PrintService#createDocPrintRequest() }
  * method call. Alternatively, the client can supply the doc and the attribute
  * set by calling methods on the Print Request object. When it's all set up, a
  * doc print request consists of a set of job-level printing attributes and a
@@ -57,11 +52,10 @@ import net.jini.print.job.DocPrintRequest;
  * shown in this UML class diagram:
  * <P>
  * <CENTER>
- * <IMG SRC="../doc-files/PrintRequestFig1.gif" WIDTH=532 HEIGHT=218>
+ * <IMG SRC="doc-files/PrintRequestFig1.gif" WIDTH=532 HEIGHT=218>
  * </CENTER>
  * <P>
- * To print multiple pieces of print data, see interface {@link MultiDocPrintService } <A
- * HREF="../../../../net/jini/print/MultiDocPrintService.html"><CODE>MultiDocPrintService</CODE></A>.
+ * To print multiple pieces of print data, see interface {@link MultiDocPrintService } .
  * <P>
  * Interface PrintService has a method to let the client examine the Print
  * Service's attribute set, which includes printer description attributes that
@@ -73,8 +67,7 @@ import net.jini.print.job.DocPrintRequest;
  * <P>
  * The client can register a remote event listener to receive event
  * notifications pertaining to a Print Service. The events that can be reported
- * are represented by class  <A
- * HREF="../../../../net/jini/print/PrintServiceEvent.html"><CODE>PrintServiceEvent</CODE></A>;
+ * are represented by class {@link net.jini.print.PrintServiceEvent};
  * see that class for further information about the events' meanings and the
  * circumstances under which they are reported.
  * <P>
@@ -86,8 +79,7 @@ import net.jini.print.job.DocPrintRequest;
  * methods can be used in two different ways. When called without specifying the
  * settings for a supposed job, these methods return information about
  * <I>all</I> the supported doc flavors, attribute categories, and attribute
- * values. However, these methods also take a <A
- * HREF="../../../../net/jini/print/Settings.html"><CODE>Settings</CODE></A>
+ * values. However, these methods also take a {@link Settings}
  * argument which is the settings for a supposed job (the job's doc flavor and
  * attribute set, which may be a partially-filled-out attribute set, including
  * both job-level and doc-level attributes), in which case these methods return
@@ -131,8 +123,7 @@ import net.jini.print.job.DocPrintRequest;
  * implementations of interface PrintService and its subinterfaces must be
  * designed to be multiple thread safe.
  * <P>
- * Interface PrintService's methods all throw <A
- * HREF="file:///C:/jdk1.2.2/docs/api/java/rmi/RemoteException.html"><CODE>RemoteException</CODE></A>
+ * Interface PrintService's methods all throw @{link java.rmi.RemotException} 
  * to provide for the possibility that the Print Service object's implementation
  * performs remote method calls. The Print Service object's implementation in
  * fact may or may not perform remote method calls.

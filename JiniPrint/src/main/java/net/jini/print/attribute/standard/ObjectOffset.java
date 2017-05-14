@@ -44,7 +44,7 @@ public class ObjectOffset extends CollectionSyntax implements Attribute {
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{xoff, yoff, zoff};
     }
 

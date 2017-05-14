@@ -16,16 +16,62 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
-import javax.print.attribute.DocAttribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
-import javax.print.attribute.PrintRequestAttribute;
 
 /**
- *
+ * <p>
+ * The "media-key" member attribute contains the name of the media represented
+ * as a keyword or name. Values MUST be the same as the keyword and name values
+ * for the "media" Job Template attribute and represent the same media, except
+ * for media size and input tray keywords (see section 6.3 in this document and
+ * [RFC2911] Appendix C) which MUST NOT be "media-key" values.
+ * </p><p>
+ * The value of this member attribute MUST be unique for each media supported by
+ * an IPP Printer instance, i.e., no two media instances can have the same
+ * "media-key" value on the same IPP Printer instance. However, the same
+ * "media-key" value can represent the same or different media on different IPP
+ * Printer instances. For example, the 'iso-a4-white' keyword might represent
+ * recycled 80 gm/mm on two Printer instances and non-recycled, 72 gm/mm on a
+ * third Printer instance. An administrator or a number of administrators within
+ * an organization MAY choose to have "media-key" values represent the same
+ * media instances across a set of Printers.
+ * </p><p>
+ * Note: Since the above requires that each media instance have a unique
+ * "media-key" value (if "media-key" attribute is supported), then the Printer
+ * automatically meets the requirement (see section 3.13) that each media
+ * instance have a unique combination of member attribute values.
+ * </p><p>
+ * Note: As with any combination of supported "media-col" member attributes, if
+ * a client supplies the "media-key" member attribute and other member
+ * attributes, the Printer will attempt to match all of the supplied member
+ * attributes, including the "media-key" value, following the algorithm defined
+ * in section 3.13. So if the supplied collection value does not match any
+ * supported "media-col" value, the Printer treats the "media-col" attribute as
+ * having an undefined attribute value. Thus, a client can ensure that the
+ * Printer maps a standard media name keyword to certain expected member
+ * attribute values.
+ * </p><p>
+ * The "media-key-supported" (1setOf (type3 keyword | name(MAX))) Printer
+ * attribute identifies the values of this "media-key" member attribute that the
+ * Printer supports.
+ * </p><p>
+ * For Printers that support a large number of media (and the "media-key"
+ * attribute), the burden of an administrator to define unique "media-key"
+ * values for each media instance could be quite large. Therefore, it is
+ * RECOMMENDED that such a Printer assign a unique "media-key" value in an
+ * IMPLEMENTATION-DEFINED manner for each media instance for which the
+ * administrator has not defined a "media-key" value, rather than refusing the
+ * media definition. The Printer also adds such generated values to its
+ * "media-key-supported" attribute. A client can supply such a Printer-generated
+ * value with either (1) the "media-key" member attribute or (2) the "media" Job
+ * Template attribute.
+ * </p>
+ * 
+ * @see MediaCollection
+ * @see MediaKeySupported
  */
 public class MediaKey extends EnumSyntax
-	implements DocAttribute, PrintRequestAttribute, PrintJobAttribute {
+	implements Attribute {
 
     private static final long serialVersionUID = 1L;
 
@@ -256,6 +302,25 @@ public class MediaKey extends EnumSyntax
     public static final MediaKey AUTO_SYNCHRO_WHITE = new MediaKey(224);
     public static final MediaKey AUTO_SYNCHRO_TRANSPARENT = new MediaKey(225);
     public static final MediaKey AUTO_SYNCHRO_TRANSLUCENT = new MediaKey(226);
+    public static final MediaKey CUSTOM1 = new MediaKey(227);//[PWG5100.3]
+    public static final MediaKey CUSTOM2 = new MediaKey(228);//[PWG5100.3]
+    public static final MediaKey CUSTOM3 = new MediaKey(229);//[PWG5100.3]
+    public static final MediaKey CUSTOM4 = new MediaKey(230);//[PWG5100.3]
+    public static final MediaKey CUSTOM5 = new MediaKey(231);//[PWG5100.3]
+    public static final MediaKey CUSTOM6 = new MediaKey(232);//[PWG5100.3]
+    public static final MediaKey CUSTOM7 = new MediaKey(233);//[PWG5100.3]
+    public static final MediaKey CUSTOM8 = new MediaKey(234);//[PWG5100.3]
+    public static final MediaKey CUSTOM9 = new MediaKey(235);//[PWG5100.3]
+    public static final MediaKey CUSTOM10 = new MediaKey(236);//[PWG5100.3]
+    public static final MediaKey BOND = new MediaKey(237);//[PWG5100.3]
+    public static final MediaKey HEAVYWEIGHT = new MediaKey(238);//[PWG5100.3]
+    public static final MediaKey LABELS = new MediaKey(239);//[PWG5100.3]
+    public static final MediaKey LETTERHEAD = new MediaKey(240);//[PWG5100.3]
+    public static final MediaKey PLAIN = new MediaKey(241);//[PWG5100.3]
+    public static final MediaKey PRE_PRINTED = new MediaKey(242);//[PWG5100.3]
+    public static final MediaKey PRE_PUNCHED = new MediaKey(243);//[PWG5100.3]
+    public static final MediaKey RECYCLED = new MediaKey(244);//[PWG5100.3]
+    public static final MediaKey TRANSPARENCY = new MediaKey(245);//[PWG5100.3]
 
     protected MediaKey(int value) {
 	super(value);
@@ -500,7 +565,26 @@ public class MediaKey extends EnumSyntax
 	    "auto-fixed-size-translucent",
 	    "auto-synchro-white",
 	    "auto-synchro-transparent",
-	    "auto-synchro-translucent",};
+	    "auto-synchro-translucent",
+	    "custom1",
+	    "custom2",
+	    "custom3",
+	    "custom4",
+	    "custom5",
+	    "custom6",
+	    "custom7",
+	    "custom8",
+	    "custom9",
+	    "custom10",
+	    "bond",
+	    "heavyweight",
+	    "labels",
+	    "letterhead",
+	    "plain",
+	    "pre-printed",
+	    "pre-punched",
+	    "recycled",
+	    "transparency",};
     }
 
     @Override
@@ -732,6 +816,25 @@ public class MediaKey extends EnumSyntax
 	    AUTO_FIXED_SIZE_TRANSLUCENT,
 	    AUTO_SYNCHRO_WHITE,
 	    AUTO_SYNCHRO_TRANSPARENT,
-	    AUTO_SYNCHRO_TRANSLUCENT,};
+	    AUTO_SYNCHRO_TRANSLUCENT,
+	    CUSTOM1,
+	    CUSTOM2,
+	    CUSTOM3,
+	    CUSTOM4,
+	    CUSTOM5,
+	    CUSTOM6,
+	    CUSTOM7,
+	    CUSTOM8,
+	    CUSTOM9,
+	    CUSTOM10,
+	    BOND,
+	    HEAVYWEIGHT,
+	    LABELS,
+	    LETTERHEAD,
+	    PLAIN,
+	    PRE_PRINTED,
+	    PRE_PUNCHED,
+	    RECYCLED,
+	    TRANSPARENCY,};
     }
 }

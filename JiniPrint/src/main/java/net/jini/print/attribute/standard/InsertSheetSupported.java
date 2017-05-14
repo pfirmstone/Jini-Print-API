@@ -31,14 +31,15 @@ import net.jini.print.attribute.OneSetOfSyntax;
 public class InsertSheetSupported extends OneSetOfSyntax
 	implements SupportedValuesAttribute {
 
-    public static enum Keyword {
+    public static enum Keyword implements Attribute{
 
 	INSERT_AFTER_PAGE_NUMBER("insert-after-page-number"),
 	INSERT_COUNT("insert-count"),
 	MEDIA("media"),
-	MEDIA_COLLECTION("media-collection");
+	MEDIA_COLLECTION("media-col");
 
-	public String toSting() {
+	@Override
+	public String toString() {
 	    return keyword;
 	}
 
@@ -46,6 +47,24 @@ public class InsertSheetSupported extends OneSetOfSyntax
 
 	private Keyword(String keyword) {
 	    this.keyword = keyword;
+	}
+
+	/**
+	 * 
+	 * @return Keyword.class
+	 */
+	@Override
+	public Class<? extends Attribute> getCategory() {
+	    return Keyword.class;
+	}
+
+	/**
+	 * 
+	 * @return "insert-sheet-supported"
+	 */
+	@Override
+	public String getName() {
+	    return "insert-sheet-supported";
 	}
     }
 

@@ -18,6 +18,9 @@ package net.jini.print.attribute.standard;
 import java.io.Serializable;
 import javax.print.attribute.Attribute;
 import javax.print.attribute.DocAttribute;
+import javax.print.attribute.PrintJobAttribute;
+import javax.print.attribute.PrintRequestAttribute;
+import net.jini.print.attribute.BooleanSyntax;
 
 /**
  * The Client MAY supply and the Printer MUST support this attribute. The value
@@ -33,14 +36,10 @@ import javax.print.attribute.DocAttribute;
  * 
  * @author peter
  */
-public class IPPAttributeFidelity implements DocAttribute, Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private final boolean fidelity;
+public class IPPAttributeFidelity extends BooleanSyntax implements DocAttribute, PrintRequestAttribute, PrintJobAttribute{
 
     public IPPAttributeFidelity(boolean fidelity) {
-	this.fidelity = fidelity;
+	super(fidelity);
     }
 
     @Override
@@ -51,15 +50,6 @@ public class IPPAttributeFidelity implements DocAttribute, Serializable {
     @Override
     public String getName() {
 	return "ipp-attribute-fidelity";
-    }
-
-    /**
-     *
-     * @return "true" or "false"
-     */
-    @Override
-    public String toString() {
-	return Boolean.toString(fidelity);
     }
 
 }

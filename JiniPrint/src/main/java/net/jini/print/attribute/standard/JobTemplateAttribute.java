@@ -120,7 +120,7 @@ public class JobTemplateAttribute extends CollectionSyntax
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{
 	    coverBack,
 	    coverFront,

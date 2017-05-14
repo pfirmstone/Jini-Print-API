@@ -17,14 +17,13 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
-import javax.print.attribute.PrintJobAttribute;
 import net.jini.print.attribute.Dimension;
 
 /**
  *
- * @author peter
+ * @see MediaCollection
  */
-public class MediaLeftMargin extends Dimension implements PrintJobAttribute {
+public class MediaLeftMargin extends Dimension implements Attribute {
 
     public MediaLeftMargin(int i, UNIT unit) {
 	super(i, unit);

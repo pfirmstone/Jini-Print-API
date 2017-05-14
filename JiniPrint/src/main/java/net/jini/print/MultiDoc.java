@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.jini.print.data;
+package net.jini.print;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -145,23 +144,4 @@ import java.io.Serializable;
  */
 public interface MultiDoc extends javax.print.MultiDoc, Serializable {
 
-    /**
-     * Obtain the current doc object.
-     *
-     * @return the current doc object.
-     * @throws IOException if a connection error occurs.
-     */
-    @Override
-    public Doc getDoc() throws IOException;
-
-    /**
-     * Go to the multidoc object that contains the next doc object in the
-     * sequence of doc objects.
-     *
-     * @return the next doc object in the sequence or null if there are no
-     * further objects.
-     * @throws IOException if a connection error occurs.
-     */
-    @Override
-    public MultiDoc next() throws IOException;
 }

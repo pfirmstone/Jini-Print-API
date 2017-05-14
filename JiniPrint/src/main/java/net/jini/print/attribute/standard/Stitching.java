@@ -13,32 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import net.jini.print.attribute.CollectionSyntax;
 
 /**
+ * <p>
+ * The "stitching" member attribute (originally defined in section 3.2.2 of
+ * [PWG5100.3]) specifies the locations of stitches or staples that are used to
+ * bind the hardcopy output. Printers with a stapler and/or stitching finisher
+ * MUST support this member attribute and all "stitching-xxx" member attributes
+ * if they support the "finishings-col" attribute.
+ * </p><p>
+ * A Client that chooses to request custom stitching using the "stitching"
+ * collection attribute MUST specify the "stitching-reference-edge", the
+ * "stitching-offset", and the "stitching-locations" member attributes. If the
+ * Client supplies a malformed request by not supplying all three member
+ * attributes, the Printer MUST (depending on implementation) either reject the
+ * request and return the ‘client-error-bad-request' (see [RFC2911] section
+ * 13.1.4.1) or default the omitted member attributes, independent of the value
+ * of the "ipp-attribute-fidelity" attribute supplied by the Client.
+ * </p>
  *
- * @author peter
+ * @see FinishingsCollection
  */
 public class Stitching extends CollectionSyntax implements Attribute {
+
     private final StitchingLocations locations;
     private final StitchingOffset offset;
     private final StitchingReferenceEdge referenceEdge;
-    
+
     public Stitching(StitchingLocations locations,
 	    StitchingOffset offset,
 	    StitchingReferenceEdge referenceEdge
-	    ){
+    ) {
 	this.locations = locations;
 	this.offset = offset;
 	this.referenceEdge = referenceEdge;
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{locations, offset, referenceEdge};
     }
 
@@ -72,5 +88,5 @@ public class Stitching extends CollectionSyntax implements Attribute {
     public StitchingLocations getLocations() {
 	return locations;
     }
-    
+
 }

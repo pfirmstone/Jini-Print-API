@@ -78,7 +78,7 @@ public class JobSheetsCollection extends CollectionSyntax
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{sheet, media};
     }
 

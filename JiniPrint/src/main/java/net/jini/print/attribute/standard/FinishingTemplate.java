@@ -16,7 +16,6 @@
 package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
  * <h1>"finishing-template"</h1>
@@ -72,10 +71,9 @@ import javax.print.attribute.PrintJobAttribute;
  * <a href="https://www.iana.org/assignments/ipp-registrations/ipp-registrations.xhtml">
  * IANA IPP Registrations</a>
  * 
- *
- * @author peter
+ * @see FinishingsCol
  */
-public interface FinishingTemplate extends PrintJobAttribute {
+public interface FinishingTemplate extends Attribute {
 
     @Override
     public default Class<? extends Attribute> getCategory() {

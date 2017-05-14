@@ -17,16 +17,19 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
+ * The "punching-reference-edge" member attribute specifies which edge of the
+ * sheets will be punched or drilled: 'bottom', 'left', 'right', or 'top'. The
+ * default value may be derived from the "finishing-template" value or, if a
+ * default value cannot be determined from that value, using an implementation
+ * or site defined value.
  *
- * @author peter
+ * @see Punching
  */
-public class PunchingReferenceEdge extends EnumSyntax implements PrintJobAttribute {
+public class PunchingReferenceEdge extends EnumSyntax implements Attribute {
 
-    public static final PunchingReferenceEdge 
-	    BOTTOM = new PunchingReferenceEdge(0),//[PWG5100.1]
+    public static final PunchingReferenceEdge BOTTOM = new PunchingReferenceEdge(0),//[PWG5100.1]
 	    LEFT = new PunchingReferenceEdge(1),//[PWG5100.1]
 	    RIGHT = new PunchingReferenceEdge(2),//[PWG5100.1]
 	    TOP = new PunchingReferenceEdge(3);//[PWG5100.1]

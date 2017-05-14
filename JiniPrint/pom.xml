@@ -118,5 +118,11 @@
             <version>3.0-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
+         <dependency>
+            <groupId>au.net.zeus.jgdms</groupId>
+            <artifactId>jgdms-lib-dl</artifactId>
+            <version>3.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>

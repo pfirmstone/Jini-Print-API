@@ -17,7 +17,6 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
  * The "coating-type" member attribute specifies the type of coating to apply.
@@ -27,7 +26,7 @@ import javax.print.attribute.PrintJobAttribute;
  *
  * @author peter
  */
-public class CoatingType extends EnumSyntax implements PrintJobAttribute {
+public class CoatingType extends EnumSyntax implements Attribute {
 
     /**
      * Each sheet is coated to preserve the output for an extended period of

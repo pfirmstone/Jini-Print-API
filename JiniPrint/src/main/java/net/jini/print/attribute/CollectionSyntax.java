@@ -77,7 +77,7 @@ public abstract class CollectionSyntax {
      * @return the attribute fields in the order listed by the relevant
      * standard.
      */
-    public abstract Attribute[] getAttributes();
+    protected abstract Attribute[] getAttributes();
 
     /**
      * Determine whether this collection attribute is supported by the given

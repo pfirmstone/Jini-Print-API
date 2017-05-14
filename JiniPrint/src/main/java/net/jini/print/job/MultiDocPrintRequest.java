@@ -15,7 +15,7 @@
  */
 package net.jini.print.job;
 
-import javax.print.MultiDoc;
+import net.jini.print.MultiDoc;
 
 /**
  * Interface MultiDocPrintRequest specifies the interface for conveying to a

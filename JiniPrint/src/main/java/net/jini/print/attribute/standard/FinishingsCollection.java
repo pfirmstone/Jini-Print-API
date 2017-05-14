@@ -45,7 +45,7 @@ import net.jini.print.attribute.CollectionSyntax;
  * device.
  * </p>
  *
- * @author peter
+ * @see FinishingsCol
  */
 public class FinishingsCollection extends CollectionSyntax {
 
@@ -181,7 +181,7 @@ public class FinishingsCollection extends CollectionSyntax {
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{
 	    template,
 	    bailing,

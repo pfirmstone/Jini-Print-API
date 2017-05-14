@@ -17,7 +17,6 @@ package net.jini.print.attribute.standard;
 
 import javax.print.attribute.Attribute;
 import javax.print.attribute.EnumSyntax;
-import javax.print.attribute.PrintJobAttribute;
 
 /**
  * The "baling-type" member attribute specifies the type of baling to apply.
@@ -27,7 +26,7 @@ import javax.print.attribute.PrintJobAttribute;
  * 
  * @author peter
  */
-public class BailingType extends EnumSyntax implements PrintJobAttribute {
+public class BailingType extends EnumSyntax implements Attribute {
 
     public static final BailingType 
 	    BAND = new BailingType(0),

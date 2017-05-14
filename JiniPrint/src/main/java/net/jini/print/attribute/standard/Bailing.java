@@ -42,7 +42,7 @@ public class Bailing extends CollectionSyntax implements DocAttribute, PrintRequ
     }
 
     @Override
-    public Attribute[] getAttributes() {
+    protected Attribute[] getAttributes() {
 	return new Attribute[]{type, when};
     }
 
