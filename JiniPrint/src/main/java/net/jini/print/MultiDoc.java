@@ -16,6 +16,10 @@
 package net.jini.print;
 
 import java.io.Serializable;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import javax.print.Doc;
+import net.jini.core.lease.Lease;
 
 /**
  * <P>
@@ -143,5 +147,48 @@ import java.io.Serializable;
  *
  */
 public interface MultiDoc extends javax.print.MultiDoc, Serializable {
+
+    /**
+     * Returns a proxy to the {@link Lease} associated with this MultiDoc, or
+     * <code>null</code> if this MultiDoc is not leased.
+     *
+     * @return a proxy for the MultiDoc's lease, or <code>null</code> if there
+     * is no lease associated with this MultiDoc
+     */
+    public Lease getLease();
+
+    /**
+     * MultiDocClient is a back end proxy the client implements, to allow Doc's
+     * to be transferred individually on demand remotely, rather than all at
+     * once.
+     */
+    public static interface MultiDocClient
+	    extends Remote {
+
+	/**
+	 * Removes one <code>Doc</code> from the MultiDoc and returns a copy to
+	 * the caller. Returns <code>null</code> if the MultiDoc is empty.
+	 *
+	 * A given invocation of this method may perform remote communications,
+	 * but generally the <code>next</code> method is not expected to have {@linkplain
+	 * net.jini.core.constraint remote method constraints} that can vary
+	 * from invocation to invocation. Instead the set of constraints
+	 * associated with the <code>next</code> method will be fixed at the
+	 * time the MultiDoc was created, even if this object implements an
+	 * interface like {@link
+	 * RemoteMethodControl} that would otherwise allow the set of
+	 * constraints associated with the <code>next</code> method to be
+	 * altered.<p>
+	 *
+	 * @return an <code>Doc</code> from the MultiDoc, or <code>null</code>
+	 * if the MultiDoc is empty
+	 *
+	 * @throws RemoteException if a communication error occurs. If a
+	 * <code>RemoteException</code> is thrown, no <code>Doc</code> was
+	 * removed from the MultiDoc because of this call
+	 */
+	public Doc next() throws RemoteException;
+
+    }
 
 }

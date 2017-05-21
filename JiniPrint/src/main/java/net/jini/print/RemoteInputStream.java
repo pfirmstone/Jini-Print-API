@@ -15,8 +15,11 @@
  */
 package net.jini.print;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.rmi.Remote;
 
 /**
  * <P>
@@ -101,10 +104,15 @@ import java.io.Serializable;
  * </P>
  * <B>DRAFT STANDARD VERSION 1.0 (23-MAY-2000)</B>
  */
-public abstract class RemoteInputStream extends InputStream implements Serializable {
-
+public interface RemoteInputStream extends Remote, Closeable {
+    
     /**
-     * Construct a new remote input stream object.
+     * 
+     * @param len max length of bytes to read.
+     * @return array of bytes read, zero length if end of stream has been reached.
+     * @throws IOException 
      */
-    public RemoteInputStream() {}
+    byte [] read(int len) throws IOException;
+	
+    
 }

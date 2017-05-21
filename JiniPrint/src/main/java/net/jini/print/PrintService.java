@@ -16,6 +16,8 @@
 package net.jini.print;
 
 import java.io.IOException;
+import java.io.NotSerializableException;
+import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.attribute.Attribute;
 import javax.print.attribute.AttributeSet;
@@ -177,11 +179,12 @@ public interface PrintService {
      * interfaces, such as NestedException, to provide further information about
      * the error.
      * @throws IOException Thrown if a remote error occurred.
+     * @throws NotSerializableException may be thrown if Doc is not Serializable.
      */
     public DocPrintRequest createDocPrintRequest(Doc theDoc,
 	    PrintRequestAttributeSet theAttributes)
 	    throws PrintServiceException,
-	    IOException;
+	    IOException, NotSerializableException;
 
     /**
      * <p>

@@ -8,6 +8,7 @@
 
 <H2><A NAME="top">Jini Print Service API Revision History</A></H2>
 <FONT SIZE=2>
+<A HREF="#20170521">Draft Version 1.1 (21-May-2017)</A><BR>
 <A HREF="#20000523">Draft Standard Version 1.0 (23-May-2000)</A><BR>
 <A HREF="#20000324">Draft Version 24-Mar-2000</A><BR>
 <A HREF="#20000207">Draft Version 07-Feb-2000</A><BR>
@@ -21,6 +22,25 @@
 
 <P>
 <HR>
+<A NAME="20170521"><H2>Initial Draft Version 1.1 (21-May-2017)</H2></A>
+<H3>Description</H3>
+Initial Draft version 1.1 of the Jini Print API represents the first version of the 
+Jini Print Service API, since the release of the Java Print API JSR006, 
+and the release of the Jini Standards to the community under the Apache License v2.0.
+<H3>Changes Since Previous Version</H3>
+<UL>
+    <LI>All classes rewritten from Javadoc</LI>
+    <LI>Some classes have not been re-implemented, eg classes in org.jpwg.jini.print.data have not
+    and classes already included in the Java Print API.</LI>
+    <LI>Updated to depend on classes in Java Print API</LI>
+    <LI>Modified package layout to mirror that of the Java Print API</LI>
+    <LI>Moved classes from net.jini.print.data and net.jini.print.service to net.jini.print</LI>
+    <LI>Created net.jini.print.attribute and net.jini.print.attribute.standard
+        packages for IPP 2.0, 2.1 and 2.2 attributes, added support for finishing attributes
+    and 3D printing attributes</LI>
+    <LI>Copied javadoc from Draft Standard 1.0 of Jini Print API, not all links
+    in javadoc have been replaced with appropriate links.</LI>
+</UL>
 <A NAME="20000523"><H2>Draft Standard Version 1.0 (23-May-2000)</H2></A>
 <H3>Description</H3>
 Draft Standard Version 1.0
