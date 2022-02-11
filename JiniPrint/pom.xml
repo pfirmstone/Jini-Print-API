@@ -32,7 +32,7 @@
                     <breakiterator>true</breakiterator>
                     <top><![CDATA[<h2>JINI PRINT ${project.version} API Documentation</h2>]]></top>
                     <footer><![CDATA[<i>Copyright &copy;, multiple authors.</i>]]></footer>
-                    <excludePackageNames></excludePackageNames>
+                    <excludePackageNames/>
                 </configuration>
             </plugin>
         </plugins>
@@ -115,7 +115,7 @@
         <dependency>
             <groupId>au.net.zeus.jgdms</groupId>
             <artifactId>jgdms-platform</artifactId>
-            <version>3.0-SNAPSHOT</version>
+            <version>3.1.0</version>
             <type>jar</type>
         </dependency>
          <dependency>
